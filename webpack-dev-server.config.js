@@ -7,14 +7,11 @@ const TransferWebpackPlugin = require('transfer-webpack-plugin');
 const config = {
   // Entry points to the project
   entry: [
-    'webpack/hot/dev-server',
-    'webpack/hot/only-dev-server',
     path.join(__dirname, '/src/app/app.js'),
   ],
   // Server Configuration options
   devServer: {
     contentBase: 'src/www', // Relative directory for base of server
-    devtool: 'eval',
     hot: true, // Live-reload
     inline: true,
     port: 3000, // Port Number
@@ -36,14 +33,12 @@ const config = {
     ], path.resolve(__dirname, 'src')),
   ],
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/, // All .js files
-        loaders: ['babel-loader'],
-        exclude: [nodeModulesPath],
-      },
-    ],
-  },
+    rules: [{
+      test: /\.jsx?$/, // All .js files
+      use: ['babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react'],
+      exclude: [nodeModulesPath],
+    }]
+  }
 };
 
 module.exports = config;
