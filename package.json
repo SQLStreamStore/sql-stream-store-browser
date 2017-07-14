@@ -25,6 +25,7 @@
     "react-dom": "15.4.2",
     "react-router": "3.0.2",
     "react-tap-event-plugin": "2.0.1",
+    "resolve-relative-url": "1.0.0",
     "rxjs": "5.2.0",
     "url-join": "1.1.0"
   },

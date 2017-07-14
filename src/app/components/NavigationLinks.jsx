@@ -12,12 +12,22 @@ const fontIconByRel =  {
 };
 
 const NavigationLink = ({ disabled, onClick, link, rel }) => (
-    <RaisedButton disabled={disabled} onClick={onClick} icon={<FontIcon className='material-icons'>{fontIconByRel[rel]}</FontIcon>} />);
+    <RaisedButton 
+        disabled={disabled} 
+        onClick={onClick} 
+        icon={<FontIcon className='material-icons'>{fontIconByRel[rel]}</FontIcon>}
+    />);
 
 const NavigationLinks = ({ onNavigate, links }) => (
     <nav>
         {rels.map(rel => (
-            <NavigationLink disabled={!links[rel]} key={rel} onClick={() => onNavigate(links[rel].href)} link={links[rel]} rel={rel} />))}
+            <NavigationLink 
+                disabled={!links[rel]} 
+                key={rel} 
+                onClick={() => onNavigate(links[rel].href)} 
+                link={links[rel]} 
+                rel={rel} 
+            />))}
     </nav>);
 
 NavigationLinks.propTypes = {

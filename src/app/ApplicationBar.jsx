@@ -18,32 +18,32 @@ const popover$ = obs.merge(
 
 const state$ = createState(
     obs.merge(
-        serverAddress$.map(url => ['url', url]),
+        serverAddress$.map(server => ['server', server]),
         popover$.map(popover => ['popover', popover])
     ),
-    obs.of({ url: getServerUrl(hashHistory.getCurrentLocation()) }));
+    obs.of({ server: getServerUrl(hashHistory.getCurrentLocation()) }));
 
-const ServerFinder = ({ url }) => (
+const ServerFinder = ({ server }) => (
     <Form>
         <TextField 
-            name='url'
+            name='server'
             type='url'
             floatingLabelText='Server Address'
             hintText='http://sqlstreamstore.com'
-            value={url}
+            value={server}
             onChange={(_, value) => actions.changeServerAddress.next(value)} />
         <br />
         <FlatButton 
-            containerElement={<Link to={`/server?url=${url}`} />}
+            containerElement={<Link to={`/server?server=${server}`} />}
             label='Connect'
             style={{align: 'right'}} />
     </Form>);
 
 ServerFinder.defaultProps = {
-    url: ''
+    server: ''
 };
 
-const AppMenu = ({ url, popover }) => (
+const AppMenu = ({ server, popover }) => (
     <div>
         <IconButton onClick={() => actions.open.next()}>
             <NavigationMenu />
@@ -55,7 +55,7 @@ const AppMenu = ({ url, popover }) => (
             onRequestClose={() => actions.close.next()}>
             <Menu>
                 <MenuItem>
-                    <ServerFinder url={url} />            
+                    <ServerFinder server={server} />
                 </MenuItem>
             </Menu>
         </Popover>        

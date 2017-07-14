@@ -12,7 +12,7 @@ const palette = {
     primary3Color: red100,
     accent1Color: blueGrey500,
     textColor: grey900,
-    alternateTextColor: grey600,
+    //alternateTextColor: grey600,
     canvasColor: white,
     borderColor: grey400,
     shadowColor: fullBlack
