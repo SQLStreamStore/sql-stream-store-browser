@@ -35,14 +35,12 @@ const config = {
     ], path.resolve(__dirname, 'src')),
   ],
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/, // All .js files
-        loaders: ['babel-loader'], // react-hot is like browser sync and babel loads jsx and es6-7
-        exclude: [nodeModulesPath],
-      },
-    ],
-  },
+    rules: [{
+      test: /\.jsx?$/, // All .js files
+      use: ['babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react'],
+      exclude: [nodeModulesPath],
+    }]
+  }
 };
 
 module.exports = config;
