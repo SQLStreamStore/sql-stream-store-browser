@@ -7,7 +7,7 @@ const TransferWebpackPlugin = require('transfer-webpack-plugin');
 const config = {
   // Entry points to the project
   entry: [
-    path.join(__dirname, '/src/app/app.js'),
+    path.join(__dirname, '/src/app/dev.js'),
   ],
   // Server Configuration options
   devServer: {
@@ -20,7 +20,7 @@ const config = {
   devtool: 'eval',
   output: {
     path: buildPath, // Path of output file
-    filename: 'app.js',
+    filename: 'dev.js',
   },
   plugins: [
     // Enables Hot Modules Replacement

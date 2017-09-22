@@ -5,7 +5,7 @@ import Welcome from './Welcome.jsx';
 import Main from './Main.jsx';
 import Server, { AllStream, Stream, Index, StreamMessage } from './server';
 
-const App = () => (
+const SqlStreamStoreBrowser = () => (
     <Router history={hashHistory}>
         <Route path="/" component={Main}>
             <IndexRoute component={Welcome} />
@@ -21,4 +21,4 @@ const App = () => (
     </Router>
 );
 
-export default App;
+export default SqlStreamStoreBrowser;

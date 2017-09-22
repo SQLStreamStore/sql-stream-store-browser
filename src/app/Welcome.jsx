@@ -8,3 +8,4 @@ const Welcome = () => (
         </CardMedia>
     </Card>);
 export default Welcome;
+
