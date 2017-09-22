@@ -23,6 +23,12 @@ const state$ = createState(
     ),
     obs.of({ server: getServerUrl(hashHistory.getCurrentLocation()) }));
 
+const onOpenMenu = () => actions.open.next();
+
+const onClose = () => actions.close.next();
+
+const onChange = (_, value) => actions.changeServerAddress.next(value);
+
 const ServerFinder = ({ server }) => (
     <Form>
         <TextField 
@@ -31,28 +37,24 @@ const ServerFinder = ({ server }) => (
             floatingLabelText='Server Address'
             hintText='http://sqlstreamstore.com'
             value={server}
-            onChange={(_, value) => actions.changeServerAddress.next(value)} />
+            onChange={onChange} />
         <br />
         <FlatButton 
-            containerElement={<Link to={`/server?server=${server}`} />}
+            containerElement={<Link onClick={onClose} to={`/server?server=${server}`} />}
             label='Connect'
             style={{align: 'right'}} />
     </Form>);
 
-ServerFinder.defaultProps = {
-    server: ''
-};
-
 const AppMenu = ({ server, popover }) => (
     <div>
-        <IconButton onClick={() => actions.open.next()}>
+        <IconButton onClick={onOpenMenu}>
             <NavigationMenu />
         </IconButton>
         <Popover 
             {...popover} 
             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={() => actions.close.next()}>
+            onRequestClose={onClose}>
             <Menu>
                 <MenuItem>
                     <ServerFinder server={server} />
