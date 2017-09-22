@@ -20,14 +20,14 @@
     "webpack-dev-server": "2.8.2"
   },
   "dependencies": {
-    "material-ui": "0.17.0",
-    "react": "15.4.2",
-    "react-dom": "15.4.2",
+    "material-ui": "0.19.2",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
     "react-router": "3.0.2",
     "react-tap-event-plugin": "2.0.1",
     "resolve-relative-url": "1.0.0",
-    "rxjs": "5.2.0",
-    "url-join": "1.1.0"
+    "rxjs": "5.4.3",
+    "url-join": "2.0.2"
   },
   "main": "src/index.js",
   "author": "thefringeninja <joao.paul@braganca.name>",
