@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { FontIcon, RaisedButton } from 'material-ui';
 
 const rels = ['first', 'previous', 'self', 'next', 'last'];

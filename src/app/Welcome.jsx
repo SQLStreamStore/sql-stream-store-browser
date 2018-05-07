@@ -7,5 +7,6 @@ const Welcome = () => (
             <img src='http://i.imgur.com/XwwTfkI.jpg' />
         </CardMedia>
     </Card>);
+
 export default Welcome;
 

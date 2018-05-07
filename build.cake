@@ -6,11 +6,11 @@ var target          = Argument("target", "Default");
 
 var srcDirectory    = Directory("src");
 
-var nodeVersion     = "8.5.0";
+var nodeVersion     = "10.0.0";
 var nodeDirectory   = Directory(".node");
 var nodeJs          = GetNodePath();
 
-var yarnVersion     = "1.0.2";
+var yarnVersion     = "1.6.1";
 var yarnDirectory   = Directory(".yarn");
 var yarn            = yarnDirectory + File($"yarn-v{yarnVersion}/bin/yarn.js");
 

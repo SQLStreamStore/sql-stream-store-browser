@@ -1,6 +1,6 @@
 import Server from './Server.jsx';
-export AllStream from './AllStream.jsx';
-export Stream from './Stream.jsx';
-export StreamMessage from './StreamMessage.jsx';
-export Index from './Index.jsx';
+export { default as AllStream } from './AllStream.jsx';
+export { default as Stream } from './Stream.jsx';
+export { default as StreamMessage } from './StreamMessage.jsx';
+export { default as Index } from './Index.jsx';
 export default Server;

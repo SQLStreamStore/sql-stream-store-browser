@@ -1,5 +1,5 @@
-export Form from './Form.jsx';
-export NavigationLinks from './NavigationLinks.jsx';
-export mount from './mount';
-export Stream from './Stream.jsx';
-export StreamMessage from './StreamMessage.jsx';
+export { default as Form } from './Form.jsx';
+export { default as NavigationLinks } from './NavigationLinks.jsx';
+export { default as mount } from './mount';
+export { default as Stream } from './Stream.jsx';
+export { default as StreamMessage } from './StreamMessage.jsx';

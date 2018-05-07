@@ -1,4 +1,6 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import Rx from 'rxjs';
 
 export const createAction = () => new Rx.Subject();

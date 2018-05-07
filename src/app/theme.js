@@ -4,7 +4,6 @@ import {
     grey400, grey600, grey900, 
     white, fullBlack
  } from 'material-ui/styles/colors';
-import { spacing } from 'material-ui/styles';
 
 const palette = {
     primary1Color: red700,

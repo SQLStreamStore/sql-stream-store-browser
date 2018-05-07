@@ -9,9 +9,10 @@ import {
     TableHeader, 
     TableHeaderColumn,
     Dialog } from 'material-ui';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { createActions, createState, connect } from '../reactive';
 import { resolveLinks, getServerUrl, http } from '../utils';
+import { rels } from '../stream-store';
 import NavigationLinks from './NavigationLinks.jsx';
 import mount from './mount';
 
@@ -29,7 +30,7 @@ const links$ = body$
 
 const messages$ = body$
     .zip(url$)
-    .map(([{ _embedded }, url]) => () => _embedded['streamStore:message']
+    .map(([{ _embedded }, url]) => () => _embedded[rels.message]
         .map(({ _links, ...message }) => ({
             ...message,
             _links: resolveLinks(url, _links)

@@ -2,9 +2,10 @@ import React from 'react';
 import { Observable as obs } from 'rxjs';
 import { Subheader } from 'material-ui';
 import { List, ListItem } from 'material-ui/List';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { http, getServerUrl, resolveLinks } from '../utils'
 import { createActions, createState, connect } from '../reactive';
+import { rels } from '../stream-store';
 import { mount } from '../components';
 
 const actions = createActions(['get', 'getResponse']);
@@ -34,11 +35,11 @@ const state$ = createState(
 actions.get.flatMap(url => http.get(url)).subscribe(url => actions.getResponse.next(url));
 
 const relsToTitle = {
-    'streamStore:stream': 'All Stream'
+    [rels.feed]: 'All Stream'
 };
 
 const relsToRoute = {
-    'streamStore:stream': '/server/stream'
+    [rels.feed]: '/server/stream'
 };
 
 const Links = ({ links, server }) => (

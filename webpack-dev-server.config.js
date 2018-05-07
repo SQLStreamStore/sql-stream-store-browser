@@ -26,7 +26,7 @@ const config = {
     // Enables Hot Modules Replacement
     new webpack.HotModuleReplacementPlugin(),
     // Allows error warnings but does not stop compiling.
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     // Moves files
     new TransferWebpackPlugin([
       {from: 'www'},

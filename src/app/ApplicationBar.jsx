@@ -2,10 +2,10 @@ import React from 'react';
 import { Observable as obs } from 'rxjs';
 import { TextField, FlatButton, AppBar, Menu, IconButton, MenuItem, Popover } from 'material-ui';
 import { NavigationMenu } from 'material-ui/svg-icons';
-import { Link, hashHistory } from 'react-router';
-import { Form, mount } from './components';
+import { Link } from 'react-router-dom';
+import { ControlledTextField, Form, mount } from './components';
 import { connect, createActions, createState } from './reactive';
-import { getServerUrl } from './utils';
+import { getServerUrl, history } from './utils';
 
 const actions = createActions(['changeServerAddress', 'open', 'close']);
 
@@ -21,7 +21,7 @@ const state$ = createState(
         serverAddress$.map(server => ['server', server]),
         popover$.map(popover => ['popover', popover])
     ),
-    obs.of({ server: getServerUrl(hashHistory.getCurrentLocation()) }));
+    obs.of({ server: getServerUrl(history.location) }));
 
 const onOpenMenu = () => actions.open.next();
 
@@ -31,12 +31,12 @@ const onChange = (_, value) => actions.changeServerAddress.next(value);
 
 const ServerFinder = ({ server }) => (
     <Form>
-        <TextField 
+        <TextField
             name='server'
             type='url'
             floatingLabelText='Server Address'
             hintText='http://sqlstreamstore.com'
-            value={server}
+            value={server || ''}
             onChange={onChange} />
         <br />
         <FlatButton 
@@ -55,7 +55,7 @@ const AppMenu = ({ server, popover }) => (
             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             onRequestClose={onClose}>
-            <Menu>
+            <Menu disableAutoFocus>
                 <MenuItem>
                     <ServerFinder server={server} />
                 </MenuItem>

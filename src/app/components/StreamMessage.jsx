@@ -11,7 +11,7 @@ import {
     TableHeader, 
     TableHeaderColumn
     } from 'material-ui';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { createActions, createState, connect } from '../reactive';
 import { getServerUrl, http, resolveLinks } from '../utils';
