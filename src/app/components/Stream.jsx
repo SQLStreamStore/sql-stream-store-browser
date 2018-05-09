@@ -76,10 +76,12 @@ Messages.defaultProps = {
     messages: []
 };
 
+const onNavigate = href => actions.get.next(href);
+
 const Stream = ({ links, messages, location }) => (
     <section>
         <NavigationLinks 
-            onNavigate={href => actions.get.next(href)}
+            onNavigate={onNavigate}
             links={links} />
         <Messages messages={messages} server={getServerUrl(location)} />
     </section>);

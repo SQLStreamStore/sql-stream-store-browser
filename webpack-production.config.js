@@ -2,29 +2,39 @@ const webpack = require('webpack');
 const path = require('path');
 const buildPath = path.resolve(__dirname, 'build');
 const nodeModulesPath = path.resolve(__dirname, 'node_modules');
+const package = require('./package.json');
 
-const entry = path.join(__dirname, '/src/index.js');
+const index = path.join(__dirname, '/src/index.js');
 
 const config = {
-  entry: [entry],
+  entry: {
+      index
+  },
   // Render source-map file for final build
   devtool: 'source-map',
   // output config
   output: {
     path: buildPath, // Path of output file
-    filename: 'index.js', // Name of output file
+    filename: '[name].js', // Name of output file
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: "initial",
+          test: path.resolve(__dirname, "node_modules"),
+          name: "vendor",
+          enforce: true
+        }
+      }
+    }
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        filename: 'vendor.js',
-        minChunks: ({ context }) => context && context.includes('node_modules'),
-    }),
   ],
   resolve: {
       extensions: ['.js', '.jsx'],
-      modules: [entry, 'node_modules']
+      modules: [index, 'node_modules']
   },
   module: {
     rules: [{

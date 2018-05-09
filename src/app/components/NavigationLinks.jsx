@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon, RaisedButton } from 'material-ui';
-
-const rels = ['first', 'previous', 'self', 'next', 'last'];
+import { rels } from '../stream-store';
 
 const fontIconByRel =  {
-    'next': 'chevron_right',
-    'previous': 'chevron_left',
-    'self': 'refresh',
-    'first': 'first_page',
-    'last': 'last_page'
+    [rels.next]: 'chevron_right',
+    [rels.previous]: 'chevron_left',
+    [rels.self]: 'refresh',
+    [rels.first]: 'first_page',
+    [rels.last]: 'last_page'
 };
 
 const NavigationLink = ({ disabled, onClick, link, rel }) => (
@@ -21,7 +20,7 @@ const NavigationLink = ({ disabled, onClick, link, rel }) => (
 
 const NavigationLinks = ({ onNavigate, links }) => (
     <nav>
-        {rels.map(rel => (
+        {Object.keys(rels).map(rel => rels[rel]).map(rel => (
             <NavigationLink 
                 disabled={!links[rel]} 
                 key={rel} 
