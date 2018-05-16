@@ -7,6 +7,7 @@ const rels = {
     feed: "streamStore:feed",
     message: "streamStore:message",
     metadata: "streamStore:metadata",
+    index: "streamStore:index"
 };
 
 export default rels;

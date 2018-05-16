@@ -10,26 +10,14 @@ import {
     TableHeaderColumn,
     Dialog } from 'material-ui';
 import { Link } from 'react-router-dom';
-import { createActions, createState, connect } from '../reactive';
-import { resolveLinks, getServerUrl, http } from '../utils';
-import { rels } from '../stream-store';
+import { createState, connect } from '../reactive';
+import { resolveLinks, getServerUrl } from '../utils';
+import { rels, actions, store } from '../stream-store';
 import NavigationLinks from './NavigationLinks.jsx';
 import mount from './mount';
 
-const actions = createActions(['get', 'getResponse']);
-
-const url$ = actions.getResponse
-    .map(({ url }) => url);
-
-const body$ = actions.getResponse
-    .map(({ body }) => body);
-
-const links$ = body$
-    .zip(url$)
-    .map(([{ _links }, url]) => () => resolveLinks(url, _links))
-
-const messages$ = body$
-    .zip(url$)
+const messages$ = store.body$
+    .zip(store.url$)
     .map(([{ _embedded }, url]) => () => _embedded[rels.message]
         .map(({ _links, ...message }) => ({
             ...message,
@@ -38,12 +26,11 @@ const messages$ = body$
 
 const state$ = createState(
     obs.merge(
-        links$.map(links => ['links', links]),
+        store.links$.map(links => ['links', links]),
         messages$.map(messages => ['messages', messages])
     ),
     obs.of({ messages: [], links: {} }));
 
-actions.get.flatMap(url => http.get(url)).subscribe(response => actions.getResponse.next(response));
 
 const Message = ({ messageId, createdUtc, payload, position, streamId, streamVersion, type, _links, server }) => (
     <TableRow>

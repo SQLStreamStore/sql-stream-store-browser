@@ -13,8 +13,9 @@ import {
     } from 'material-ui';
 import { Link } from 'react-router-dom';
 
-import { createActions, createState, connect } from '../reactive';
-import { getServerUrl, http, resolveLinks } from '../utils';
+import { createState, connect } from '../reactive';
+import { getServerUrl } from '../utils';
+import { actions, store } from '../stream-store';
 import NavigationLinks from './NavigationLinks.jsx';
 import mount from './mount';
 
@@ -27,29 +28,16 @@ const tryParseJson = payload => {
     }
 };
 
-const actions = createActions(['get', 'getResponse']);
 
-const body$ = actions.getResponse
-    .map(({ body }) => body);
-
-const url$ = actions.getResponse
-    .map(({ url }) => url);
-
-const links$ = body$
-    .zip(url$)
-    .map(([{ _links }, url]) => () => resolveLinks(url, _links));
-
-const message$ = body$
+const message$ = store.body$
     .map(({ payload, ...body }) => () => ({ ...body, payload: tryParseJson(payload) }));
 
 const state$ = createState(
     obs.merge(
-        links$.map(links => ['links', links]),
+        store.links$.map(links => ['links', links]),
         message$.map(message => ['message', message])
     ),
     obs.of({ message: {}, links: {} }));
-
-actions.get.flatMap(url => http.get(url)).subscribe(response => actions.getResponse.next(response));
 
 const StreamMessageHeader = () => (
     <TableRow>
