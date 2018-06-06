@@ -11,7 +11,6 @@ import {
     TableHeader, 
     TableHeaderColumn
     } from 'material-ui';
-import { Link } from 'react-router-dom';
 
 import { createState, connect } from '../reactive';
 import { getServerUrl } from '../utils';
@@ -28,13 +27,15 @@ const tryParseJson = payload => {
     }
 };
 
+const links$ = store.links$
+    .map(links => () => links);
 
 const message$ = store.body$
     .map(({ payload, ...body }) => () => ({ ...body, payload: tryParseJson(payload) }));
 
 const state$ = createState(
     obs.merge(
-        store.links$.map(links => ['links', links]),
+        links$.map(links => ['links', links]),
         message$.map(message => ['message', message])
     ),
     obs.of({ message: {}, links: {} }));
@@ -49,16 +50,16 @@ const StreamMessageHeader = () => (
         <TableHeaderColumn>Position</TableHeaderColumn>
     </TableRow>);
 
-const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, server }) => (
+const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, links }) => (
     <TableRow>
         <TableRowColumn>
-            <Link to={`/server/streams/${streamId}?server=${server}`}>{streamId}</Link>
+            <a onClick={() => actions.get.next(links["streamStore:feed"].href)} href="#">{streamId}</a>
         </TableRowColumn>
         <TableRowColumn>{messageId}</TableRowColumn>
         <TableRowColumn>{createdUtc}</TableRowColumn>
         <TableRowColumn>{type}</TableRowColumn>
         <TableRowColumn style={{width: '100%'}}>
-            <Link rel='self' to={`/server/streams/${streamId}/${streamVersion}?server=${server}`}>{streamId}@{streamVersion}</Link>
+            <a onClick={() => actions.get.next(links.self.href)} href="#">{streamId}@{streamVersion}</a>
         </TableRowColumn>
         <TableRowColumn>{position}</TableRowColumn>
     </TableRow>);
@@ -78,10 +79,10 @@ const StreamMessage = ({ message, links, location }) => (
                 <StreamMessageHeader />
             </TableHeader>
             <TableBody displayRowCheckbox={false} stripedRows>
-                <StreamMessageDetails {...message} server={getServerUrl(location)} />
+                <StreamMessageDetails {...message} links={links} />
             </TableBody>
         </Table>
         <StreamMessagePayload payload={message.payload} />
     </section>);
 
-export default getBookmark => mount(props => actions.get.next(getBookmark(props)))(connect(state$)(StreamMessage));
+export default connect(state$)(StreamMessage);

@@ -9,12 +9,13 @@ import {
     TableHeader, 
     TableHeaderColumn,
     Dialog } from 'material-ui';
-import { Link } from 'react-router-dom';
 import { createState, connect } from '../reactive';
 import { resolveLinks, getServerUrl } from '../utils';
 import { rels, actions, store } from '../stream-store';
 import NavigationLinks from './NavigationLinks.jsx';
-import mount from './mount';
+
+const links$ = store.links$
+    .map(links => () => links);
 
 const messages$ = store.body$
     .zip(store.url$)
@@ -26,7 +27,7 @@ const messages$ = store.body$
 
 const state$ = createState(
     obs.merge(
-        store.links$.map(links => ['links', links]),
+        links$.map(links => ['links', links]),
         messages$.map(messages => ['messages', messages])
     ),
     obs.of({ messages: [], links: {} }));
@@ -38,7 +39,7 @@ const Message = ({ messageId, createdUtc, payload, position, streamId, streamVer
         <TableRowColumn>{createdUtc}</TableRowColumn>
         <TableRowColumn>{type}</TableRowColumn>
         <TableRowColumn style={{width: '100%'}}>
-            <Link rel='self' to={`/server/streams/${streamId}/${streamVersion}?server=${server}`}>{streamId}@{streamVersion}</Link>
+            <a onClick={() => actions.get.next(_links.self.href)} href="#">{streamId}@{streamVersion}</a>
         </TableRowColumn>
         <TableRowColumn>{position}</TableRowColumn>
     </TableRow>);
@@ -77,4 +78,4 @@ Stream.defaultProps = {
     links: { }
 };
 
-export default getBookmark => mount(props => actions.get.next(getBookmark(props)))(connect(state$)(Stream));
+export default connect(state$)(Stream);

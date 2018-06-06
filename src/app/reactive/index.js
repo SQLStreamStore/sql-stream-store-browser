@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 
 import Rx from 'rxjs';
 
-export const createAction = () => new Rx.Subject();
+export const createAction = () => {
+    const subject = new Rx.ReplaySubject(1);
+
+    subject.subscribe(console.log);
+
+    return subject;
+};
 
 export const createActions = actionNames =>
     actionNames.reduce((akk, name) => ({ ...akk, [name]: createAction() }), {});

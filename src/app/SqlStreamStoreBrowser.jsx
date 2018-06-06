@@ -1,33 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { 
-    Redirect,
-    Router,
-    Route,
-    Switch } from 'react-router';
-import { history } from './utils';
+import { MuiThemeProvider, getMuiTheme }  from 'material-ui/styles';
+import { Observable as obs } from 'rxjs';
 
+import ApplicationBar, { actions as applicationBarActions } from './ApplicationBar.jsx';
 import Welcome from './Welcome.jsx';
-import Main from './Main.jsx';
-import Server, { 
-    AllStream,
-    Stream,
-    Index,
-    StreamMessage
-} from './server';
+import { Stream, StreamMessage, Index, mount } from './components';
+import { actions, store, rels } from './stream-store';
+import theme from './theme';
+import { history, getServerUrl } from './utils';
+import { createState, connect } from './reactive';
 
-const SqlStreamStoreBrowser = () => (
-    <Router history={history}>
-        <Main>
-            <Route exact path="/" component={Welcome}  />
-            <Server>
-                <Route exact path="/server" component={Index} />
-                <Route exact path="/server/stream" component={AllStream} />
-                <Route exact path="/server/streams/:streamId" component={Stream} />
-                <Route exact path="/server/streams/:streamId/:streamVersion" component={StreamMessage} />
-            </Server>
-        </Main>
-    </Router>
-);
+const viewsByRel = {
+    [rels.feed]: props => <Stream {...props} />,
+    [rels.message]: props => <StreamMessage {...props} />,
+    [rels.index]: props => <Index {...props} />
+};
 
-export default SqlStreamStoreBrowser;
+const getSelfAlias = links => Object
+    .keys(links)
+    .filter(rel => rel.indexOf("streamStore:") === 0)
+    .filter(rel => links[rel].href === links.self.href)[0];
+
+const self$ = store.links$
+    .filter(links => links.self)
+    .map(getSelfAlias)
+    .filter(rel => !!rel);
+
+const server$ = applicationBarActions.connect;
+
+server$.subscribe(server => actions.get.next(server));
+
+const state$ = createState(obs.merge(
+    self$.map(self => ['self', () => self]),
+    server$.map(server => ['server', () => server])
+));
+
+const muiTheme = getMuiTheme(theme);
+
+const SqlStreamStoreBrowser = ({ self, server }) => (
+    <MuiThemeProvider muiTheme={muiTheme} >
+        <div>
+            <ApplicationBar />
+            {viewsByRel[self] && viewsByRel[self]({ server })}
+        </div>
+    </MuiThemeProvider>);
+
+export default connect(state$)(SqlStreamStoreBrowser);
