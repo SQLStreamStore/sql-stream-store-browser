@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MuiThemeProvider, getMuiTheme }  from 'material-ui/styles';
 import { Observable as obs } from 'rxjs';
 
 import ApplicationBar, { actions as applicationBarActions } from './ApplicationBar.jsx';
-import Welcome from './Welcome.jsx';
-import { Stream, StreamMessage, Index, mount } from './components';
+import { Stream, StreamMessage, Index } from './components';
 import { actions, store, rels } from './stream-store';
 import theme from './theme';
-import { history, getServerUrl } from './utils';
 import { createState, connect } from './reactive';
 
 const viewsByRel = {
