@@ -1,11 +1,8 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import { Subheader } from 'material-ui';
 import { List, ListItem } from 'material-ui/List';
-import { http, getServerUrl, resolveLinks } from '../utils'
 import { createState, connect } from '../reactive';
 import { rels, actions, store } from '../stream-store';
-import { mount } from '../components';
 
 const links$ = store.links$
     .map(links => () => links);
@@ -39,7 +36,7 @@ Links.defaultProps = {
     links: []
 };
 
-const Index = ({ recent, location, links }) => (
+const Index = ({ links }) => (
     <section>
         <Links links={links} />
     </section>);

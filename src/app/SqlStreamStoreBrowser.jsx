@@ -3,7 +3,7 @@ import { MuiThemeProvider, getMuiTheme }  from 'material-ui/styles';
 import { Observable as obs } from 'rxjs';
 
 import ApplicationBar, { actions as applicationBarActions } from './ApplicationBar.jsx';
-import { Stream, StreamMessage, Index } from './components';
+import { Stream, StreamMessage, Index, mount } from './components';
 import { actions, store, rels } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
@@ -35,6 +35,16 @@ const state$ = createState(obs.merge(
 
 const muiTheme = getMuiTheme(theme);
 
+const initialNavigation = () => {
+    if (!window.location.hash || window.location.hash === '#') {
+        return;
+    }
+
+    const url = window.location.hash.substring(window.location.hash.lastIndexOf('#') + 1);
+
+    actions.get.next(url);
+}
+
 const SqlStreamStoreBrowser = ({ self, server }) => (
     <MuiThemeProvider muiTheme={muiTheme} >
         <div>
@@ -43,4 +53,4 @@ const SqlStreamStoreBrowser = ({ self, server }) => (
         </div>
     </MuiThemeProvider>);
 
-export default connect(state$)(SqlStreamStoreBrowser);
+export default mount(initialNavigation)(connect(state$)(SqlStreamStoreBrowser));

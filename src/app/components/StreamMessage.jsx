@@ -32,7 +32,11 @@ const links$ = store.links$
     .map(links => () => links);
 
 const message$ = store.body$
-    .map(({ payload, metadata, ...body }) => () => ({ ...body, payload: tryParseJson(payload), metadata: tryParseJson(metadata) }));
+    .map(({ payload, metadata, ...body }) => () => ({ 
+        ...body,
+        payload: tryParseJson(payload),
+        metadata: tryParseJson(metadata)
+    }));
 
 const state$ = createState(
     obs.merge(

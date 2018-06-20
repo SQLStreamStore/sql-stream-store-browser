@@ -1,5 +1,4 @@
 import React from 'react';
-import urljoin from 'url-join';
 import { Observable as obs } from 'rxjs';
 import { 
     Table, 
@@ -7,10 +6,10 @@ import {
     TableRow, 
     TableRowColumn, 
     TableHeader, 
-    TableHeaderColumn,
-    Dialog } from 'material-ui';
+    TableHeaderColumn
+} from 'material-ui';
 import { createState, connect } from '../reactive';
-import { resolveLinks, getServerUrl } from '../utils';
+import { resolveLinks } from '../utils';
 import { rels, actions, store } from '../stream-store';
 import NavigationLinks from './NavigationLinks.jsx';
 
@@ -33,7 +32,7 @@ const state$ = createState(
     obs.of({ messages: [], links: {} }));
 
 
-const Message = ({ messageId, createdUtc, payload, position, streamId, streamVersion, type, _links, server }) => (
+const Message = ({ messageId, createdUtc, position, streamId, streamVersion, type, _links }) => (
     <TableRow>
         <TableRowColumn>{messageId}</TableRowColumn>
         <TableRowColumn>{createdUtc}</TableRowColumn>
@@ -44,7 +43,7 @@ const Message = ({ messageId, createdUtc, payload, position, streamId, streamVer
         <TableRowColumn>{position}</TableRowColumn>
     </TableRow>);
 
-const Messages = ({ messages, server }) => (
+const Messages = ({ messages }) => (
     <Table selectable={false} fixedHeader={false} style={{ tableLayout: 'auto' }}>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
@@ -56,7 +55,7 @@ const Messages = ({ messages, server }) => (
             </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false} stripedRows>
-            {messages.map(message => (<Message key={message.messageId} {...message} server={server} />))}
+            {messages.map(message => (<Message key={message.messageId} {...message} />))}
         </TableBody>
     </Table>);
 
@@ -66,12 +65,12 @@ Messages.defaultProps = {
 
 const onNavigate = href => actions.get.next(href);
 
-const Stream = ({ links, messages, location }) => (
+const Stream = ({ links, messages }) => (
     <section>
         <NavigationLinks 
             onNavigate={onNavigate}
             links={links} />
-        <Messages messages={messages} server={getServerUrl(location)} />
+        <Messages messages={messages} />
     </section>);
 
 Stream.defaultProps = {
