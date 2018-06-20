@@ -2,18 +2,17 @@ import React from 'react';
 import { Observable as obs } from 'rxjs';
 import { TextField, FlatButton, AppBar, Menu, IconButton, MenuItem, Popover } from 'material-ui';
 import { NavigationMenu } from 'material-ui/svg-icons';
-import { Link } from 'react-router-dom';
-import { ControlledTextField, Form, mount } from './components';
+import { Form } from './components';
 import { connect, createActions, createState } from './reactive';
 import { getServerUrl, history } from './utils';
 
-const actions = createActions(['changeServerAddress', 'open', 'close']);
+const actions = createActions(['changeServerAddress', 'open', 'connect']);
 
 const serverAddress$ = actions.changeServerAddress.map(value => () => value);
 
 const popover$ = obs.merge(
     actions.open.map(() => true),
-    actions.close.map(() => false)
+    actions.connect.map(() => false)
 ).map(open => () => ({ open }));
 
 const state$ = createState(
@@ -24,8 +23,6 @@ const state$ = createState(
     obs.of({ server: getServerUrl(history.location) }));
 
 const onOpenMenu = () => actions.open.next();
-
-const onClose = () => actions.close.next();
 
 const onChange = (_, value) => actions.changeServerAddress.next(value);
 
@@ -40,8 +37,8 @@ const ServerFinder = ({ server }) => (
             onChange={onChange} />
         <br />
         <FlatButton 
-            containerElement={<Link onClick={onClose} to={`/server?server=${server}`} />}
             label='Connect'
+            onClick={() => actions.connect.next(server)}
             style={{align: 'right'}} />
     </Form>);
 
@@ -54,7 +51,7 @@ const AppMenu = ({ server, popover }) => (
             {...popover} 
             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={onClose}>
+            onRequestClose={() => actions.connect.next(server)}>
             <Menu disableAutoFocus>
                 <MenuItem>
                     <ServerFinder server={server} />
@@ -67,3 +64,5 @@ export const ApplicationBar = props => (
     <AppBar iconElementLeft={<AppMenu {...props} />} />);
 
 export default connect(state$)(ApplicationBar);
+
+export { actions };

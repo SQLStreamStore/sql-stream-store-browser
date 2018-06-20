@@ -1,5 +1,4 @@
 import React from 'react';
-import urljoin from 'url-join';
 import { Observable as obs } from 'rxjs';
 import { 
     Table, 
@@ -7,29 +6,18 @@ import {
     TableRow, 
     TableRowColumn, 
     TableHeader, 
-    TableHeaderColumn,
-    Dialog } from 'material-ui';
-import { Link } from 'react-router-dom';
-import { createActions, createState, connect } from '../reactive';
-import { resolveLinks, getServerUrl, http } from '../utils';
-import { rels } from '../stream-store';
+    TableHeaderColumn
+} from 'material-ui';
+import { createState, connect } from '../reactive';
+import { resolveLinks, preventDefault } from '../utils';
+import { rels, actions, store } from '../stream-store';
 import NavigationLinks from './NavigationLinks.jsx';
-import mount from './mount';
 
-const actions = createActions(['get', 'getResponse']);
+const links$ = store.links$
+    .map(links => () => links);
 
-const url$ = actions.getResponse
-    .map(({ url }) => url);
-
-const body$ = actions.getResponse
-    .map(({ body }) => body);
-
-const links$ = body$
-    .zip(url$)
-    .map(([{ _links }, url]) => () => resolveLinks(url, _links))
-
-const messages$ = body$
-    .zip(url$)
+const messages$ = store.body$
+    .zip(store.url$)
     .map(([{ _embedded }, url]) => () => _embedded[rels.message]
         .map(({ _links, ...message }) => ({
             ...message,
@@ -43,20 +31,19 @@ const state$ = createState(
     ),
     obs.of({ messages: [], links: {} }));
 
-actions.get.flatMap(url => http.get(url)).subscribe(response => actions.getResponse.next(response));
 
-const Message = ({ messageId, createdUtc, payload, position, streamId, streamVersion, type, _links, server }) => (
+const Message = ({ messageId, createdUtc, position, streamId, streamVersion, type, _links }) => (
     <TableRow>
         <TableRowColumn>{messageId}</TableRowColumn>
         <TableRowColumn>{createdUtc}</TableRowColumn>
         <TableRowColumn>{type}</TableRowColumn>
         <TableRowColumn style={{width: '100%'}}>
-            <Link rel='self' to={`/server/streams/${streamId}/${streamVersion}?server=${server}`}>{streamId}@{streamVersion}</Link>
+            <a onClick={preventDefault(() => actions.get.next(_links.self.href))} href="#">{streamId}@{streamVersion}</a>
         </TableRowColumn>
         <TableRowColumn>{position}</TableRowColumn>
     </TableRow>);
 
-const Messages = ({ messages, server }) => (
+const Messages = ({ messages }) => (
     <Table selectable={false} fixedHeader={false} style={{ tableLayout: 'auto' }}>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
@@ -68,7 +55,7 @@ const Messages = ({ messages, server }) => (
             </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false} stripedRows>
-            {messages.map(message => (<Message key={message.messageId} {...message} server={server} />))}
+            {messages.map(message => (<Message key={message.messageId} {...message} />))}
         </TableBody>
     </Table>);
 
@@ -78,16 +65,16 @@ Messages.defaultProps = {
 
 const onNavigate = href => actions.get.next(href);
 
-const Stream = ({ links, messages, location }) => (
+const Stream = ({ links, messages }) => (
     <section>
         <NavigationLinks 
             onNavigate={onNavigate}
             links={links} />
-        <Messages messages={messages} server={getServerUrl(location)} />
+        <Messages messages={messages} />
     </section>);
 
 Stream.defaultProps = {
     links: { }
 };
 
-export default getBookmark => mount(props => actions.get.next(getBookmark(props)))(connect(state$)(Stream));
+export default connect(state$)(Stream);

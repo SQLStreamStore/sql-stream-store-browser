@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontIcon, RaisedButton } from 'material-ui';
 import { rels } from '../stream-store';
+import { preventDefault } from '../utils';
 
 const fontIconByRel =  {
     [rels.first]: 'first_page',
@@ -26,7 +27,7 @@ const NavigationLinks = ({ onNavigate, links }) => (
             <NavigationLink 
                 disabled={!links[rel]} 
                 key={rel} 
-                onClick={() => onNavigate(links[rel].href)} 
+                onClick={preventDefault(() => onNavigate(links[rel].href))} 
                 link={links[rel]} 
                 rel={rel} 
             />))}

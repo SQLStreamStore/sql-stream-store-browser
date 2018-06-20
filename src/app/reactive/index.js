@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import Rx from 'rxjs';
 
-export const createAction = () => new Rx.Subject();
+export const createAction = () => {
+    const subject = new Rx.ReplaySubject(1);
+
+    return subject;
+};
 
 export const createActions = actionNames =>
     actionNames.reduce((akk, name) => ({ ...akk, [name]: createAction() }), {});
@@ -16,7 +19,7 @@ export const createState = (reducer$, initialState$ = Rx.Observable.of({})) => i
 
 export const connect = (state$, selector = state => state) => WrappedComponent => class Connect extends Component {
     componentWillMount() {
-        this.subscription = state$.subscribe(s => this.setState(s));
+        this.subscription = state$.subscribe(s => this.setState(selector(s)));
     }
 
     componentWillUnmount() {

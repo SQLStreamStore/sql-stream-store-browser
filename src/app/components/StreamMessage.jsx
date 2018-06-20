@@ -1,22 +1,24 @@
-import React from 'react';
-import urljoin from 'url-join';
+import React, { PureComponent } from 'react';
 import { Observable as obs } from 'rxjs';
 import { 
     Card,
     CardText,
+    IconButton,
     Table, 
     TableBody, 
     TableRow, 
     TableRowColumn, 
     TableHeader, 
-    TableHeaderColumn
+    TableHeaderColumn,
+    Toolbar,
+    ToolbarGroup,
+    ToolbarTitle
     } from 'material-ui';
-import { Link } from 'react-router-dom';
-
-import { createActions, createState, connect } from '../reactive';
-import { getServerUrl, http, resolveLinks } from '../utils';
+import { ActionCode } from 'material-ui/svg-icons';
+import { createState, connect } from '../reactive';
+import { actions, store, rels } from '../stream-store';
+import { preventDefault } from '../utils';
 import NavigationLinks from './NavigationLinks.jsx';
-import mount from './mount';
 
 const tryParseJson = payload => {
     try {
@@ -27,20 +29,15 @@ const tryParseJson = payload => {
     }
 };
 
-const actions = createActions(['get', 'getResponse']);
+const links$ = store.links$
+    .map(links => () => links);
 
-const body$ = actions.getResponse
-    .map(({ body }) => body);
-
-const url$ = actions.getResponse
-    .map(({ url }) => url);
-
-const links$ = body$
-    .zip(url$)
-    .map(([{ _links }, url]) => () => resolveLinks(url, _links));
-
-const message$ = body$
-    .map(({ payload, ...body }) => () => ({ ...body, payload: tryParseJson(payload) }));
+const message$ = store.body$
+    .map(({ payload, metadata, ...body }) => () => ({ 
+        ...body,
+        payload: tryParseJson(payload),
+        metadata: tryParseJson(metadata)
+    }));
 
 const state$ = createState(
     obs.merge(
@@ -48,8 +45,6 @@ const state$ = createState(
         message$.map(message => ['message', message])
     ),
     obs.of({ message: {}, links: {} }));
-
-actions.get.flatMap(url => http.get(url)).subscribe(response => actions.getResponse.next(response));
 
 const StreamMessageHeader = () => (
     <TableRow>
@@ -61,26 +56,79 @@ const StreamMessageHeader = () => (
         <TableHeaderColumn>Position</TableHeaderColumn>
     </TableRow>);
 
-const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, server }) => (
+const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, links }) => (
     <TableRow>
         <TableRowColumn>
-            <Link to={`/server/streams/${streamId}?server=${server}`}>{streamId}</Link>
+            <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
         </TableRowColumn>
         <TableRowColumn>{messageId}</TableRowColumn>
         <TableRowColumn>{createdUtc}</TableRowColumn>
         <TableRowColumn>{type}</TableRowColumn>
         <TableRowColumn style={{width: '100%'}}>
-            <Link rel='self' to={`/server/streams/${streamId}/${streamVersion}?server=${server}`}>{streamId}@{streamVersion}</Link>
+            <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
         </TableRowColumn>
         <TableRowColumn>{position}</TableRowColumn>
     </TableRow>);
 
-const StreamMessagePayload = ({ payload }) => (
-    <Card>
-        <CardText><pre>{JSON.stringify(payload, null, 4)}</pre></CardText>
-    </Card>);
+class StreamMessageJson extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = { 
+            expanded: true
+        };
+    }
+    _handleClick = () => {
+        this.setState({
+            expanded: !this.state.expanded
+        })
+    }
+    _renderJson = (json) => {
+        if (!this.state.expanded) {
+            return null;
+        }
 
-const StreamMessage = ({ message, links, location }) => (
+        return (
+            <Card>
+                <CardText><pre>{JSON.stringify(json, null, 4)}</pre></CardText>
+            </Card>);
+    }
+    render() {
+        const { json, title } = this.props;
+
+        return (
+            <div>
+                <div onClick={this._handleClick}>
+                    <Toolbar>
+                        <ToolbarTitle 
+                            text={title}
+                        />
+                    <ToolbarGroup>
+                    <IconButton touch={true}>
+                        <ActionCode />
+                    </IconButton>
+                    </ToolbarGroup>
+                    </Toolbar>
+                </div>
+                {this._renderJson(json)}
+            </div>);
+    }
+}
+
+const StreamMessageData = ({ payload }) => (
+    <StreamMessageJson
+        title={"Data"}
+        json={payload}
+    />
+);
+
+const StreamMessageMetadata = ({ payload }) => (
+    <StreamMessageJson
+        title={"Metadata"}
+        json={payload}
+    />
+);
+
+const StreamMessage = ({ message, links }) => (
     <section>
         <NavigationLinks 
             onNavigate={url => actions.get.next(url)}
@@ -90,10 +138,11 @@ const StreamMessage = ({ message, links, location }) => (
                 <StreamMessageHeader />
             </TableHeader>
             <TableBody displayRowCheckbox={false} stripedRows>
-                <StreamMessageDetails {...message} server={getServerUrl(location)} />
+                <StreamMessageDetails {...message} links={links} />
             </TableBody>
         </Table>
-        <StreamMessagePayload payload={message.payload} />
+        <StreamMessageData payload={message.payload} />
+        <StreamMessageMetadata payload={message.metadata} />
     </section>);
 
-export default getBookmark => mount(props => actions.get.next(getBookmark(props)))(connect(state$)(StreamMessage));
+export default connect(state$)(StreamMessage);
