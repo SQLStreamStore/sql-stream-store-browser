@@ -9,7 +9,7 @@ import {
     TableHeaderColumn
 } from 'material-ui';
 import { createState, connect } from '../reactive';
-import { resolveLinks } from '../utils';
+import { resolveLinks, preventDefault } from '../utils';
 import { rels, actions, store } from '../stream-store';
 import NavigationLinks from './NavigationLinks.jsx';
 
@@ -38,7 +38,7 @@ const Message = ({ messageId, createdUtc, position, streamId, streamVersion, typ
         <TableRowColumn>{createdUtc}</TableRowColumn>
         <TableRowColumn>{type}</TableRowColumn>
         <TableRowColumn style={{width: '100%'}}>
-            <a onClick={() => actions.get.next(_links.self.href)} href="#">{streamId}@{streamVersion}</a>
+            <a onClick={preventDefault(() => actions.get.next(_links.self.href))} href="#">{streamId}@{streamVersion}</a>
         </TableRowColumn>
         <TableRowColumn>{position}</TableRowColumn>
     </TableRow>);

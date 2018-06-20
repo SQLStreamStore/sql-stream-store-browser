@@ -16,7 +16,8 @@ import {
     } from 'material-ui';
 import { ActionCode } from 'material-ui/svg-icons';
 import { createState, connect } from '../reactive';
-import { actions, store } from '../stream-store';
+import { actions, store, rels } from '../stream-store';
+import { preventDefault } from '../utils';
 import NavigationLinks from './NavigationLinks.jsx';
 
 const tryParseJson = payload => {
@@ -58,13 +59,13 @@ const StreamMessageHeader = () => (
 const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, links }) => (
     <TableRow>
         <TableRowColumn>
-            <a onClick={() => actions.get.next(links["streamStore:feed"].href)} href="#">{streamId}</a>
+            <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
         </TableRowColumn>
         <TableRowColumn>{messageId}</TableRowColumn>
         <TableRowColumn>{createdUtc}</TableRowColumn>
         <TableRowColumn>{type}</TableRowColumn>
         <TableRowColumn style={{width: '100%'}}>
-            <a onClick={() => actions.get.next(links.self.href)} href="#">{streamId}@{streamVersion}</a>
+            <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
         </TableRowColumn>
         <TableRowColumn>{position}</TableRowColumn>
     </TableRow>);

@@ -23,3 +23,5 @@ export const resolveLinks = (url, links) => Object
 export { default as history } from './history';
 
 export { default as http } from './http';
+
+export { default as preventDefault } from './preventDefault';
