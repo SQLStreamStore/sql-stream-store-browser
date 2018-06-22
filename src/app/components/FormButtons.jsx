@@ -3,62 +3,59 @@ import {
     FontIcon,
     RaisedButton,
     FlatButton,
-    Dialog,
-    TextField
+    Dialog
 } from 'material-ui';
 import { SchemaForm } from 'react-schema-form';
-import { rels } from '../stream-store';
+import { rels, actions } from '../stream-store';
 
 const fontIconByRel =  {
     [rels.append]: 'publish'
 };
 
-const mapSchemaToForm = ({ properties }) => Object.keys(properties)
-    .map(key => ({ name: key, type: properties[key].type }));
+const actionsByRel = {
+    [rels.append]: actions.post
+};
 
-const Json = ({ form }) => (
-    <div className={form.htmlClass}>
-        <TextField
-            type={form.type}
-            floatingLabelText={form.title}
-            hintText={form.placeholder}
-            onChange={onChangeValidate}
-            errorText={props.error || props.errorText}
-            defaultValue={props.value}
-            multiLine
-            rows={form.rows}
-            rowsMax={form.rowsMax}
-            disabled={form.readonly}
-            style={form.style || {width: '100%'}}
-        />
-    </div>);
+let url;
 
-class Form extends PureComponent {
-    state = {}
-    
-    _onModelChange = (key, value) => this.setState({ ...this.state, [key]: value });
-    
-    render() {
-        const { schema } = this.props;
-        return (
-            <SchemaForm 
-                schema={schema}
-                model={this.state}
-                onModelChange={this._onModelChange}
-            />);
-    }
-}
+actions.getResponse.subscribe(({ url: _url }) => url = _url);
 
 class FormButton extends PureComponent {
     state = {
         open: false
     };
-    _onOpen = () => this.setState({ open: true });
-    _onClose = () => this.setState({ open: false });
+    _onOpen = () => this.setState({ 
+        ...this.state,
+        open: true
+    });
+    _onClose = () => this.setState({
+        open: false,
+        ...this.state
+    });
+    _onSubmit = e => {
+        e.preventDefault();
 
+        const { rel } = this.props;
+        const { model: body } = this.state;
+
+        actionsByRel[rel].next({
+            body,
+            url
+        });
+
+        this._onClose();
+    };
+    _onModelChange = (key, value) => this.setState({ 
+        ...this.state, 
+        model: {
+            ...this.state.model,
+            [key]: value
+        } 
+    });
+    
     render() {
         const { rel, title, schema } = this.props;
-        const { open } = this.state;
+        const { open, model } = this.state;
         return (
             <div>
                 <RaisedButton 
@@ -80,13 +77,15 @@ class FormButton extends PureComponent {
                         <FlatButton
                             label="Submit"
                             primary
-                            onClick={this._onClose}
+                            onClick={this._onSubmit}
                         />
                     ]}
                 >
-                    <Form
-                        schema={schema} 
-                    />
+                <SchemaForm 
+                    schema={schema}
+                    model={model}
+                    onModelChange={this._onModelChange}
+                />
                 </Dialog>
             </div>
         );
