@@ -1317,6 +1317,10 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@^2.2.5:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+
 cli-cursor@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/cli-cursor/-/cli-cursor-1.0.2.tgz#64da3f7d56a54412e59794bd62dc35295e8f2987"
@@ -3364,7 +3368,7 @@ lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
 
-lodash@^4.13.1, lodash@^4.14.0, lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.5, lodash@^4.3.0:
+lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -3965,6 +3969,10 @@ object.pick@^1.3.0:
   dependencies:
     isobject "^3.0.1"
 
+objectpath@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/objectpath/-/objectpath-1.2.1.tgz#c87433bdd352aea014e4f9c0b52d70a42652052e"
+
 obuf@^1.0.0, obuf@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.1.tgz#104124b6c602c6796881a042541d36db43a5264e"
@@ -4466,6 +4474,15 @@ react-hot-loader@1.3.1:
   dependencies:
     react-hot-api "^0.4.5"
     source-map "^0.4.4"
+
+react-schema-form@0.3.11:
+  version "0.3.11"
+  resolved "https://registry.yarnpkg.com/react-schema-form/-/react-schema-form-0.3.11.tgz#816763a0652e7a18ac24107356c71e3a67d41d81"
+  dependencies:
+    classnames "^2.2.5"
+    lodash "^4.16.6"
+    objectpath "^1.2.1"
+    tv4 "^1.2.7"
 
 react-tap-event-plugin@3.0.2:
   version "3.0.2"
@@ -5389,6 +5406,10 @@ trim-right@^1.0.1:
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
+
+tv4@^1.2.7:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/tv4/-/tv4-1.3.0.tgz#d020c846fadd50c855abb25ebaecc68fc10f7963"
 
 type-is@~1.6.15, type-is@~1.6.16:
   version "1.6.16"

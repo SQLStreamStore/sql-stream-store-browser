@@ -14,7 +14,7 @@ const fontIconByRel =  {
     [rels.feed]: 'rss_feed'
 };
 
-const NavigationLink = ({ disabled, onClick, link, rel }) => (
+const NavigationLink = ({ disabled, onClick, rel }) => (
     <RaisedButton 
         disabled={disabled} 
         onClick={onClick} 

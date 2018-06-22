@@ -11,6 +11,7 @@ import {
 import { createState, connect } from '../reactive';
 import { resolveLinks, preventDefault } from '../utils';
 import { rels, actions, store } from '../stream-store';
+import FormButtons from './FormButtons.jsx';
 import NavigationLinks from './NavigationLinks.jsx';
 
 const links$ = store.links$
@@ -24,12 +25,19 @@ const messages$ = store.body$
             _links: resolveLinks(url, _links)
         })));
 
+const forms$ = store.body$
+    .filter(({ _embedded }) => _embedded)
+    .map(({ _embedded }) => () => Object.keys(_embedded)
+        .filter(rel => _embedded[rel].$schema && _embedded[rel].$schema.endsWith('hyper-schema#'))
+        .reduce((akk, rel) => ({...akk, [rel]: _embedded[rel]}), {}));
+
 const state$ = createState(
     obs.merge(
         links$.map(links => ['links', links]),
-        messages$.map(messages => ['messages', messages])
+        messages$.map(messages => ['messages', messages]),
+        forms$.map(forms => ['forms', forms])
     ),
-    obs.of({ messages: [], links: {} }));
+    obs.of({ messages: [], links: {}, forms: {} }));
 
 
 const Message = ({ messageId, createdUtc, position, streamId, streamVersion, type, _links }) => (
@@ -65,12 +73,18 @@ Messages.defaultProps = {
 
 const onNavigate = href => actions.get.next(href);
 
-const Stream = ({ links, messages }) => (
+const Stream = ({ links, messages, forms }) => (
     <section>
         <NavigationLinks 
             onNavigate={onNavigate}
-            links={links} />
-        <Messages messages={messages} />
+            links={links}
+        />
+        <FormButtons
+            forms={forms}
+        />
+        <Messages 
+            messages={messages}
+        />
     </section>);
 
 Stream.defaultProps = {

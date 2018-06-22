@@ -27,6 +27,7 @@
     "qs": "6.5.2",
     "react": "16.3.2",
     "react-dom": "16.3.2",
+    "react-schema-form": "0.3.11",
     "react-tap-event-plugin": "3.0.2",
     "resolve-relative-url": "1.0.0",
     "rxjs": "5.4.3",
