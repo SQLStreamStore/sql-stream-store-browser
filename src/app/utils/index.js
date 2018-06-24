@@ -5,10 +5,6 @@ const parseQueryString = search => qs.parse(search, { ignoreQueryPrefix: true })
 
 export const getServerUrl = ({ search } = { search: { } }) => parseQueryString(search).server;
 
-export const getStreamId = ({ streamId } = { })  => streamId;
-
-export const getStreamVersion = ({ streamVersion } = { }) => streamVersion;
-
 export const resolveLinks = (url, links) => Object
     .keys(links)
     .reduce((prev, rel) => ({

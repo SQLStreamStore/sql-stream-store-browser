@@ -13,19 +13,6 @@ actions.post.flatMap(request => http.post(request)).subscribe(response => action
 
 actions.getResponse.subscribe(({ url }) => history.push(url));
 
-history.listen((location, action) => {
-    if (action !== 'POP') {
-        return;
-    }
-
-    const url = location.pathname.substr(1);
-
-    if (!url) {
-        return;
-    }
-
-    actions.get.next(url);
-});
-
+history.listen((location, action) => action === 'POP' && actions.get.next(location.pathname.substring(1)));
 
 export default actions;

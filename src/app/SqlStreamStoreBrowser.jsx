@@ -33,15 +33,7 @@ const state$ = createState(obs.merge(
     server$.map(server => ['server', () => server])
 ));
 
-const initialNavigation = () => {
-    if (!window.location.hash || window.location.hash === '#') {
-        return;
-    }
-
-    const url = window.location.hash.substring(window.location.hash.lastIndexOf('#') + 1);
-
-    actions.get.next(url);
-}
+const initialNavigation = () => actions.get.next(window.location.href);
 
 const SqlStreamStoreBrowser = ({ self, server }) => (
     <MuiThemeProvider theme={theme} >
