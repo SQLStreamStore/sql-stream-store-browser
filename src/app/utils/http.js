@@ -38,7 +38,7 @@ const post = ({ url, body, headers = {} }) => fetch(url, {
         ...headers
     }),
     method: 'post',
-    body
+    body: JSON.stringify(body)
 }).then(mapResponse);
 
 export default {

@@ -25,8 +25,22 @@ actions.getResponse.subscribe(({ url: _url }) => url = _url);
 const SlideUp = props => (
     <Slide
         direction="up"
-        {...props} />
+        {...props}
+    />
 );
+
+const getValue = value => {
+    if (typeof value === "object") {
+        try {
+            return JSON.parse(value.target.value);
+        }
+        catch(e) {
+            return value.target.value;
+        }
+    }
+
+    return value;
+}
 
 class FormButton extends PureComponent {
     state = {
@@ -57,9 +71,10 @@ class FormButton extends PureComponent {
         ...this.state, 
         model: {
             ...this.state.model,
-            [key]: value
+            [key]: getValue(value)
         } 
     });
+    
     
     render() {
         const { rel, title, schema } = this.props;
