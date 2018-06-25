@@ -1,5 +1,5 @@
 import React from 'react';
-import { MuiThemeProvider, getMuiTheme }  from 'material-ui/styles';
+import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 
 import ApplicationBar, { actions as applicationBarActions } from './ApplicationBar.jsx';
@@ -33,8 +33,6 @@ const state$ = createState(obs.merge(
     server$.map(server => ['server', () => server])
 ));
 
-const muiTheme = getMuiTheme(theme);
-
 const initialNavigation = () => {
     if (!window.location.hash || window.location.hash === '#') {
         return;
@@ -46,7 +44,7 @@ const initialNavigation = () => {
 }
 
 const SqlStreamStoreBrowser = ({ self, server }) => (
-    <MuiThemeProvider muiTheme={muiTheme} >
+    <MuiThemeProvider theme={theme} >
         <div>
             <ApplicationBar />
             {viewsByRel[self] && viewsByRel[self]({ server })}

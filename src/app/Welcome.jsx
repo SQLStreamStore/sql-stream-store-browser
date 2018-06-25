@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardMedia } from 'material-ui';
+import { Card, CardMedia } from '@material-ui/core';
 
 const Welcome = () => (
     <Card>

@@ -22,11 +22,21 @@ const config = {
     path: buildPath, // Path of output file
     filename: 'dev.js',
   },
+  resolve: {
+    modules: [
+        'src/app/shim',
+        'node_modules'
+    ]
+  },
   plugins: [
     // Enables Hot Modules Replacement
     new webpack.HotModuleReplacementPlugin(),
     // Allows error warnings but does not stop compiling.
     new webpack.NoEmitOnErrorsPlugin(),
+    /*new webpack.NormalModuleReplacementPlugin(
+        /^material-ui/,
+        resource => resource.request = resource.request.replace('material-ui/', './components/material-ui-shim/')
+    ),*/
     // Moves files
     new TransferWebpackPlugin([
       {from: 'www'},

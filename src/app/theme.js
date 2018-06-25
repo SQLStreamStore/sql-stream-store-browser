@@ -3,7 +3,8 @@ import {
     blueGrey500,
     grey400, grey600, grey900, 
     white, fullBlack
- } from 'material-ui/styles/colors';
+ } from '@material-ui/core/styles';
+ import { createMuiTheme } from '@material-ui/core/styles';
 
 const palette = {
     primary1Color: red700,
@@ -17,6 +18,8 @@ const palette = {
     shadowColor: fullBlack
 };
 
-export default {
+const theme = createMuiTheme({
     palette
-};
+});
+
+export default theme;

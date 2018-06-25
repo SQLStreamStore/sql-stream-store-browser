@@ -1,15 +1,17 @@
 import React, { PureComponent } from 'react';
 import { 
-    FontIcon,
-    RaisedButton,
-    FlatButton,
-    Dialog
-} from 'material-ui';
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    Slide
+} from '@material-ui/core';
+import * as Icons from '@material-ui/icons';
 import { SchemaForm } from 'react-schema-form';
 import { rels, actions } from '../stream-store';
 
 const fontIconByRel =  {
-    [rels.append]: 'publish'
+    [rels.append]: <Icons.Publish />
 };
 
 const actionsByRel = {
@@ -19,6 +21,12 @@ const actionsByRel = {
 let url;
 
 actions.getResponse.subscribe(({ url: _url }) => url = _url);
+
+const SlideUp = props => (
+    <Slide
+        direction="up"
+        {...props} />
+);
 
 class FormButton extends PureComponent {
     state = {
@@ -58,34 +66,40 @@ class FormButton extends PureComponent {
         const { open, model } = this.state;
         return (
             <div>
-                <RaisedButton 
+                <Button 
+                    variant='raised'
                     label={title}
-                    icon={<FontIcon className='material-icons'>{fontIconByRel[rel]}</FontIcon>}
                     onClick={this._onOpen}
-                />
+                >
+                    {fontIconByRel[rel]}
+                </Button>
                 <Dialog
                     title={title}
-                    modal
                     open={open}
-                    autoScrollBodyContent
-                    actions={[
-                        <FlatButton
-                            label="Cancel"
-                            primary
-                            onClick={this._onClose}
-                        />,
-                        <FlatButton
-                            label="Submit"
-                            primary
-                            onClick={this._onSubmit}
-                        />
-                    ]}
+                    TransitionComponent={SlideUp}
+                    disableBackdropClick={false}
                 >
-                <SchemaForm 
-                    schema={schema}
-                    model={model}
-                    onModelChange={this._onModelChange}
-                />
+                    <DialogContent>
+                        <SchemaForm 
+                            schema={schema}
+                            model={model}
+                            onModelChange={this._onModelChange}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            color='primary'
+                            onClick={this._onClose}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            color='primary'
+                            onClick={this._onSubmit}
+                        >
+                            Submit
+                        </Button>
+                    </DialogActions>
                 </Dialog>
             </div>
         );

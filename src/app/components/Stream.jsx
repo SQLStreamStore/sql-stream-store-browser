@@ -4,10 +4,9 @@ import {
     Table, 
     TableBody, 
     TableRow, 
-    TableRowColumn, 
-    TableHeader, 
-    TableHeaderColumn
-} from 'material-ui';
+    TableHead, 
+    TableCell
+} from '@material-ui/core';
 import { createState, connect } from '../reactive';
 import { resolveLinks, preventDefault } from '../utils';
 import { rels, actions, store } from '../stream-store';
@@ -39,30 +38,33 @@ const state$ = createState(
     ),
     obs.of({ messages: [], links: {}, forms: {} }));
 
+const nowrap = {whiteSpace: 'nowrap'};
 
 const Message = ({ messageId, createdUtc, position, streamId, streamVersion, type, _links }) => (
     <TableRow>
-        <TableRowColumn>{messageId}</TableRowColumn>
-        <TableRowColumn>{createdUtc}</TableRowColumn>
-        <TableRowColumn>{type}</TableRowColumn>
-        <TableRowColumn style={{width: '100%'}}>
+        <TableCell style={nowrap}>{messageId}</TableCell>
+        <TableCell style={nowrap}>{createdUtc}</TableCell>
+        <TableCell style={nowrap}>{type}</TableCell>
+        <TableCell style={{width: '100%'}}>
             <a onClick={preventDefault(() => actions.get.next(_links.self.href))} href="#">{streamId}@{streamVersion}</a>
-        </TableRowColumn>
-        <TableRowColumn>{position}</TableRowColumn>
+        </TableCell>
+        <TableCell>{position}</TableCell>
     </TableRow>);
 
 const Messages = ({ messages }) => (
-    <Table selectable={false} fixedHeader={false} style={{ tableLayout: 'auto' }}>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+    <Table
+        style={{ tableLayout: 'auto' }}
+    >
+        <TableHead>
             <TableRow>
-                <TableHeaderColumn>Message Id</TableHeaderColumn>
-                <TableHeaderColumn>Created UTC</TableHeaderColumn>
-                <TableHeaderColumn>Type</TableHeaderColumn>
-                <TableHeaderColumn style={{width: '100%'}}>Stream Id@Version</TableHeaderColumn>
-                <TableHeaderColumn>Position</TableHeaderColumn>
+                <TableCell>Message Id</TableCell>
+                <TableCell>Created UTC</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell style={{width: '100%'}}>Stream Id@Version</TableCell>
+                <TableCell numeric>Position</TableCell>
             </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false} stripedRows>
+        </TableHead>
+        <TableBody>
             {messages.map(message => (<Message key={message.messageId} {...message} />))}
         </TableBody>
     </Table>);
