@@ -13,6 +13,8 @@ actions.post.flatMap(request => http.post(request)).subscribe(response => action
 
 actions.getResponse.subscribe(({ url }) => history.push(url));
 
-history.listen((location, action) => action === 'POP' && actions.get.next(location.pathname.substring(1)));
+const getUrl = location => `${location.pathname}${location.search}${location.hash}`;
+
+history.listen((location, action) => action === 'POP' && actions.get.next(getUrl(location)));
 
 export default actions;
