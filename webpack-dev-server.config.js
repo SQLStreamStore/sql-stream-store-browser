@@ -33,10 +33,6 @@ const config = {
     new webpack.HotModuleReplacementPlugin(),
     // Allows error warnings but does not stop compiling.
     new webpack.NoEmitOnErrorsPlugin(),
-    /*new webpack.NormalModuleReplacementPlugin(
-        /^material-ui/,
-        resource => resource.request = resource.request.replace('material-ui/', './components/material-ui-shim/')
-    ),*/
     // Moves files
     new TransferWebpackPlugin([
       {from: 'www'},

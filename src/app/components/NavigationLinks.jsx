@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-    FontIcon,
-    Button,
     IconButton
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
