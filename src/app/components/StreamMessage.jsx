@@ -1,17 +1,19 @@
 import React, { PureComponent } from 'react';
 import { Observable as obs } from 'rxjs';
-import { 
-    Card,
-    CardContent,
-    IconButton,
-    Table, 
-    TableCell,
-    TableBody, 
-    TableRow, 
-    TableHead, 
-    Toolbar,
-    } from '@material-ui/core';
+import {
+    Typography,
+    ExpansionPanel,
+    ExpansionPanelSummary,
+    ExpansionPanelDetails
+} from '@material-ui/core';
 import { Code } from '@material-ui/icons';
+import {
+    Table,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from './StripeyTable';
 import { createState, connect } from '../reactive';
 import { actions, store, rels } from '../stream-store';
 import { preventDefault } from '../utils';
@@ -21,7 +23,7 @@ const tryParseJson = payload => {
     try {
         return JSON.parse(payload);
     }
-    catch(e) {
+    catch (e) {
         return payload;
     }
 };
@@ -30,7 +32,7 @@ const links$ = store.links$
     .map(links => () => links);
 
 const message$ = store.body$
-    .map(({ payload, metadata, ...body }) => () => ({ 
+    .map(({ payload, metadata, ...body }) => () => ({
         ...body,
         payload: tryParseJson(payload),
         metadata: tryParseJson(metadata)
@@ -49,11 +51,11 @@ const StreamMessageHeader = () => (
         <TableCell>Message Id</TableCell>
         <TableCell>Created UTC</TableCell>
         <TableCell>Type</TableCell>
-        <TableCell style={{width: '100%'}}>Stream Id@Version</TableCell>
+        <TableCell style={{ width: '100%' }}>Stream Id@Version</TableCell>
         <TableCell>Position</TableCell>
     </TableRow>);
 
-const nowrap = {whiteSpace: 'nowrap'};
+const nowrap = { whiteSpace: 'nowrap' };
 
 const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, links }) => (
     <TableRow>
@@ -63,7 +65,7 @@ const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, strea
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
-        <TableCell style={{width: '100%'}}>
+        <TableCell style={{ width: '100%' }}>
             <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
         </TableCell>
         <TableCell numeric>{position}</TableCell>
@@ -72,7 +74,7 @@ const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, strea
 class StreamMessageJson extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             expanded: true
         };
     }
@@ -81,33 +83,24 @@ class StreamMessageJson extends PureComponent {
             expanded: !this.state.expanded
         })
     }
-    _renderJson = (json) => {
-        if (!this.state.expanded) {
-            return null;
-        }
-
-        return (
-            <Card>
-                <CardContent><pre>{JSON.stringify(json, null, 4)}</pre></CardContent>
-            </Card>);
-    }
     render() {
         const { json, title } = this.props;
-
+        const { expanded } = this.state;
         return (
-            <div>
-                <div onClick={this._handleClick}>
-                    <Toolbar>
+            <ExpansionPanel
+                expanded={expanded}
+                onClick={this._handleClick}>
+                <ExpansionPanelSummary
+                    expandIcon={<Code />}
+                >
+                    <Typography variant='title'>
                         {title}
-                        <section>
-                            <IconButton>
-                                <Code />
-                            </IconButton>
-                        </section>
-                    </Toolbar>
-                </div>
-                {this._renderJson(json)}
-            </div>);
+                    </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <pre>{JSON.stringify(json, null, 4)}</pre>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>);
     }
 }
 
@@ -127,7 +120,7 @@ const StreamMessageMetadata = ({ payload }) => (
 
 const StreamMessage = ({ message, links }) => (
     <section>
-        <NavigationLinks 
+        <NavigationLinks
             onNavigate={url => actions.get.next(url)}
             links={links} />
         <Table style={{ tableLayout: 'auto' }}>

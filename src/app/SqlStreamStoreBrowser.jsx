@@ -1,4 +1,5 @@
 import React from 'react';
+import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 
@@ -32,6 +33,7 @@ const initialNavigation = () => actions.get.next(window.location.href);
 const SqlStreamStoreBrowser = ({ self }) => (
     <MuiThemeProvider theme={theme} >
         <div>
+            <CssBaseline />
             {viewsByRel[self] && viewsByRel[self]}
         </div>
     </MuiThemeProvider>);
