@@ -3,7 +3,7 @@ import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 
-import { Stream, StreamMessage, Index, mount } from './components';
+import { Stream, StreamMessage, Index, mount, Notifications } from './components';
 import { actions, store, rels } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
@@ -35,6 +35,7 @@ const SqlStreamStoreBrowser = ({ self }) => (
         <div>
             <CssBaseline />
             {viewsByRel[self] && viewsByRel[self]}
+            <Notifications />
         </div>
     </MuiThemeProvider>);
 
