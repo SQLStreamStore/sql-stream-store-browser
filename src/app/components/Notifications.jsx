@@ -31,6 +31,21 @@ const styles = ({
     }
 });
 
+const formatTitle = ({ status, statusText }) => `${status} ${statusText}`;
+
+const formatSubheader = ({ title, type }) => title ? `${title} (${type})` : null;
+
+const formatContent = ({ detail }) => detail
+    ? detail
+        .split(/\r|\n/)
+        .filter(x => x.length)
+        .reduce((akk, line, index) => ([
+            ...akk,
+            (<br key={index*2} />),
+            (<span key={(index*2) + 1}>{line}</span>)
+        ]), [])
+    : null;
+
 const responses$ = obs.merge(
     actions.getResponse,
     actions.postResponse,
@@ -39,26 +54,29 @@ const responses$ = obs.merge(
 
 const clientError$ = responses$
     .filter(({ status }) => status >= 400 && status < 500)
-    .map(({ statusText, status, body = { title, type, detail, ...body } }) => ({
+    .map(({ body, ...response }) => ({
         variant: 'warning',
-        status,
-        statusText,
+        title: formatTitle(response),
+        subheader: formatSubheader(body),
+        content: formatContent(body)
     }));
 
 const serverError$ = responses$
     .filter(({ status }) => status >= 500)
-    .map(({ statusText, status, body = { title, type, detail, ...body } }) => ({
+    .map(({ body, ...response }) => ({
         variant: 'error',
-        status,
-        statusText,
+        title: formatTitle(response),
+        subheader: formatSubheader(body),
+        content: formatContent(body),
+
     }));
 
 const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
     .filter(({ status }) => status < 400 )
-    .map(({ status, statusText }) => ({
+    .map(response => ({
         variant: 'info',
-        status,
-        statusText,
+        title: formatTitle(response),
+        timeout: 2000
     }));
 
 const getIcon = variant => Icons[variant[0].toUpperCase() + variant.substring(1)];
@@ -75,15 +93,10 @@ const notification$ = obs.merge(
     success$
 ).map(({
     variant,
-    status,
-    statusText,
-    type,
-    title
+    ...props
 }) => {
     return {
-        title: `${status} ${statusText}`,
-        subheader: type,
-        content: title,
+        ...props,
         avatar: (<NotificationAvatar variant={variant} />)
     };
 });
