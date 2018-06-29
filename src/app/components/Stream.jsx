@@ -12,6 +12,7 @@ import {
     TableHead,
     TableCell,
 } from './StripeyTable';
+
 const links$ = store.links$
     .map(links => () => links);
 
@@ -52,6 +53,9 @@ const Message = ({
             <TableCell style={nowrap}>{messageId}</TableCell>
             <TableCell style={nowrap}>{createdUtc}</TableCell>
             <TableCell style={nowrap}>{type}</TableCell>
+            <TableCell style={nowrap}>
+                <a onClick={preventDefault(() => actions.get.next(_links[rels.feed].href))} href="#">{streamId}</a>
+            </TableCell>
             <TableCell style={{ width: '100%' }}>
                 <a onClick={preventDefault(() => actions.get.next(_links.self.href))} href="#">{streamId}@{streamVersion}</a>
             </TableCell>
@@ -67,6 +71,7 @@ const Messages = ({ messages }) => (
                 <TableCell>Message Id</TableCell>
                 <TableCell>Created UTC</TableCell>
                 <TableCell>Type</TableCell>
+                <TableCell>Stream</TableCell>
                 <TableCell style={{ width: '100%' }}>Stream Id@Version</TableCell>
                 <TableCell numeric>Position</TableCell>
             </TableRow>
