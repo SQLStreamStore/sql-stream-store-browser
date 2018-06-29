@@ -10,21 +10,11 @@ import {
     Slide,
     withStyles
 } from '@material-ui/core';
-import { 
-    Publish,
-    Settings,
-    DeleteForever,
-    SentimentNeutral
-} from '@material-ui/icons';
 import { SchemaForm } from 'react-schema-form';
+
+import RelIcon from './RelIcon.jsx';
 import { rels, actions } from '../stream-store';
 import { createState, connect } from '../reactive';
-
-const fontIconByRel =  {
-    [rels.append]: <Publish />,
-    [rels.metadata]: <Settings />,
-    [rels.delete]: <DeleteForever />
-};
 
 const actionsByRel = {
     [rels.append]: actions.post,
@@ -109,7 +99,7 @@ class FormButton extends PureComponent {
                     onClick={this._onOpen}
                     className={classes.button}
                 >
-                    {fontIconByRel[rel] || (<SentimentNeutral />)}
+                    <RelIcon rel={rel} />
                     {schema.title}
                 </Button>
                 <Dialog

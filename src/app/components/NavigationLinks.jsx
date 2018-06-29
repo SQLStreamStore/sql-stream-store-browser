@@ -1,21 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { 
-    IconButton
-} from '@material-ui/core';
-import * as Icons from '@material-ui/icons';
+import { IconButton } from '@material-ui/core';
+import RelIcon from './RelIcon.jsx';
 import { rels } from '../stream-store';
 import { preventDefault } from '../utils';
 
-const fontIconByRel =  {
-    [rels.first]: <Icons.FirstPage />,
-    [rels.previous]: <Icons.ChevronLeft />,
-    [rels.self]: <Icons.Refresh />,
-    [rels.next]: <Icons.ChevronRight />,
-    [rels.last]: <Icons.LastPage />,
-    [rels.metadata]: <Icons.Settings />,
-    [rels.feed]: <Icons.RssFeed />
-};
+const navigationRels = [
+    'first',
+    'previous',
+    'self',
+    'next',
+    'last',
+    'metadata',
+    'feed'
+].map(rel => rels[rel]);
 
 const NavigationLink = ({ disabled, onClick, rel }) => (
     <IconButton 
@@ -23,12 +21,12 @@ const NavigationLink = ({ disabled, onClick, rel }) => (
         disabled={disabled} 
         onClick={onClick} 
     >
-        {fontIconByRel[rel]}
+        <RelIcon rel={rel} />
     </IconButton>);
 
 const NavigationLinks = ({ onNavigate, links }) => (
     <nav>
-        {Object.keys(fontIconByRel).map(rel => (
+        {navigationRels.map(rel => (
             <NavigationLink 
                 disabled={!links[rel]} 
                 key={rel} 
