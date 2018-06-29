@@ -3,7 +3,13 @@ import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 
-import { Stream, StreamMessage, Index, mount, Notifications } from './components';
+import { 
+    Stream,
+    StreamMessage,
+    StreamMetadata,
+    Index,
+    mount,
+    Notifications } from './components';
 import { actions, store, rels } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
@@ -11,7 +17,8 @@ import { createState, connect } from './reactive';
 const viewsByRel = {
     [rels.feed]: <Stream />,
     [rels.message]: <StreamMessage />,
-    [rels.index]: <Index />
+    [rels.index]: <Index />,
+    [rels.metadata]: <StreamMetadata />
 };
 
 const getSelfAlias = links => Object
