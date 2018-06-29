@@ -8,7 +8,8 @@ const rels = {
     message: "streamStore:message",
     metadata: "streamStore:metadata",
     index: "streamStore:index",
-    append: "streamStore:append"
+    append: "streamStore:append",
+    delete: "streamStore:delete"
 };
 
 export default rels;

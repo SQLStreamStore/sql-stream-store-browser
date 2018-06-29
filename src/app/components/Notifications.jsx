@@ -33,7 +33,8 @@ const styles = ({
 
 const responses$ = obs.merge(
     actions.getResponse,
-    actions.postResponse
+    actions.postResponse,
+    actions.deleteResponse
 );
 
 const clientError$ = responses$

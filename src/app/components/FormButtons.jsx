@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { 
+    Card,
+    CardActions,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
-    Slide
+    Slide,
+    withStyles
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
 import { SchemaForm } from 'react-schema-form';
@@ -12,24 +15,21 @@ import { rels, actions } from '../stream-store';
 import { createState, connect } from '../reactive';
 
 const fontIconByRel =  {
-    [rels.append]: <Icons.Publish />
+    [rels.append]: <Icons.Publish />,
+    [rels.metadata]: <Icons.Layers />,
+    [rels.delete]: <Icons.DeleteForever />
 };
 
 const actionsByRel = {
-    [rels.append]: actions.post
+    [rels.append]: actions.post,
+    [rels.metadata]: actions.post,
+    [rels.delete]: actions.delete
 };
 
 const url$ = actions.getResponse.map(({ url }) => () => url);
 
 const state$ = createState(
     url$.map(url => ['url', url])
-);
-
-const SlideUp = props => (
-    <Slide
-        direction="up"
-        {...props}
-    />
 );
 
 const getValue = value => {
@@ -44,6 +44,19 @@ const getValue = value => {
 
     return value;
 }
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit
+    }
+})
+
+const SlideUp = props => (
+    <Slide
+        direction="up"
+        {...props}
+    />
+);
 
 class FormButton extends PureComponent {
     state = {
@@ -77,19 +90,21 @@ class FormButton extends PureComponent {
             [key]: getValue(value)
         } 
     });
-    
-    
+
     render() {
-        const { rel, title, schema } = this.props;
+        const { rel, title, schema, classes } = this.props;
         const { open, model } = this.state;
         return (
-            <div>
+            <span>
                 <Button 
-                    variant='raised'
+                    variant='contained'
+                    color='secondary'
                     label={title}
                     onClick={this._onOpen}
+                    className={classes.button}
                 >
                     {fontIconByRel[rel] || (<Icons.SentimentNeutral />)}
+                    {schema.title}
                 </Button>
                 <Dialog
                     title={title}
@@ -119,19 +134,24 @@ class FormButton extends PureComponent {
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </div>
+            </span>
         );
     }
 }
 
+FormButton = withStyles(styles)(FormButton);
+
 const FormButtons = ({ forms, url }) => (
-    <div>{Object.keys(forms).map(rel => (
-        <FormButton
-            key={rel}
-            rel={rel}
-            url={url}
-            schema={forms[rel]}
-        />))}
-    </div>);
+    <Card>
+        <CardActions>
+            {Object.keys(forms).map(rel => (
+                <FormButton
+                    key={rel}
+                    rel={rel}
+                    url={url}
+                    schema={forms[rel]}
+                />))}
+        </CardActions>
+    </Card>);
 
 export default connect(state$)(FormButtons);
