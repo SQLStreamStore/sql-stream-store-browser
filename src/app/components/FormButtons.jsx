@@ -4,6 +4,7 @@ import {
     CardActions,
     Button,
     Dialog,
+    DialogTitle,
     DialogActions,
     DialogContent,
     Slide,
@@ -107,11 +108,11 @@ class FormButton extends PureComponent {
                     {schema.title}
                 </Button>
                 <Dialog
-                    title={title}
                     open={open}
                     TransitionComponent={SlideUp}
                     disableBackdropClick={false}
                 >
+                    <DialogTitle>{schema.title}</DialogTitle>
                     <DialogContent>
                         <SchemaForm 
                             schema={schema}
