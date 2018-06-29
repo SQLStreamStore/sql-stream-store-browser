@@ -53,7 +53,7 @@ const serverError$ = responses$
         statusText,
     }));
 
-const success$ = actions.postResponse
+const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
     .filter(({ status }) => status < 400 )
     .map(({ status, statusText }) => ({
         variant: 'info',
