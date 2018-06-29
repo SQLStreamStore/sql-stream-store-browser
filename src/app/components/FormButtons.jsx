@@ -9,6 +9,7 @@ import {
 import * as Icons from '@material-ui/icons';
 import { SchemaForm } from 'react-schema-form';
 import { rels, actions } from '../stream-store';
+import { createState, connect } from '../reactive';
 
 const fontIconByRel =  {
     [rels.append]: <Icons.Publish />
@@ -18,9 +19,11 @@ const actionsByRel = {
     [rels.append]: actions.post
 };
 
-let url;
+const url$ = actions.getResponse.map(({ url }) => () => url);
 
-actions.getResponse.subscribe(({ url: _url }) => url = _url);
+const state$ = createState(
+    url$.map(url => ['url', url])
+);
 
 const SlideUp = props => (
     <Slide
@@ -51,16 +54,16 @@ class FormButton extends PureComponent {
         open: true
     });
     _onClose = () => this.setState({
+        ...this.state,
         open: false,
-        ...this.state
     });
     _onSubmit = e => {
         e.preventDefault();
 
-        const { rel } = this.props;
+        const { rel, url } = this.props;
         const { model: body } = this.state;
 
-        actionsByRel[rel].next({
+        actionsByRel[rel] && actionsByRel[rel].next({
             body,
             url
         });
@@ -86,7 +89,7 @@ class FormButton extends PureComponent {
                     label={title}
                     onClick={this._onOpen}
                 >
-                    {fontIconByRel[rel]}
+                    {fontIconByRel[rel] || (<Icons.SentimentNeutral />)}
                 </Button>
                 <Dialog
                     title={title}
@@ -121,13 +124,14 @@ class FormButton extends PureComponent {
     }
 }
 
-const FormButtons = ({ forms }) => (
+const FormButtons = ({ forms, url }) => (
     <div>{Object.keys(forms).map(rel => (
         <FormButton
             key={rel}
             rel={rel}
+            url={url}
             schema={forms[rel]}
         />))}
     </div>);
 
-export default FormButtons;
+export default connect(state$)(FormButtons);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createElement } from 'react';
 import { Observable as obs } from 'rxjs';
 import { Avatar, withStyles } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
@@ -11,13 +11,13 @@ import { actions } from '../stream-store';
 
 
 const styles = ({
-    avatarInfo: {
+    infoAvatar: {
       backgroundColor: green[500]
     },
-    avatarWarning: {
+    warningAvatar: {
       backgroundColor: yellow[500]
     },
-    avatarError: {
+    errorAvatar: {
       backgroundColor: red[500]
     },
     infoCard: {
@@ -55,25 +55,18 @@ const serverError$ = responses$
 const success$ = actions.postResponse
     .filter(({ status }) => status < 400 )
     .map(({ status, statusText }) => ({
-        varant: 'info',
+        variant: 'info',
         status,
         statusText,
     }));
 
-const avatarsByVariant = {
-    'error': () => (
-        <Avatar style={styles.avatarError}>
-            <Icons.Error />
-        </Avatar>),
-    'warning': () => (
-        <Avatar style={styles.avatarWarning}>
-            <Icons.Warning />
-        </Avatar>),
-    'info': () => (
-        <Avatar style={styles.avatarInfo}>
-            <Icons.Info />
-        </Avatar>),
-};
+const getIcon = variant => Icons[variant[0].toUpperCase() + variant.substring(1)];
+
+const NotificationAvatar = withStyles(styles)(({ classes, variant }) => (
+    <Avatar className={classes[`${variant}Avatar`]}>
+        {createElement(getIcon(variant))}
+    </Avatar>
+));
 
 const notification$ = obs.merge(
     clientError$,
@@ -84,17 +77,13 @@ const notification$ = obs.merge(
     status,
     statusText,
     type,
-    title,
-    detail
+    title
 }) => {
-    const Alert = avatarsByVariant[variant];
-
     return {
         title: `${status} ${statusText}`,
         subheader: type,
         content: title,
-        timeout: 2000,
-        avatar: <Alert />
+        avatar: (<NotificationAvatar variant={variant} />)
     };
 });
 
