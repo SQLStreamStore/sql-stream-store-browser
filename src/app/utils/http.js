@@ -1,3 +1,8 @@
+const contentTypes = {
+    hal: 'application/hal+json',
+    json: 'application/json'
+};
+
 const tryParseJson = body => {
     try {
         return JSON.parse(body);
@@ -7,17 +12,36 @@ const tryParseJson = body => {
     }
 };
 
-const mapResponse = ({ ok, status, statusText, url }, body) => ({
-    body: tryParseJson(body),
-    ok,
-    status,
-    statusText,
-    url
-});
+const mapResponse = response => response
+    .text()
+    .then(body => {
+        const { ok, status, statusText, url } = response;
+        return {
+            body: tryParseJson(body),
+            ok,
+            status,
+            statusText,
+            url
+        };
+    });
 
-const get = url => fetch(url).then(response => response.text()
-    .then(body => mapResponse(response, body)));
+const get = url => fetch(url, {
+    headers: new Headers({
+        accept: contentTypes.hal
+    })
+}).then(mapResponse);
+
+const post = ({ url, body, headers = {} }) => fetch(url, {
+    headers: new Headers({
+        'content-type': contentTypes.json,
+        accept: contentTypes.hal,
+        ...headers
+    }),
+    method: 'post',
+    body
+}).then(mapResponse);
 
 export default {
-    get
+    get,
+    post
 };

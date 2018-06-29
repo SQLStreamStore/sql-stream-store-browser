@@ -1,18 +1,16 @@
-import { createHashHistory } from 'history';
+import { createBrowserHistory } from 'history';
 
-const history = createHashHistory({
-    hashType: 'noslash'
-});
+const removeOrigin = href => href.substring(new URL(href).origin.length); 
 
-const push = url => {
-    const pathname = `/${url}`;
+const history = createBrowserHistory();
 
-    if (history.location.pathname === pathname) {
-        return;
-    }
+const push = url =>  {
+    const pathNameAndQuery = removeOrigin(url); 
 
-    history.push(pathname);
+    removeOrigin(window.location.href) !== pathNameAndQuery 
+        && history.push(pathNameAndQuery);
 };
+
 
 export default {
     ...history,

@@ -22,6 +22,12 @@ const config = {
     path: buildPath, // Path of output file
     filename: 'dev.js',
   },
+  resolve: {
+    modules: [
+        'src/app/shim',
+        'node_modules'
+    ]
+  },
   plugins: [
     // Enables Hot Modules Replacement
     new webpack.HotModuleReplacementPlugin(),

@@ -1,20 +1,19 @@
 import React, { PureComponent } from 'react';
 import { Observable as obs } from 'rxjs';
-import { 
-    Card,
-    CardText,
-    IconButton,
-    Table, 
-    TableBody, 
-    TableRow, 
-    TableRowColumn, 
-    TableHeader, 
-    TableHeaderColumn,
-    Toolbar,
-    ToolbarGroup,
-    ToolbarTitle
-    } from 'material-ui';
-import { ActionCode } from 'material-ui/svg-icons';
+import {
+    Typography,
+    ExpansionPanel,
+    ExpansionPanelSummary,
+    ExpansionPanelDetails
+} from '@material-ui/core';
+import { Code } from '@material-ui/icons';
+import {
+    Table,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from './StripeyTable';
 import { createState, connect } from '../reactive';
 import { actions, store, rels } from '../stream-store';
 import { preventDefault } from '../utils';
@@ -24,7 +23,7 @@ const tryParseJson = payload => {
     try {
         return JSON.parse(payload);
     }
-    catch(e) {
+    catch (e) {
         return payload;
     }
 };
@@ -33,7 +32,7 @@ const links$ = store.links$
     .map(links => () => links);
 
 const message$ = store.body$
-    .map(({ payload, metadata, ...body }) => () => ({ 
+    .map(({ payload, metadata, ...body }) => () => ({
         ...body,
         payload: tryParseJson(payload),
         metadata: tryParseJson(metadata)
@@ -48,32 +47,34 @@ const state$ = createState(
 
 const StreamMessageHeader = () => (
     <TableRow>
-        <TableHeaderColumn>StreamId</TableHeaderColumn>
-        <TableHeaderColumn>Message Id</TableHeaderColumn>
-        <TableHeaderColumn>Created UTC</TableHeaderColumn>
-        <TableHeaderColumn>Type</TableHeaderColumn>
-        <TableHeaderColumn style={{width: '100%'}}>Stream Id@Version</TableHeaderColumn>
-        <TableHeaderColumn>Position</TableHeaderColumn>
+        <TableCell>StreamId</TableCell>
+        <TableCell>Message Id</TableCell>
+        <TableCell>Created UTC</TableCell>
+        <TableCell>Type</TableCell>
+        <TableCell style={{ width: '100%' }}>Stream Id@Version</TableCell>
+        <TableCell>Position</TableCell>
     </TableRow>);
+
+const nowrap = { whiteSpace: 'nowrap' };
 
 const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, links }) => (
     <TableRow>
-        <TableRowColumn>
+        <TableCell style={nowrap}>
             <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
-        </TableRowColumn>
-        <TableRowColumn>{messageId}</TableRowColumn>
-        <TableRowColumn>{createdUtc}</TableRowColumn>
-        <TableRowColumn>{type}</TableRowColumn>
-        <TableRowColumn style={{width: '100%'}}>
+        </TableCell>
+        <TableCell style={nowrap}>{messageId}</TableCell>
+        <TableCell style={nowrap}>{createdUtc}</TableCell>
+        <TableCell style={nowrap}>{type}</TableCell>
+        <TableCell style={{ width: '100%' }}>
             <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
-        </TableRowColumn>
-        <TableRowColumn>{position}</TableRowColumn>
+        </TableCell>
+        <TableCell numeric>{position}</TableCell>
     </TableRow>);
 
 class StreamMessageJson extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             expanded: true
         };
     }
@@ -82,35 +83,24 @@ class StreamMessageJson extends PureComponent {
             expanded: !this.state.expanded
         })
     }
-    _renderJson = (json) => {
-        if (!this.state.expanded) {
-            return null;
-        }
-
-        return (
-            <Card>
-                <CardText><pre>{JSON.stringify(json, null, 4)}</pre></CardText>
-            </Card>);
-    }
     render() {
         const { json, title } = this.props;
-
+        const { expanded } = this.state;
         return (
-            <div>
-                <div onClick={this._handleClick}>
-                    <Toolbar>
-                        <ToolbarTitle 
-                            text={title}
-                        />
-                    <ToolbarGroup>
-                    <IconButton touch={true}>
-                        <ActionCode />
-                    </IconButton>
-                    </ToolbarGroup>
-                    </Toolbar>
-                </div>
-                {this._renderJson(json)}
-            </div>);
+            <ExpansionPanel
+                expanded={expanded}
+                onClick={this._handleClick}>
+                <ExpansionPanelSummary
+                    expandIcon={<Code />}
+                >
+                    <Typography variant='title'>
+                        {title}
+                    </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <pre>{JSON.stringify(json, null, 4)}</pre>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>);
     }
 }
 
@@ -130,14 +120,14 @@ const StreamMessageMetadata = ({ payload }) => (
 
 const StreamMessage = ({ message, links }) => (
     <section>
-        <NavigationLinks 
+        <NavigationLinks
             onNavigate={url => actions.get.next(url)}
             links={links} />
-        <Table selectable={false} fixedHeader={false} style={{ tableLayout: 'auto' }}>
-            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <Table style={{ tableLayout: 'auto' }}>
+            <TableHead>
                 <StreamMessageHeader />
-            </TableHeader>
-            <TableBody displayRowCheckbox={false} stripedRows>
+            </TableHead>
+            <TableBody>
                 <StreamMessageDetails {...message} links={links} />
             </TableBody>
         </Table>

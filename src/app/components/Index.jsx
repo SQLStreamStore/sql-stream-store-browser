@@ -1,6 +1,6 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import { List, ListItem } from 'material-ui/List';
+import { List, ListItem } from '@material-ui/core';
 import { createState, connect } from '../reactive';
 import { rels, actions, store } from '../stream-store';
 import { preventDefault } from '../utils';
@@ -27,7 +27,11 @@ const Links = ({ links }) => (
     <List>
         {Object.keys(links).map((rel, key) => (
             <ListItem key={key}>
-                <a onClick={preventDefault(() => actions.get.next(links[rel].href))}>{relsToTitle[rel]}</a>
+                <a 
+                    href='#'
+                    onClick={preventDefault(() => actions.get.next(links[rel].href))}>
+                    {relsToTitle[rel]}
+                </a>
             </ListItem>
         ))}
     </List>);

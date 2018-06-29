@@ -21,12 +21,14 @@
     "webpack-dev-server": "3.1.4"
   },
   "dependencies": {
+    "@material-ui/core": "1.2.3",
+    "@material-ui/icons": "1.1.0",
     "history": "4.7.2",
-    "material-ui": "0.19.4",
     "prop-types": "15.6.1",
     "qs": "6.5.2",
     "react": "16.3.2",
     "react-dom": "16.3.2",
+    "react-schema-form": "0.3.11",
     "react-tap-event-plugin": "3.0.2",
     "resolve-relative-url": "1.0.0",
     "rxjs": "5.4.3",

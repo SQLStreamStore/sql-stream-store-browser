@@ -1,17 +1,17 @@
 import React from 'react';
-import { MuiThemeProvider, getMuiTheme }  from 'material-ui/styles';
+import { CssBaseline } from '@material-ui/core';
+import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 
-import ApplicationBar, { actions as applicationBarActions } from './ApplicationBar.jsx';
 import { Stream, StreamMessage, Index, mount } from './components';
 import { actions, store, rels } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 
 const viewsByRel = {
-    [rels.feed]: props => <Stream {...props} />,
-    [rels.message]: props => <StreamMessage {...props} />,
-    [rels.index]: props => <Index {...props} />
+    [rels.feed]: <Stream />,
+    [rels.message]: <StreamMessage />,
+    [rels.index]: <Index />
 };
 
 const getSelfAlias = links => Object
@@ -24,32 +24,17 @@ const self$ = store.links$
     .map(getSelfAlias)
     .filter(rel => !!rel);
 
-const server$ = applicationBarActions.connect;
-
-server$.subscribe(server => actions.get.next(server));
-
 const state$ = createState(obs.merge(
-    self$.map(self => ['self', () => self]),
-    server$.map(server => ['server', () => server])
+    self$.map(self => ['self', () => self])
 ));
 
-const muiTheme = getMuiTheme(theme);
+const initialNavigation = () => actions.get.next(window.location.href);
 
-const initialNavigation = () => {
-    if (!window.location.hash || window.location.hash === '#') {
-        return;
-    }
-
-    const url = window.location.hash.substring(window.location.hash.lastIndexOf('#') + 1);
-
-    actions.get.next(url);
-}
-
-const SqlStreamStoreBrowser = ({ self, server }) => (
-    <MuiThemeProvider muiTheme={muiTheme} >
+const SqlStreamStoreBrowser = ({ self }) => (
+    <MuiThemeProvider theme={theme} >
         <div>
-            <ApplicationBar />
-            {viewsByRel[self] && viewsByRel[self]({ server })}
+            <CssBaseline />
+            {viewsByRel[self] && viewsByRel[self]}
         </div>
     </MuiThemeProvider>);
 
