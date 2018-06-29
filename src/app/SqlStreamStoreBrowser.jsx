@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createElement } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
@@ -9,16 +9,21 @@ import {
     StreamMetadata,
     Index,
     mount,
-    Notifications } from './components';
+    Notifications,
+    FormButtons,
+    NavigationLinks
+} from './components';
 import { actions, store, rels } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 
+const empty = () => null;
+
 const viewsByRel = {
-    [rels.feed]: <Stream />,
-    [rels.message]: <StreamMessage />,
-    [rels.index]: <Index />,
-    [rels.metadata]: <StreamMetadata />
+    [rels.feed]: Stream,
+    [rels.message]: StreamMessage,
+    [rels.index]: Index,
+    [rels.metadata]: StreamMetadata
 };
 
 const getSelfAlias = links => Object
@@ -31,17 +36,31 @@ const self$ = store.links$
     .map(getSelfAlias)
     .filter(rel => !!rel);
 
-const state$ = createState(obs.merge(
-    self$.map(self => ['self', () => self])
-));
+const state$ = createState(
+    obs.merge(
+        self$.map(self => ['self', () => self]),
+        store.links$.map(links => ['links', () => links]),
+        store.forms$.map(forms => ['forms', () => forms])
+    ), obs.of({ links: {}, forms: {} }));
 
 const initialNavigation = () => actions.get.next(window.location.href);
 
-const SqlStreamStoreBrowser = ({ self }) => (
+const onNavigate = url => actions.get.next(url);
+
+const SqlStreamStoreBrowser = ({ self, links, forms }) => (
     <MuiThemeProvider theme={theme} >
         <div>
             <CssBaseline />
-            {viewsByRel[self] && viewsByRel[self]}
+            <section>
+                <NavigationLinks
+                    onNavigate={onNavigate}
+                    links={links}
+                />
+                <FormButtons
+                    forms={forms}
+                />
+                {createElement(viewsByRel[self] || empty, { links, forms, self })}
+            </section>
             <Notifications />
         </div>
     </MuiThemeProvider>);

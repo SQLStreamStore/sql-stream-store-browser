@@ -10,8 +10,6 @@ import { Code } from '@material-ui/icons';
 import { createState, connect } from '../reactive';
 import { preventDefault } from '../utils';
 import { rels, actions, store } from '../stream-store';
-import FormButtons from './FormButtons.jsx';
-import NavigationLinks from './NavigationLinks.jsx';
 import {
     Table,
     TableBody,
@@ -20,25 +18,15 @@ import {
     TableCell,
 } from './StripeyTable';
 
-const links$ = store.links$
-    .map(links => () => links);
-
-const forms$ = store.body$
-    .filter(({ _embedded }) => _embedded)
-    .map(({ _embedded }) => () => Object.keys(_embedded)
-        .filter(rel => _embedded[rel].$schema && _embedded[rel].$schema.endsWith('hyper-schema#'))
-        .reduce((akk, rel) => ({ ...akk, [rel]: _embedded[rel] }), {}));
-
 const metadata$ = store.body$
     .map(metadata => () => metadata);
 
 const state$ = createState(
-    obs.merge(
-        links$.map(links => ['links', links]),
-        forms$.map(forms => ['forms', forms]),
-        metadata$.map(metadata => ['metadata', metadata])
-    ),
-    obs.of({ metadata: {}, links: {}, forms: {} }));
+    metadata$.map(metadata => ['metadata', metadata]),
+    obs.of({ metadata: {} })
+);
+
+const nowrap = { whiteSpace: 'nowrap' };
 
 const StreamMetadataHeader = () => (
     <TableRow>
@@ -47,7 +35,6 @@ const StreamMetadataHeader = () => (
         <TableCell>Max Count</TableCell>
     </TableRow>);
 
-const nowrap = { whiteSpace: 'nowrap' };
 
 const StreamMetadataDetails = ({ streamId, maxAge, maxCount, links }) => (
     <TableRow>
@@ -91,14 +78,8 @@ class StreamMetadataJson extends PureComponent {
     }
 }
 
-const StreamMetadata = ({ metadata, forms, links }) => (
+const StreamMetadata = ({ metadata, links }) => (
     <section>
-        <NavigationLinks
-            onNavigate={url => actions.get.next(url)}
-            links={links} />
-        <FormButtons
-            forms={forms}
-        />
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
                 <StreamMetadataHeader />

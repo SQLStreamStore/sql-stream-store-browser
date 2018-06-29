@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { 
+import {
     Card,
     CardActions,
     Button,
@@ -10,15 +10,20 @@ import {
     Slide,
     withStyles
 } from '@material-ui/core';
-import * as Icons from '@material-ui/icons';
+import { 
+    Publish,
+    Settings,
+    DeleteForever,
+    SentimentNeutral
+} from '@material-ui/icons';
 import { SchemaForm } from 'react-schema-form';
 import { rels, actions } from '../stream-store';
 import { createState, connect } from '../reactive';
 
 const fontIconByRel =  {
-    [rels.append]: <Icons.Publish />,
-    [rels.metadata]: <Icons.Layers />,
-    [rels.delete]: <Icons.DeleteForever />
+    [rels.append]: <Publish />,
+    [rels.metadata]: <Settings />,
+    [rels.delete]: <DeleteForever />
 };
 
 const actionsByRel = {
@@ -104,7 +109,7 @@ class FormButton extends PureComponent {
                     onClick={this._onOpen}
                     className={classes.button}
                 >
-                    {fontIconByRel[rel] || (<Icons.SentimentNeutral />)}
+                    {fontIconByRel[rel] || (<SentimentNeutral />)}
                     {schema.title}
                 </Button>
                 <Dialog

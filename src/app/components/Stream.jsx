@@ -3,8 +3,6 @@ import { Observable as obs } from 'rxjs';
 import { createState, connect } from '../reactive';
 import { resolveLinks, preventDefault } from '../utils';
 import { rels, actions, store } from '../stream-store';
-import FormButtons from './FormButtons.jsx';
-import NavigationLinks from './NavigationLinks.jsx';
 import {
     Table,
     TableBody,
@@ -13,32 +11,21 @@ import {
     TableCell,
 } from './StripeyTable';
 
-const links$ = store.links$
-    .map(links => () => links);
-
 const messages$ = store.body$
     .zip(store.url$)
     .map(([{ _embedded }, url]) => () => _embedded[rels.message]
         .map(({ _links, ...message }) => ({
             ...message,
-            _links: resolveLinks(url, _links)
+            links: resolveLinks(url, _links)
         })));
 
-const forms$ = store.body$
-    .filter(({ _embedded }) => _embedded)
-    .map(({ _embedded }) => () => Object.keys(_embedded)
-        .filter(rel => _embedded[rel].$schema && _embedded[rel].$schema.endsWith('hyper-schema#'))
-        .reduce((akk, rel) => ({ ...akk, [rel]: _embedded[rel] }), {}));
-
 const state$ = createState(
-    obs.merge(
-        links$.map(links => ['links', links]),
-        messages$.map(messages => ['messages', messages]),
-        forms$.map(forms => ['forms', forms])
-    ),
-    obs.of({ messages: [], links: {}, forms: {} }));
+    messages$.map(messages => ['messages', messages]),
+    obs.of({ messages: [] }));
 
 const nowrap = { whiteSpace: 'nowrap' };
+
+const onNavigate = href => actions.get.next(href);
 
 const Message = ({
     messageId,
@@ -47,17 +34,17 @@ const Message = ({
     streamId,
     streamVersion,
     type,
-    _links
+    links
 }) => (
         <TableRow>
             <TableCell style={nowrap}>{messageId}</TableCell>
             <TableCell style={nowrap}>{createdUtc}</TableCell>
             <TableCell style={nowrap}>{type}</TableCell>
             <TableCell style={nowrap}>
-                <a onClick={preventDefault(() => actions.get.next(_links[rels.feed].href))} href="#">{streamId}</a>
+                <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
             </TableCell>
             <TableCell style={{ width: '100%' }}>
-                <a onClick={preventDefault(() => actions.get.next(_links.self.href))} href="#">{streamId}@{streamVersion}</a>
+                <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
             </TableCell>
             <TableCell>{position}</TableCell>
         </TableRow>);
@@ -85,17 +72,8 @@ Messages.defaultProps = {
     messages: []
 };
 
-const onNavigate = href => actions.get.next(href);
-
 const Stream = ({ links, messages, forms }) => (
     <section>
-        <NavigationLinks
-            onNavigate={onNavigate}
-            links={links}
-        />
-        <FormButtons
-            forms={forms}
-        />
         <Messages
             messages={messages}
         />

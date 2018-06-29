@@ -17,8 +17,6 @@ import {
 import { createState, connect } from '../reactive';
 import { actions, store, rels } from '../stream-store';
 import { preventDefault } from '../utils';
-import FormButtons from './FormButtons.jsx';
-import NavigationLinks from './NavigationLinks.jsx';
 
 const tryParseJson = payload => {
     try {
@@ -29,15 +27,6 @@ const tryParseJson = payload => {
     }
 };
 
-const links$ = store.links$
-    .map(links => () => links);
-
-const forms$ = store.body$
-    .filter(({ _embedded }) => _embedded)
-    .map(({ _embedded }) => () => Object.keys(_embedded)
-        .filter(rel => _embedded[rel].$schema && _embedded[rel].$schema.endsWith('hyper-schema#'))
-        .reduce((akk, rel) => ({ ...akk, [rel]: _embedded[rel] }), {}));
-
 const message$ = store.body$
     .map(({ payload, metadata, ...body }) => () => ({
         ...body,
@@ -46,12 +35,8 @@ const message$ = store.body$
     }));
 
 const state$ = createState(
-    obs.merge(
-        links$.map(links => ['links', links]),
-        message$.map(message => ['message', message]),
-        forms$.map(forms => ['forms', forms])
-    ),
-    obs.of({ message: {}, links: {}, forms: {} }));
+    message$.map(message => ['message', message]),
+    obs.of({ message: {} }));
 
 const StreamMessageHeader = () => (
     <TableRow>
@@ -126,14 +111,8 @@ const StreamMessageMetadata = ({ payload }) => (
     />
 );
 
-const StreamMessage = ({ message, links, forms }) => (
+const StreamMessage = ({ message, links }) => (
     <section>
-        <NavigationLinks
-            onNavigate={url => actions.get.next(url)}
-            links={links} />
-        <FormButtons
-            forms={forms}
-        />
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
                 <StreamMessageHeader />
