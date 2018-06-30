@@ -94,12 +94,10 @@ const notification$ = obs.merge(
 ).map(({
     variant,
     ...props
-}) => {
-    return {
-        ...props,
-        avatar: (<NotificationAvatar variant={variant} />)
-    };
-});
+}) => ({
+    ...props,
+    avatar: (<NotificationAvatar variant={variant} />)
+}));
 
 notification$.subscribe(notification => showNotification(() => notification));
 

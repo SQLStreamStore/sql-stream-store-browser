@@ -11,7 +11,6 @@ const TextField = ({
     error,
     errorText,
     multiLine,
-    rows,
     type,
     ...props
 }) => (
@@ -21,7 +20,6 @@ const TextField = ({
         helperText={error ? errorText : hintText}
         label={floatingLabelText}
         multiline={multiLine}
-        rows={rows}
         fullWidth
     />
 );

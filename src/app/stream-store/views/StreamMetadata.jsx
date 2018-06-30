@@ -7,16 +7,16 @@ import {
     ExpansionPanelDetails
 } from '@material-ui/core';
 import { Code } from '@material-ui/icons';
-import { createState, connect } from '../reactive';
-import { preventDefault } from '../utils';
-import { rels, actions, store } from '../stream-store';
+import { createState, connect } from '../../reactive';
+import { preventDefault } from '../../utils';
+import { rels, actions, store } from '../';
 import {
     Table,
     TableBody,
     TableRow,
     TableHead,
     TableCell,
-} from './StripeyTable';
+} from '../../components/StripeyTable';
 
 const metadata$ = store.body$
     .map(metadata => () => metadata);

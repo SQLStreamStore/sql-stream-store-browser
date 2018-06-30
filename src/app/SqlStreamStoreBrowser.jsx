@@ -2,29 +2,18 @@ import React, { createElement } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
-
 import { 
-    Stream,
-    StreamMessage,
-    StreamMetadata,
-    Index,
     mount,
     Notifications,
     FormButtons,
     NavigationLinks
 } from './components';
-import { actions, store, rels } from './stream-store';
+import { actions, store, rels, views } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 
-const empty = () => null;
 
-const viewsByRel = {
-    [rels.feed]: Stream,
-    [rels.message]: StreamMessage,
-    [rels.index]: Index,
-    [rels.metadata]: StreamMetadata
-};
+const empty = () => null;
 
 const getSelfAlias = links => Object
     .keys(links)
@@ -57,9 +46,14 @@ const SqlStreamStoreBrowser = ({ self, links, forms }) => (
                     links={links}
                 />
                 <FormButtons
+                    actions={{
+                        [rels.append]: actions.post,
+                        [rels.metadata]: actions.post,
+                        [rels.delete]: actions.delete
+                    }}
                     forms={forms}
                 />
-                {createElement(viewsByRel[self] || empty, { links, forms, self })}
+                {createElement(views[self] || empty, { links, forms, self })}
             </section>
             <Notifications />
         </div>

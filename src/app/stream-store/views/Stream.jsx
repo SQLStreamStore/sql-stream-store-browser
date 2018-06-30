@@ -1,15 +1,15 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import { createState, connect } from '../reactive';
-import { resolveLinks, preventDefault } from '../utils';
-import { rels, actions, store } from '../stream-store';
+import { createState, connect } from '../../reactive';
+import { resolveLinks, preventDefault } from '../../utils';
+import { rels, actions, store } from '../';
 import {
     Table,
     TableBody,
     TableRow,
     TableHead,
     TableCell,
-} from './StripeyTable';
+} from '../../components/StripeyTable';
 
 const messages$ = store.body$
     .zip(store.url$)
@@ -41,25 +41,33 @@ const Message = ({
             <TableCell style={nowrap}>{createdUtc}</TableCell>
             <TableCell style={nowrap}>{type}</TableCell>
             <TableCell style={nowrap}>
-                <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
+                <a 
+                    onClick={preventDefault(() => actions.get.next(links[rels.feed].href))}
+                    href={links[rels.feed].href}
+                >
+                    {streamId}
+                </a>
             </TableCell>
-            <TableCell style={{ width: '100%' }}>
-                <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
+            <TableCell>
+                <a 
+                    onClick={preventDefault(() => actions.get.next(links.self.href))}
+                    href={links.self.href}
+                >
+                    {streamId}@{streamVersion}
+                </a>
             </TableCell>
             <TableCell>{position}</TableCell>
         </TableRow>);
 
 const Messages = ({ messages }) => (
-    <Table
-        style={{ tableLayout: 'auto' }}
-    >
+    <Table>
         <TableHead>
             <TableRow>
                 <TableCell>Message Id</TableCell>
                 <TableCell>Created UTC</TableCell>
                 <TableCell>Type</TableCell>
                 <TableCell>Stream</TableCell>
-                <TableCell style={{ width: '100%' }}>Stream Id@Version</TableCell>
+                <TableCell>Stream Id@Version</TableCell>
                 <TableCell numeric>Position</TableCell>
             </TableRow>
         </TableHead>

@@ -13,10 +13,10 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from './StripeyTable';
-import { createState, connect } from '../reactive';
-import { actions, store, rels } from '../stream-store';
-import { preventDefault } from '../utils';
+} from '../../components/StripeyTable';
+import { createState, connect } from '../../reactive';
+import { actions, store, rels } from '../';
+import { preventDefault } from '../../utils';
 
 const tryParseJson = payload => {
     try {

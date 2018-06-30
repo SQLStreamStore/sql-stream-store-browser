@@ -3,6 +3,7 @@ import {
     Card,
     CardActions,
     Button,
+    TextField,
     Dialog,
     DialogTitle,
     DialogActions,
@@ -13,14 +14,9 @@ import {
 import { SchemaForm } from 'react-schema-form';
 
 import RelIcon from './RelIcon.jsx';
+import UuidField from './UuidField.jsx';
 import { rels, actions } from '../stream-store';
 import { createState, connect } from '../reactive';
-
-const actionsByRel = {
-    [rels.append]: actions.post,
-    [rels.metadata]: actions.post,
-    [rels.delete]: actions.delete
-};
 
 const url$ = actions.getResponse.map(({ url }) => () => url);
 
@@ -54,6 +50,10 @@ const SlideUp = props => (
     />
 );
 
+const mapper = {
+    'uuid': UuidField
+};
+
 class FormButton extends PureComponent {
     state = {
         open: false
@@ -69,10 +69,10 @@ class FormButton extends PureComponent {
     _onSubmit = e => {
         e.preventDefault();
 
-        const { rel, url } = this.props;
+        const { rel, url, actions } = this.props;
         const { model: body } = this.state;
 
-        actionsByRel[rel] && actionsByRel[rel].next({
+        actions[rel] && actions[rel].next({
             body,
             url
         });
@@ -112,6 +112,7 @@ class FormButton extends PureComponent {
                         <SchemaForm 
                             schema={schema}
                             model={model}
+                            mapper={mapper}
                             onModelChange={this._onModelChange}
                         />
                     </DialogContent>
@@ -137,7 +138,7 @@ class FormButton extends PureComponent {
 
 FormButton = withStyles(styles)(FormButton);
 
-const FormButtons = ({ forms, url }) => (
+const FormButtons = ({ forms, url, actions }) => (
     <Card>
         <CardActions>
             {Object.keys(forms).map(rel => (
@@ -145,6 +146,7 @@ const FormButtons = ({ forms, url }) => (
                     key={rel}
                     rel={rel}
                     url={url}
+                    actions={actions}
                     schema={forms[rel]}
                 />))}
         </CardActions>
