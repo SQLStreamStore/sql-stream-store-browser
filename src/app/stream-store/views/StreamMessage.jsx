@@ -50,6 +50,8 @@ const StreamMessageHeader = () => (
 
 const nowrap = { whiteSpace: 'nowrap' };
 
+const getFeed = links => (links[rels.feed] || {}).href;
+
 const StreamMessageDetails = ({ 
     messageId,
     createdUtc,
@@ -62,13 +64,13 @@ const StreamMessageDetails = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <a onClick={preventDefault(() => onNavigate(links[rels.feed].href))} href={links[rels.feed].href}>{streamId}</a>
+            <a onClick={preventDefault(() => onNavigate(links[rels.feed].href))} href={getFeed(links)}>{streamId}</a>
         </TableCell>
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <a onClick={preventDefault(() => onNavigate(links.self.href))} href={links[rels.feed].href}>{streamId}@{streamVersion}</a>
+            <a onClick={preventDefault(() => onNavigate(links.self.href))} href={getFeed(links)}>{streamId}@{streamVersion}</a>
         </TableCell>
         <TableCell numeric>{position}</TableCell>
     </TableRow>);

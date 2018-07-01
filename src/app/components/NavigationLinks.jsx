@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
 import RelIcon from './RelIcon.jsx';
 import { rels } from '../stream-store';
 import { preventDefault } from '../utils';
 
-const navigationRels = [
+const feedNavigation = [
     'first',
     'previous',
     'self',
@@ -13,28 +13,56 @@ const navigationRels = [
     'last',
     'metadata',
     'feed'
-].map(rel => rels[rel]);
+].map(key => rels[key]);
 
-const NavigationLink = ({ disabled, onClick, rel }) => (
+const feedNavigationSet = new Set(feedNavigation);
+
+const FeedNavigationLink = ({ disabled, onClick, rel }) => (
     <IconButton 
-        variant='Raised'
+        variant='raised'
         disabled={disabled} 
         onClick={onClick} 
     >
         <RelIcon rel={rel} />
     </IconButton>);
 
+const NavigationLink = ({ onClick, rel }) => (
+    <Button
+        variant='text'
+        onClick={onClick} 
+    >
+        <RelIcon rel={rel} />
+        {rel}
+    </Button>
+);
+
 const NavigationLinks = ({ onNavigate, links }) => (
-    <nav>
-        {navigationRels.map(rel => (
-            <NavigationLink 
-                disabled={!links[rel]} 
-                key={rel} 
-                onClick={preventDefault(() => onNavigate(links[rel].href))} 
-                link={links[rel]} 
-                rel={rel} 
-            />))}
-    </nav>);
+    <div>
+        <nav>
+            {[...feedNavigation].map(rel => (
+                <FeedNavigationLink 
+                    disabled={!links[rel]} 
+                    key={rel} 
+                    onClick={preventDefault(() => onNavigate(links[rel].href))} 
+                    link={links[rel]} 
+                    rel={rel} 
+                />))}
+        </nav>
+        <nav>
+            {Object
+                .keys(links)
+                .filter(rel => !feedNavigationSet.has(rel))
+                .map(rel => (
+                    <NavigationLink
+                        key={rel}
+                        onClick={preventDefault(() => onNavigate(links[rel].href))} 
+                        link={links[rel]} 
+                        rel={rel} 
+                    >
+                        {rel}
+                    </NavigationLink>))}
+        </nav>
+    </div>);
 
 NavigationLinks.propTypes = {
     onNavigate: PropTypes.func.isRequired

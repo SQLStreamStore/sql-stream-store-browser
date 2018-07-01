@@ -1,3 +1,5 @@
+import { Observable as obs } from 'rxjs';
+
 import { createActions } from '../reactive';
 import { http, history } from '../utils';
 
@@ -18,6 +20,6 @@ actions.getResponse.subscribe(({ url }) => history.push(url));
 
 const getUrl = location => `${location.pathname}${location.search}${location.hash}`;
 
-history.listen((location, action) => action === 'POP' && actions.get.next(getUrl(location)));
+history.listen((location, action) => action === 'POP' && actions.get.next({ url: getUrl(location) }));
 
 export default actions;

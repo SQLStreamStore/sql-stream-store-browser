@@ -44,7 +44,6 @@ const post = ({ url, body, headers = {} }) => fetch(url, {
 
 const _delete = ({ url, headers = {}}) => fetch(url, {
     headers: new Headers({
-        'content-type': contentTypes.json,
         accept: contentTypes.hal,
         ...headers
     }),
