@@ -10,7 +10,7 @@ const actions = createActions([
     'deleteResponse'
 ]);
 
-actions.get.flatMap(url => http.get(url)).subscribe(response => actions.getResponse.next(response));
+actions.get.flatMap(request => http.get(request)).subscribe(response => actions.getResponse.next(response));
 actions.post.flatMap(request => http.post(request)).subscribe(response => actions.postResponse.next(response));
 actions.delete.flatMap(request => http.delete(request)).subscribe(response => actions.deleteResponse.next(response));
 

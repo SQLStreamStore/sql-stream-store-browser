@@ -9,7 +9,7 @@ import {
 import { Code } from '@material-ui/icons';
 import { createState, connect } from '../../reactive';
 import { preventDefault } from '../../utils';
-import { rels, actions, store } from '../';
+import { rels, store } from '../';
 import {
     Table,
     TableBody,
@@ -36,10 +36,10 @@ const StreamMetadataHeader = () => (
     </TableRow>);
 
 
-const StreamMetadataDetails = ({ streamId, maxAge, maxCount, links }) => (
+const StreamMetadataDetails = ({ streamId, maxAge, maxCount, links, onNavigate }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
+            <a onClick={preventDefault(() => onNavigate(links[rels.feed].href))} href={links[rels.feed].href}>{streamId}</a>
         </TableCell>
         <TableCell style={nowrap} numeric>{maxAge}</TableCell>
         <TableCell style={nowrap} numeric>{maxCount}</TableCell>
@@ -78,14 +78,18 @@ class StreamMetadataJson extends PureComponent {
     }
 }
 
-const StreamMetadata = ({ metadata, links }) => (
+const StreamMetadata = ({ metadata, links, onNavigate }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
                 <StreamMetadataHeader />
             </TableHead>
             <TableBody>
-                <StreamMetadataDetails {...metadata} links={links} />
+                <StreamMetadataDetails
+                    {...metadata}
+                    links={links}
+                    onNavigate={onNavigate}
+                />
             </TableBody>
         </Table>
         <StreamMetadataJson metadata={metadata.metadataJson} />

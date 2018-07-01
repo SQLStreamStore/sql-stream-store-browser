@@ -34,7 +34,11 @@ const config = {
   ],
   resolve: {
       extensions: ['.js', '.jsx'],
-      modules: [index, 'node_modules']
+      modules: [
+        index,
+        'src/app/shim',
+        'node_modules'
+      ]
   },
   module: {
     rules: [{

@@ -2,7 +2,7 @@ import React from 'react';
 import { Observable as obs } from 'rxjs';
 import { createState, connect } from '../../reactive';
 import { resolveLinks, preventDefault } from '../../utils';
-import { rels, actions, store } from '../';
+import { rels, store } from '../';
 import {
     Table,
     TableBody,
@@ -25,8 +25,6 @@ const state$ = createState(
 
 const nowrap = { whiteSpace: 'nowrap' };
 
-const onNavigate = href => actions.get.next(href);
-
 const Message = ({
     messageId,
     createdUtc,
@@ -34,7 +32,8 @@ const Message = ({
     streamId,
     streamVersion,
     type,
-    links
+    links,
+    onNavigate
 }) => (
         <TableRow>
             <TableCell style={nowrap}>{messageId}</TableCell>
@@ -42,7 +41,7 @@ const Message = ({
             <TableCell style={nowrap}>{type}</TableCell>
             <TableCell style={nowrap}>
                 <a 
-                    onClick={preventDefault(() => actions.get.next(links[rels.feed].href))}
+                    onClick={preventDefault(() => onNavigate(links[rels.feed].href))}
                     href={links[rels.feed].href}
                 >
                     {streamId}
@@ -50,7 +49,7 @@ const Message = ({
             </TableCell>
             <TableCell>
                 <a 
-                    onClick={preventDefault(() => actions.get.next(links.self.href))}
+                    onClick={preventDefault(() => onNavigate(links.self.href))}
                     href={links.self.href}
                 >
                     {streamId}@{streamVersion}
@@ -59,7 +58,7 @@ const Message = ({
             <TableCell>{position}</TableCell>
         </TableRow>);
 
-const Messages = ({ messages }) => (
+const Messages = ({ messages, onNavigate }) => (
     <Table>
         <TableHead>
             <TableRow>
@@ -72,7 +71,12 @@ const Messages = ({ messages }) => (
             </TableRow>
         </TableHead>
         <TableBody>
-            {messages.map(message => (<Message key={message.messageId} {...message} />))}
+            {messages.map(message => (
+                <Message
+                    key={message.messageId}
+                    onNavigate={onNavigate}
+                    {...message}
+            />))}
         </TableBody>
     </Table>);
 
@@ -80,10 +84,11 @@ Messages.defaultProps = {
     messages: []
 };
 
-const Stream = ({ links, messages, forms }) => (
+const Stream = ({ links, messages, forms, onNavigate }) => (
     <section>
         <Messages
             messages={messages}
+            onNavigate={onNavigate}
         />
     </section>);
 

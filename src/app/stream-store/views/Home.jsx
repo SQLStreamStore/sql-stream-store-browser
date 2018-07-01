@@ -2,7 +2,7 @@ import React from 'react';
 import { Observable as obs } from 'rxjs';
 import { List, ListItem } from '@material-ui/core';
 import { createState, connect } from '../../reactive';
-import { rels, actions, store } from '../';
+import { rels, store } from '../';
 import { preventDefault } from '../../utils';
 const links$ = store.links$
     .map(links => () => links);
@@ -23,13 +23,13 @@ const relsToTitle = {
     [rels.feed]: 'All Stream'
 };
 
-const Links = ({ links }) => (
+const Links = ({ links, onNavigate }) => (
     <List>
         {Object.keys(links).map((rel, key) => (
             <ListItem key={key}>
                 <a 
                     href={links[rel].href}
-                    onClick={preventDefault(() => actions.get.next(links[rel].href))}>
+                    onClick={preventDefault(() => onNavigate(links[rel].href))}>
                     {relsToTitle[rel]}
                 </a>
             </ListItem>
@@ -40,9 +40,12 @@ Links.defaultProps = {
     links: []
 };
 
-const Index = ({ links }) => (
+const Index = ({ links, onNavigate }) => (
     <section>
-        <Links links={links} />
+        <Links 
+            links={links}
+            onNavigate={onNavigate}
+        />
     </section>);
 
 export default connect(state$)(Index);

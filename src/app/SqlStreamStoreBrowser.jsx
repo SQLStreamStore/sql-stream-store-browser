@@ -12,7 +12,6 @@ import { actions, store, rels, views } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 
-
 const empty = () => null;
 
 const getSelfAlias = links => Object
@@ -32,9 +31,9 @@ const state$ = createState(
         store.forms$.map(forms => ['forms', () => forms])
     ), obs.of({ links: {}, forms: {} }));
 
-const initialNavigation = () => actions.get.next(window.location.href);
+const initialNavigation = () => actions.get.next({ url: window.location.href });
 
-const onNavigate = url => actions.get.next(url);
+const onNavigate = url => actions.get.next({ url });
 
 const SqlStreamStoreBrowser = ({ self, links, forms }) => (
     <MuiThemeProvider theme={theme} >
@@ -53,7 +52,12 @@ const SqlStreamStoreBrowser = ({ self, links, forms }) => (
                     }}
                     forms={forms}
                 />
-                {createElement(views[self] || empty, { links, forms, self })}
+                {createElement(views[self] || empty, { 
+                    links, 
+                    forms, 
+                    self,
+                    onNavigate
+                })}
             </section>
             <Notifications />
         </div>

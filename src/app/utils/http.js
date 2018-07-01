@@ -25,9 +25,10 @@ const mapResponse = response => response
         };
     });
 
-const get = url => fetch(url, {
+const get = ({ url, headers = {} }) => fetch(url, {
     headers: new Headers({
-        accept: contentTypes.hal
+        accept: contentTypes.hal,
+        ...headers
     })
 }).then(mapResponse);
 
@@ -41,17 +42,17 @@ const post = ({ url, body, headers = {} }) => fetch(url, {
     body: JSON.stringify(body)
 }).then(mapResponse);
 
-const del = ({ url, headers = {}}) => fetch(url, {
+const _delete = ({ url, headers = {}}) => fetch(url, {
     headers: new Headers({
         'content-type': contentTypes.json,
         accept: contentTypes.hal,
         ...headers
     }),
     method: 'delete'
-}).then(mapResponse)
+}).then(mapResponse);
 
 export default {
     get,
     post,
-    delete: del
+    delete: _delete
 };

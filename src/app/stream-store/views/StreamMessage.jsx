@@ -15,7 +15,7 @@ import {
     TableCell,
 } from '../../components/StripeyTable';
 import { createState, connect } from '../../reactive';
-import { actions, store, rels } from '../';
+import { store, rels } from '../';
 import { preventDefault } from '../../utils';
 
 const tryParseJson = payload => {
@@ -50,16 +50,25 @@ const StreamMessageHeader = () => (
 
 const nowrap = { whiteSpace: 'nowrap' };
 
-const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, links }) => (
+const StreamMessageDetails = ({ 
+    messageId,
+    createdUtc,
+    position,
+    streamId,
+    streamVersion,
+    type,
+    links,
+    onNavigate
+}) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
+            <a onClick={preventDefault(() => onNavigate(links[rels.feed].href))} href={links[rels.feed].href}>{streamId}</a>
         </TableCell>
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
+            <a onClick={preventDefault(() => onNavigate(links.self.href))} href={links[rels.feed].href}>{streamId}@{streamVersion}</a>
         </TableCell>
         <TableCell numeric>{position}</TableCell>
     </TableRow>);
@@ -111,14 +120,18 @@ const StreamMessageMetadata = ({ payload }) => (
     />
 );
 
-const StreamMessage = ({ message, links }) => (
+const StreamMessage = ({ message, links, onNavigate }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
                 <StreamMessageHeader />
             </TableHead>
             <TableBody>
-                <StreamMessageDetails {...message} links={links} />
+                <StreamMessageDetails 
+                    {...message}
+                    links={links}
+                    onNavigate={onNavigate}
+                />
             </TableBody>
         </Table>
         <StreamMessageData payload={message.payload} />
