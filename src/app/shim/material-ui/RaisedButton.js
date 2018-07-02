@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 
 const RaisedButton = props => (
     <Button
-        variant="raised"
+        variant={'raised'}
         {...props}
     />);
 

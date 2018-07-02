@@ -43,7 +43,7 @@ const styles = theme => ({
 
 const SlideUp = props => (
     <Slide
-        direction="up"
+        direction={'up'}
         {...props}
     />
 );
@@ -100,8 +100,8 @@ const FormButton = withStyles(styles)(class FormButton extends PureComponent {
         return (
             <span>
                 <Button
-                    variant="contained"
-                    color="secondary"
+                    variant={'contained'}
+                    color={'secondary'}
                     label={title}
                     onClick={this._onOpen}
                     className={classes.button}
@@ -127,16 +127,16 @@ const FormButton = withStyles(styles)(class FormButton extends PureComponent {
                     </DialogContent>
                     <DialogActions>
                         <Button
-                            color="primary"
+                            color={'primary'}
                             onClick={this._onClose}
                         >
-                            Cancel
+                            {'Cancel'}
                         </Button>
                         <Button
-                            color="primary"
+                            color={'primary'}
                             onClick={this._onSubmit}
                         >
-                            Submit
+                            {'Submit'}
                         </Button>
                     </DialogActions>
                 </Dialog>

@@ -37,8 +37,8 @@ class UuidField extends React.PureComponent {
                     style={form.style || { width: '100%' }}
                 />
                 <Button
-                    color="primary"
-                    variant="contained"
+                    color={'primary'}
+                    variant={'contained'}
                     onClick={this._onNewUuidClick}
                 >
                     New UUID

@@ -21,7 +21,7 @@ const feedNavigationSet = new Set(feedNavigation);
 
 const FeedNavigationLink = ({ disabled, onClick, rel }) => (
     <IconButton
-        variant="raised"
+        variant={'raised'}
         disabled={disabled}
         onClick={onClick}
     >
@@ -30,7 +30,7 @@ const FeedNavigationLink = ({ disabled, onClick, rel }) => (
 
 const NavigationLink = ({ onClick, rel }) => (
     <Button
-        variant="text"
+        variant={'text'}
         onClick={onClick}
     >
         <RelIcon rel={rel} />

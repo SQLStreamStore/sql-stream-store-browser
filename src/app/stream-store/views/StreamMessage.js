@@ -134,7 +134,7 @@ class StreamMessageJson extends PureComponent {
                 <ExpansionPanelSummary
                     expandIcon={<Code />}
                 >
-                    <Typography variant="title">
+                    <Typography variant={'title'}>
                         {title}
                     </Typography>
                 </ExpansionPanelSummary>
@@ -149,14 +149,14 @@ class StreamMessageJson extends PureComponent {
 
 const StreamMessageData = ({ payload }) => (
     <StreamMessageJson
-        title="Data"
+        title={'Data'}
         json={payload}
     />
 );
 
 const StreamMessageMetadata = ({ payload }) => (
     <StreamMessageJson
-        title="Metadata"
+        title={'Metadata'}
         json={payload}
     />
 );

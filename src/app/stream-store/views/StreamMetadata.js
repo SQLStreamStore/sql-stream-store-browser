@@ -100,7 +100,7 @@ class StreamMetadataJson extends PureComponent {
                 <ExpansionPanelSummary
                     expandIcon={<Code />}
                 >
-                    <Typography variant="title">
+                    <Typography variant={'title'}>
                         {'Metadata'}
                     </Typography>
                 </ExpansionPanelSummary>

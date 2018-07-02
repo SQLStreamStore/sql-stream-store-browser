@@ -50,10 +50,10 @@ const initialNavigation = () => actions.get.next({ url: window.location.href });
 const onNavigate = url => actions.get.next({ url });
 
 const Hero = () => (
-    <AppBar position="static" color="default">
+    <AppBar position={'static'} color={'default'}>
         <Toolbar>
             <SqlStreamStore />
-            <Typography variant="title" color="inherit">
+            <Typography variant={'title'} color={'inherit'}>
                 Sql Stream Store
             </Typography>
         </Toolbar>
