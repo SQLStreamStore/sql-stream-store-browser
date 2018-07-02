@@ -1,5 +1,10 @@
 import React, { createElement } from 'react';
-import { CssBaseline } from '@material-ui/core';
+import {
+    CssBaseline,
+    AppBar,
+    Toolbar,
+    Typography
+} from '@material-ui/core';
 import { MuiThemeProvider }  from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 import { 
@@ -8,6 +13,9 @@ import {
     FormButtons,
     NavigationLinks
 } from './components';
+import {
+    SqlStreamStore
+} from './components/Icons';
 import { actions, store, rels, views } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
@@ -35,10 +43,21 @@ const initialNavigation = () => actions.get.next({ url: window.location.href });
 
 const onNavigate = url => actions.get.next({ url });
 
+const Hero = () => (
+    <AppBar position="static" color="default">
+        <Toolbar>
+            <SqlStreamStore />
+            <Typography variant="title" color="inherit">
+                Sql Stream Store
+            </Typography>
+        </Toolbar>
+    </AppBar>);
+
 const SqlStreamStoreBrowser = ({ self, links, forms }) => (
     <MuiThemeProvider theme={theme} >
         <div>
             <CssBaseline />
+            <Hero />
             <section>
                 <NavigationLinks
                     onNavigate={onNavigate}

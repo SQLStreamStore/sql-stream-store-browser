@@ -8,9 +8,9 @@ import {
     ChevronLeft,
     ChevronRight,
     RssFeed,
-    SentimentNeutral,
     Refresh
 } from '@material-ui/icons';
+import { SqlStreamStore } from './Icons';
 import { rels } from '../stream-store';
 
 const fontIconByRel =  {
@@ -25,6 +25,6 @@ const fontIconByRel =  {
     [rels.delete]: DeleteForever
 };
 
-const RelIcon = ({ rel }) =>  createElement(fontIconByRel[rel] || SentimentNeutral);
+const RelIcon = ({ rel }) => createElement(fontIconByRel[rel] || SqlStreamStore);
 
 export default RelIcon;
