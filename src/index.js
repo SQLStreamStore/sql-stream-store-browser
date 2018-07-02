@@ -1,2 +1,3 @@
-import SqlStreamStoreBrowser from './app/SqlStreamStoreBrowser.jsx';
+import SqlStreamStoreBrowser from './app/SqlStreamStoreBrowser';
+
 export default SqlStreamStoreBrowser;

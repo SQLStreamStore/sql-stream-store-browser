@@ -8,8 +8,7 @@ export const createAction = () => {
     return subject;
 };
 
-export const createActions = actionNames =>
-    actionNames.reduce((akk, name) => ({ ...akk, [name]: createAction() }), {});
+export const createActions = actionNames => actionNames.reduce((akk, name) => ({ ...akk, [name]: createAction() }), {});
 
 export const createState = (reducer$, initialState$ = Rx.Observable.of({})) => initialState$
     .merge(reducer$)

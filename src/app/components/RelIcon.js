@@ -1,5 +1,5 @@
-import React, { createElement } from 'react';
-import { 
+import { createElement } from 'react';
+import {
     Publish,
     Settings,
     DeleteForever,
@@ -8,12 +8,12 @@ import {
     ChevronLeft,
     ChevronRight,
     RssFeed,
-    Refresh
+    Refresh,
 } from '@material-ui/icons';
 import { SqlStreamStore } from './Icons';
 import { rels } from '../stream-store';
 
-const fontIconByRel =  {
+const fontIconByRel = {
     [rels.first]: FirstPage,
     [rels.previous]: ChevronLeft,
     [rels.self]: Refresh,
@@ -22,7 +22,7 @@ const fontIconByRel =  {
     [rels.feed]: RssFeed,
     [rels.append]: Publish,
     [rels.metadata]: Settings,
-    [rels.delete]: DeleteForever
+    [rels.delete]: DeleteForever,
 };
 
 const RelIcon = ({ rel }) => createElement(fontIconByRel[rel] || SqlStreamStore);
