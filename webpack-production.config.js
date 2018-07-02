@@ -33,7 +33,7 @@ const config = {
     new webpack.NoEmitOnErrorsPlugin(),
   ],
   resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: ['.js'],
       modules: [
         index,
         'src/app/shim',
@@ -42,7 +42,7 @@ const config = {
   },
   module: {
     rules: [{
-      test: /\.jsx?$/, // All .js files
+      test: /\.js$/, // All .js files
       use: [
           'babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react',
           'eslint-loader'

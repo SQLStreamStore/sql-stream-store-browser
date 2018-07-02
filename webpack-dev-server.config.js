@@ -41,7 +41,7 @@ const config = {
     ],
     module: {
         rules: [{
-            test: /\.jsx?$/, // All .js files
+            test: /\.js$/, // All .js files
             use: [
                 'babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react',
                 'eslint-loader?emitWarning=true',
