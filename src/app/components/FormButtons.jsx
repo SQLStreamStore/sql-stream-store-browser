@@ -1,32 +1,58 @@
 import React, { PureComponent } from 'react';
-import { 
+import {
+    Card,
+    CardActions,
     Button,
+    TextField,
     Dialog,
+    DialogTitle,
     DialogActions,
     DialogContent,
-    Slide
+    Slide,
+    withStyles
 } from '@material-ui/core';
-import * as Icons from '@material-ui/icons';
 import { SchemaForm } from 'react-schema-form';
+
+import RelIcon from './RelIcon.jsx';
+import UuidField from './UuidField.jsx';
 import { rels, actions } from '../stream-store';
+import { createState, connect } from '../reactive';
 
-const fontIconByRel =  {
-    [rels.append]: <Icons.Publish />
-};
+const url$ = actions.getResponse.map(({ url }) => () => url);
 
-const actionsByRel = {
-    [rels.append]: actions.post
-};
+const state$ = createState(
+    url$.map(url => ['url', url])
+);
 
-let url;
+const getValue = value => {
+    if (typeof value === "object") {
+        try {
+            return JSON.parse(value.target.value);
+        }
+        catch(e) {
+            return value.target.value;
+        }
+    }
 
-actions.getResponse.subscribe(({ url: _url }) => url = _url);
+    return value;
+}
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit
+    }
+})
 
 const SlideUp = props => (
     <Slide
         direction="up"
-        {...props} />
+        {...props}
+    />
 );
+
+const mapper = {
+    'uuid': UuidField
+};
 
 class FormButton extends PureComponent {
     state = {
@@ -37,16 +63,16 @@ class FormButton extends PureComponent {
         open: true
     });
     _onClose = () => this.setState({
+        ...this.state,
         open: false,
-        ...this.state
     });
     _onSubmit = e => {
         e.preventDefault();
 
-        const { rel } = this.props;
+        const { rel, url, actions } = this.props;
         const { model: body } = this.state;
 
-        actionsByRel[rel].next({
+        actions[rel] && actions[rel].next({
             body,
             url
         });
@@ -57,32 +83,36 @@ class FormButton extends PureComponent {
         ...this.state, 
         model: {
             ...this.state.model,
-            [key]: value
+            [key]: getValue(value)
         } 
     });
-    
+
     render() {
-        const { rel, title, schema } = this.props;
+        const { rel, title, schema, classes } = this.props;
         const { open, model } = this.state;
         return (
-            <div>
+            <span>
                 <Button 
-                    variant='raised'
+                    variant='contained'
+                    color='secondary'
                     label={title}
                     onClick={this._onOpen}
+                    className={classes.button}
                 >
-                    {fontIconByRel[rel]}
+                    <RelIcon rel={rel} />
+                    {schema.title}
                 </Button>
                 <Dialog
-                    title={title}
                     open={open}
                     TransitionComponent={SlideUp}
                     disableBackdropClick={false}
                 >
+                    <DialogTitle>{schema.title}</DialogTitle>
                     <DialogContent>
                         <SchemaForm 
                             schema={schema}
                             model={model}
+                            mapper={mapper}
                             onModelChange={this._onModelChange}
                         />
                     </DialogContent>
@@ -101,18 +131,25 @@ class FormButton extends PureComponent {
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </div>
+            </span>
         );
     }
 }
 
-const FormButtons = ({ forms }) => (
-    <div>{Object.keys(forms).map(rel => (
-        <FormButton
-            key={rel}
-            rel={rel}
-            schema={forms[rel]}
-        />))}
-    </div>);
+FormButton = withStyles(styles)(FormButton);
 
-export default FormButtons;
+const FormButtons = ({ forms, url, actions }) => (
+    <Card>
+        <CardActions>
+            {Object.keys(forms).map(rel => (
+                <FormButton
+                    key={rel}
+                    rel={rel}
+                    url={url}
+                    actions={actions}
+                    schema={forms[rel]}
+                />))}
+        </CardActions>
+    </Card>);
+
+export default connect(state$)(FormButtons);

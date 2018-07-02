@@ -13,11 +13,10 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from './StripeyTable';
-import { createState, connect } from '../reactive';
-import { actions, store, rels } from '../stream-store';
-import { preventDefault } from '../utils';
-import NavigationLinks from './NavigationLinks.jsx';
+} from '../../components/StripeyTable';
+import { createState, connect } from '../../reactive';
+import { store, rels } from '../';
+import { preventDefault } from '../../utils';
 
 const tryParseJson = payload => {
     try {
@@ -28,9 +27,6 @@ const tryParseJson = payload => {
     }
 };
 
-const links$ = store.links$
-    .map(links => () => links);
-
 const message$ = store.body$
     .map(({ payload, metadata, ...body }) => () => ({
         ...body,
@@ -39,11 +35,8 @@ const message$ = store.body$
     }));
 
 const state$ = createState(
-    obs.merge(
-        links$.map(links => ['links', links]),
-        message$.map(message => ['message', message])
-    ),
-    obs.of({ message: {}, links: {} }));
+    message$.map(message => ['message', message]),
+    obs.of({ message: {} }));
 
 const StreamMessageHeader = () => (
     <TableRow>
@@ -57,16 +50,27 @@ const StreamMessageHeader = () => (
 
 const nowrap = { whiteSpace: 'nowrap' };
 
-const StreamMessageDetails = ({ messageId, createdUtc, position, streamId, streamVersion, type, links }) => (
+const getFeed = links => (links[rels.feed] || {}).href;
+
+const StreamMessageDetails = ({ 
+    messageId,
+    createdUtc,
+    position,
+    streamId,
+    streamVersion,
+    type,
+    links,
+    onNavigate
+}) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <a onClick={preventDefault(() => actions.get.next(links[rels.feed].href))} href="#">{streamId}</a>
+            <a onClick={preventDefault(() => onNavigate(links[rels.feed].href))} href={getFeed(links)}>{streamId}</a>
         </TableCell>
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <a onClick={preventDefault(() => actions.get.next(links.self.href))} href="#">{streamId}@{streamVersion}</a>
+            <a onClick={preventDefault(() => onNavigate(links.self.href))} href={getFeed(links)}>{streamId}@{streamVersion}</a>
         </TableCell>
         <TableCell numeric>{position}</TableCell>
     </TableRow>);
@@ -118,17 +122,18 @@ const StreamMessageMetadata = ({ payload }) => (
     />
 );
 
-const StreamMessage = ({ message, links }) => (
+const StreamMessage = ({ message, links, onNavigate }) => (
     <section>
-        <NavigationLinks
-            onNavigate={url => actions.get.next(url)}
-            links={links} />
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
                 <StreamMessageHeader />
             </TableHead>
             <TableBody>
-                <StreamMessageDetails {...message} links={links} />
+                <StreamMessageDetails 
+                    {...message}
+                    links={links}
+                    onNavigate={onNavigate}
+                />
             </TableBody>
         </Table>
         <StreamMessageData payload={message.payload} />
