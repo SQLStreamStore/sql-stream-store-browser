@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-    SvgIcon
-} from '@material-ui/core'
-
+    SvgIcon,
+} from '@material-ui/core';
+/* eslint-disable max-len */
 const SqlStreamStore = props => (
     <SvgIcon
         color="primary"
         {...props}
-        viewBox="0 0 448.687 627.153">
+        viewBox="0 0 448.687 627.153"
+    >
         <g transform="translate(-88.5 -116.776)">
             <ellipse ry="100.857" rx="224.285" cy="217.633" cx="312.902" />
             <path d="M537.187 273.963A265.714 157.143 0 0 1 312.33 347.79a265.714 157.143 0 0 1-223.713-72.543v78.732a265.714 157.143 0 0 0 223.713 72.668 265.714 157.143 0 0 0 224.857-73.543v-79.142z" />
@@ -18,5 +19,5 @@ const SqlStreamStore = props => (
         </g>
     </SvgIcon>
 );
-
+/* eslint-enable max-len */
 export default SqlStreamStore;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { TextField as _TextField } from '@material-ui/core';
+import { TextField as LegacyTextField } from '@material-ui/core';
 
-const getType = type => (type !== 'text' || type === 'textarea')
+const getType = type => ((type !== 'text' || type === 'textarea')
     ? undefined
-    : type;
+    : type);
 
 const TextField = ({
     floatingLabelText,
@@ -14,7 +14,7 @@ const TextField = ({
     type,
     ...props
 }) => (
-    <_TextField
+    <LegacyTextField
         {...props}
         type={getType(type)}
         helperText={error ? errorText : hintText}

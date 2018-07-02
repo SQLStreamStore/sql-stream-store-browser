@@ -1,7 +1,8 @@
+import React from 'react';
 import { Button } from '@material-ui/core';
 
 const RaisedButton = props => (
-    <Button 
+    <Button
         variant="raised"
         {...props}
     />);

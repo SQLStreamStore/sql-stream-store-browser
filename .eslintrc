@@ -1,0 +1,17 @@
+{
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "no-underscore-dangle": [0],
+        "max-len": ["error", 160],
+        "indent": ["error", 4],
+        "react/prop-types": [0],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+        "react/no-array-index-key": [0]
+    }
+}

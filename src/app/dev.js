@@ -1,7 +1,7 @@
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import SqlStreamStoreBrowser from './SqlStreamStoreBrowser.jsx'; // Our custom react component
+import SqlStreamStoreBrowser from './SqlStreamStoreBrowser'; // Our custom react component
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941

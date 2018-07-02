@@ -4,7 +4,7 @@ import {
     Typography,
     ExpansionPanel,
     ExpansionPanelSummary,
-    ExpansionPanelDetails
+    ExpansionPanelDetails,
 } from '@material-ui/core';
 import { Code } from '@material-ui/icons';
 import {
@@ -15,14 +15,14 @@ import {
     TableCell,
 } from '../../components/StripeyTable';
 import { createState, connect } from '../../reactive';
-import { store, rels } from '../';
+import rels from '../rels';
+import store from '../store';
 import { preventDefault } from '../../utils';
 
-const tryParseJson = payload => {
+const tryParseJson = (payload) => {
     try {
         return JSON.parse(payload);
-    }
-    catch (e) {
+    } catch (e) {
         return payload;
     }
 };
@@ -31,28 +31,41 @@ const message$ = store.body$
     .map(({ payload, metadata, ...body }) => () => ({
         ...body,
         payload: tryParseJson(payload),
-        metadata: tryParseJson(metadata)
+        metadata: tryParseJson(metadata),
     }));
 
 const state$ = createState(
     message$.map(message => ['message', message]),
-    obs.of({ message: {} }));
+    obs.of({ message: {} }),
+);
 
 const StreamMessageHeader = () => (
     <TableRow>
-        <TableCell>StreamId</TableCell>
-        <TableCell>Message Id</TableCell>
-        <TableCell>Created UTC</TableCell>
-        <TableCell>Type</TableCell>
-        <TableCell style={{ width: '100%' }}>Stream Id@Version</TableCell>
-        <TableCell>Position</TableCell>
+        <TableCell>
+            {'StreamId'}
+        </TableCell>
+        <TableCell>
+            {'Message Id'}
+        </TableCell>
+        <TableCell>
+            {'Created UTC'}
+        </TableCell>
+        <TableCell>
+            {'Type'}
+        </TableCell>
+        <TableCell style={{ width: '100%' }}>
+            {'Stream Id@Version'}
+        </TableCell>
+        <TableCell>
+            {'Position'}
+        </TableCell>
     </TableRow>);
 
 const nowrap = { whiteSpace: 'nowrap' };
 
 const getFeed = links => (links[rels.feed] || {}).href;
 
-const StreamMessageDetails = ({ 
+const StreamMessageDetails = ({
     messageId,
     createdUtc,
     position,
@@ -60,49 +73,75 @@ const StreamMessageDetails = ({
     streamVersion,
     type,
     links,
-    onNavigate
+    onNavigate,
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <a onClick={preventDefault(() => onNavigate(links[rels.feed].href))} href={getFeed(links)}>{streamId}</a>
+            <a
+                onClick={preventDefault(() => onNavigate(links[rels.feed].href))}
+                href={getFeed(links)}
+            >
+                {streamId}
+            </a>
         </TableCell>
-        <TableCell style={nowrap}>{messageId}</TableCell>
-        <TableCell style={nowrap}>{createdUtc}</TableCell>
-        <TableCell style={nowrap}>{type}</TableCell>
+        <TableCell style={nowrap}>
+            {messageId}
+        </TableCell>
+        <TableCell style={nowrap}>
+            {createdUtc}
+        </TableCell>
+        <TableCell style={nowrap}>
+            {type}
+        </TableCell>
         <TableCell style={{ width: '100%' }}>
-            <a onClick={preventDefault(() => onNavigate(links.self.href))} href={getFeed(links)}>{streamId}@{streamVersion}</a>
+            <a
+                onClick={preventDefault(() => onNavigate(links.self.href))}
+                href={getFeed(links)}
+            >
+                {streamId}
+@
+                {streamVersion}
+            </a>
         </TableCell>
-        <TableCell numeric>{position}</TableCell>
+        <TableCell numeric>
+            {position}
+        </TableCell>
     </TableRow>);
 
 class StreamMessageJson extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            expanded: true
+            expanded: true,
         };
     }
+
     _handleClick = () => {
+        const { expanded } = this.state;
         this.setState({
-            expanded: !this.state.expanded
-        })
+            expanded: !expanded,
+        });
     }
+
     render() {
         const { json, title } = this.props;
         const { expanded } = this.state;
         return (
             <ExpansionPanel
                 expanded={expanded}
-                onClick={this._handleClick}>
+                onClick={this._handleClick}
+            >
                 <ExpansionPanelSummary
                     expandIcon={<Code />}
                 >
-                    <Typography variant='title'>
+                    <Typography variant="title">
                         {title}
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <pre>{JSON.stringify(json, null, 4)}</pre>
+                    <pre>
+                        {JSON.stringify(json, null, 4)}
+                    </pre>
                 </ExpansionPanelDetails>
             </ExpansionPanel>);
     }
@@ -110,14 +149,14 @@ class StreamMessageJson extends PureComponent {
 
 const StreamMessageData = ({ payload }) => (
     <StreamMessageJson
-        title={"Data"}
+        title="Data"
         json={payload}
     />
 );
 
 const StreamMessageMetadata = ({ payload }) => (
     <StreamMessageJson
-        title={"Metadata"}
+        title="Metadata"
         json={payload}
     />
 );
@@ -129,7 +168,7 @@ const StreamMessage = ({ message, links, onNavigate }) => (
                 <StreamMessageHeader />
             </TableHead>
             <TableBody>
-                <StreamMessageDetails 
+                <StreamMessageDetails
                     {...message}
                     links={links}
                     onNavigate={onNavigate}

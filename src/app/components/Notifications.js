@@ -5,51 +5,54 @@ import * as Icons from '@material-ui/icons';
 import { green, yellow, red } from '@material-ui/core/colors';
 import {
     NotificationProvider,
-    showNotification
-  } from 'mui-notifications';
+    showNotification,
+} from 'mui-notifications';
 import { actions } from '../stream-store';
 
 
 const styles = ({
     infoAvatar: {
-      backgroundColor: green[500]
+        backgroundColor: green[500],
     },
     warningAvatar: {
-      backgroundColor: yellow[500]
+        backgroundColor: yellow[500],
     },
     errorAvatar: {
-      backgroundColor: red[500]
+        backgroundColor: red[500],
     },
     infoCard: {
-      border: `solid 1px ${green[500]}`
+        border: `solid 1px ${green[500]}`,
     },
     warningCard: {
-      border: `solid 1px ${yellow[500]}`
+        border: `solid 1px ${yellow[500]}`,
     },
     errorCard: {
-      border: `solid 1px ${red[500]}`
-    }
+        border: `solid 1px ${red[500]}`,
+    },
 });
 
 const formatTitle = ({ status, statusText }) => `${status} ${statusText}`;
 
-const formatSubheader = ({ title, type }) => title ? `${title} (${type})` : null;
+const formatSubheader = ({ title, type }) => (title ? `${title} (${type})` : null);
 
-const formatContent = ({ detail }) => detail
+const formatContent = ({ detail }) => (detail
     ? detail
         .split(/\r|\n/)
         .filter(x => x.length)
         .reduce((akk, line, index) => ([
             ...akk,
-            (<br key={index*2} />),
-            (<span key={(index*2) + 1}>{line}</span>)
+            (<br key={index * 2} />),
+            (
+                <span key={(index * 2) + 1}>
+                    {line}
+                </span>),
         ]), [])
-    : null;
+    : null);
 
 const responses$ = obs.merge(
     actions.getResponse,
     actions.postResponse,
-    actions.deleteResponse
+    actions.deleteResponse,
 );
 
 const clientError$ = responses$
@@ -58,7 +61,7 @@ const clientError$ = responses$
         variant: 'warning',
         title: formatTitle(response),
         subheader: formatSubheader(body),
-        content: formatContent(body)
+        content: formatContent(body),
     }));
 
 const serverError$ = responses$
@@ -72,11 +75,11 @@ const serverError$ = responses$
     }));
 
 const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
-    .filter(({ status }) => status < 400 )
+    .filter(({ status }) => status < 400)
     .map(response => ({
         variant: 'info',
         title: formatTitle(response),
-        timeout: 2000
+        timeout: 2000,
     }));
 
 const getIcon = variant => Icons[variant[0].toUpperCase() + variant.substring(1)];
@@ -90,13 +93,13 @@ const NotificationAvatar = withStyles(styles)(({ classes, variant }) => (
 const notification$ = obs.merge(
     clientError$,
     serverError$,
-    success$
+    success$,
 ).map(({
     variant,
     ...props
 }) => ({
     ...props,
-    avatar: (<NotificationAvatar variant={variant} />)
+    avatar: (<NotificationAvatar variant={variant} />),
 }));
 
 notification$.subscribe(notification => showNotification(() => notification));
@@ -108,7 +111,7 @@ const Notifications = () => (
             leave: 'dummy',
             leaveActive: 'fadeOut',
             appear: 'dummy',
-            appearActive: 'zoomInUp'
+            appearActive: 'zoomInUp',
         }}
         transitionAppear
         transitionLeave

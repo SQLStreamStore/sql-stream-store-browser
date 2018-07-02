@@ -43,7 +43,10 @@ const config = {
   module: {
     rules: [{
       test: /\.jsx?$/, // All .js files
-      use: ['babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react'],
+      use: [
+          'babel-loader?presets[]=es2015,presets[]=stage-0,presets[]=react',
+          'eslint-loader'
+      ],
       exclude: [nodeModulesPath],
     }]
   }

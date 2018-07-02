@@ -12,6 +12,6 @@ const mount = (didMount, willUnmount = () => {}) => WrappedComponent => class Mo
     render() {
         return React.createElement(WrappedComponent, { ...this.props });
     }
-}
+};
 
 export default mount;

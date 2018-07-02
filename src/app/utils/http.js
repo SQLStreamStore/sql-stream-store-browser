@@ -1,57 +1,58 @@
 const contentTypes = {
     hal: 'application/hal+json',
-    json: 'application/json'
+    json: 'application/json',
 };
 
-const tryParseJson = body => {
+const tryParseJson = (body) => {
     try {
         return JSON.parse(body);
-    }
-    catch(e) {
+    } catch (e) {
         return body;
     }
 };
 
 const mapResponse = response => response
     .text()
-    .then(body => {
-        const { ok, status, statusText, url } = response;
+    .then((body) => {
+        const {
+            ok, status, statusText, url,
+        } = response;
         return {
             body: tryParseJson(body),
             ok,
             status,
             statusText,
-            url
+            url,
         };
     });
 
 const get = ({ url, headers = {} }) => fetch(url, {
     headers: new Headers({
         accept: contentTypes.hal,
-        ...headers
-    })
+        ...headers,
+    }),
 }).then(mapResponse);
 
 const post = ({ url, body, headers = {} }) => fetch(url, {
     headers: new Headers({
         'content-type': contentTypes.json,
         accept: contentTypes.hal,
-        ...headers
+        ...headers,
     }),
     method: 'post',
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
 }).then(mapResponse);
 
-const _delete = ({ url, headers = {}}) => fetch(url, {
+const _delete = ({ url, headers = {} }) => fetch(url, {
     headers: new Headers({
         accept: contentTypes.hal,
-        ...headers
+        ...headers,
     }),
-    method: 'delete'
+    method: 'delete',
 }).then(mapResponse);
 
 export default {
     get,
     post,
-    delete: _delete
+    delete: _delete,
 };
