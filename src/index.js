@@ -1,3 +1,5 @@
-import SqlStreamStoreBrowser from './app/SqlStreamStoreBrowser';
+import React from 'react';
+import { render } from 'react-dom';
+import SqlStreamStoreBrowser from './SqlStreamStoreBrowser';
 
-export default SqlStreamStoreBrowser;
+render(<SqlStreamStoreBrowser />, document.getElementById('root'));
