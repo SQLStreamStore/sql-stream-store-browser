@@ -13,7 +13,12 @@ import {
     Error,
     Info,
 } from '@material-ui/icons';
-import { green, amber } from '@material-ui/core/colors';
+import {
+    green,
+    amber,
+    blue,
+    red
+} from '@material-ui/core/colors';
 import classNames from 'classnames';
 import uuid from 'uuid';
 import { actions } from '../stream-store';
@@ -75,9 +80,9 @@ const serverError$ = responses$
 const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
     .filter(({ status }) => status < 400)
     .map(response => ({
-        variant: 'info',
+        variant: 'success',
         title: formatTitle(response),
-        timeout: 2000,
+        autoHideDuration: 2000,
     }));
 
 const dismiss = createAction(); 
@@ -108,27 +113,27 @@ const state$ = createState(
 
 const styles = theme => ({
     success: {
-      backgroundColor: green[600],
+        backgroundColor: green[600],
     },
     error: {
-      backgroundColor: theme.palette.error.dark,
+        backgroundColor: red[500],
     },
     info: {
-      backgroundColor: theme.palette.primary.dark,
+        backgroundColor: blue[500],
     },
     warning: {
-      backgroundColor: amber[700],
+        backgroundColor: amber[700],
     },
     icon: {
-      fontSize: 20,
+        fontSize: 20,
     },
     iconVariant: {
-      opacity: 0.9,
-      marginRight: theme.spacing.unit,
+        opacity: 0.9,
+        marginRight: theme.spacing.unit,
     },
     message: {
-      display: 'flex',
-      alignItems: 'center',
+        display: 'flex',
+        alignItems: 'center',
     },
 });
 
@@ -140,6 +145,7 @@ const Notification = withStyles(styles)(({
     subheader,
     content,
     variant,
+    autoHideDuration,
     ...other,
 }) => (
     <Snackbar
@@ -148,6 +154,7 @@ const Notification = withStyles(styles)(({
             vertical: 'bottom',
             horizontal: 'right',
         }}
+        autoHideDuration={autoHideDuration}
     >
         <SnackbarContent
             className={classNames(classes[variant], className)}
@@ -178,7 +185,8 @@ const Notification = withStyles(styles)(({
 const Notifications = ({ notifications }) => (
     <div>
         {notifications.map(notification => (
-            <Notification 
+            <Notification
+                key={notification.messageId} 
                 {...notification}
             />
         ))}
