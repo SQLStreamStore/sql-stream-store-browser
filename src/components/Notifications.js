@@ -1,35 +1,34 @@
 import React, { createElement } from 'react';
 import { Observable as obs } from 'rxjs';
-import { Avatar, withStyles } from '@material-ui/core';
-import * as Icons from '@material-ui/icons';
-import { green, yellow, red } from '@material-ui/core/colors';
 import {
-    NotificationProvider,
-    showNotification,
-} from 'mui-notifications';
+    IconButton, 
+    Snackbar,
+    SnackbarContent,
+    withStyles
+} from '@material-ui/core';
+import {
+    Close,
+    CheckCircle,
+    Warning,
+    Error,
+    Info,
+} from '@material-ui/icons';
+import { green, amber } from '@material-ui/core/colors';
+import classNames from 'classnames';
+import uuid from 'uuid';
 import { actions } from '../stream-store';
+import { 
+    connect,
+    createAction,
+    createState,
+} from '../reactive';
 
-
-const styles = ({
-    infoAvatar: {
-        backgroundColor: green[500],
-    },
-    warningAvatar: {
-        backgroundColor: yellow[500],
-    },
-    errorAvatar: {
-        backgroundColor: red[500],
-    },
-    infoCard: {
-        border: `solid 1px ${green[500]}`,
-    },
-    warningCard: {
-        border: `solid 1px ${yellow[500]}`,
-    },
-    errorCard: {
-        border: `solid 1px ${red[500]}`,
-    },
-});
+const iconsByVariant = {
+    success: CheckCircle,
+    warning: Warning,
+    error: Error,
+    info: Info,
+};
 
 const formatTitle = ({ status, statusText }) => `${status} ${statusText}`;
 
@@ -71,7 +70,6 @@ const serverError$ = responses$
         title: formatTitle(response),
         subheader: formatSubheader(body),
         content: formatContent(body),
-
     }));
 
 const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
@@ -82,39 +80,108 @@ const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
         timeout: 2000,
     }));
 
-const getIcon = variant => Icons[variant[0].toUpperCase() + variant.substring(1)];
-
-const NotificationAvatar = withStyles(styles)(({ classes, variant }) => (
-    <Avatar className={classes[`${variant}Avatar`]}>
-        {createElement(getIcon(variant))}
-    </Avatar>
-));
+const dismiss = createAction(); 
 
 const notification$ = obs.merge(
     clientError$,
     serverError$,
     success$,
-).map(({
-    variant,
-    ...props
-}) => ({
-    ...props,
-    avatar: (<NotificationAvatar variant={variant} />),
+).map(notification => ({
+    ...notification,
+    messageId: uuid.v4(),
 }));
 
-notification$.subscribe(notification => showNotification(() => notification));
+const state$ = createState(
+    obs.merge(
+        notification$.map(notification => [
+            'notifications',
+            notifications => [...notifications, notification] 
+        ]),
+        dismiss.map(messageId => [
+            'notifications',
+            notifications => notifications.filter(n => n.messageId !== messageId)
+        ])
+    ), obs.of({
+        notifications: []
+    })
+);
 
-const Notifications = () => (
-    <NotificationProvider
-        desktop
-        transitionName={{
-            leave: 'dummy',
-            leaveActive: 'fadeOut',
-            appear: 'dummy',
-            appearActive: 'zoomInUp',
+const styles = theme => ({
+    success: {
+      backgroundColor: green[600],
+    },
+    error: {
+      backgroundColor: theme.palette.error.dark,
+    },
+    info: {
+      backgroundColor: theme.palette.primary.dark,
+    },
+    warning: {
+      backgroundColor: amber[700],
+    },
+    icon: {
+      fontSize: 20,
+    },
+    iconVariant: {
+      opacity: 0.9,
+      marginRight: theme.spacing.unit,
+    },
+    message: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+});
+
+const Notification = withStyles(styles)(({
+    classes,
+    className,
+    messageId,
+    title,
+    subheader,
+    content,
+    variant,
+    ...other,
+}) => (
+    <Snackbar
+        open
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
         }}
-        transitionAppear
-        transitionLeave
-    />);
+    >
+        <SnackbarContent
+            className={classNames(classes[variant], className)}
+            message={
+                <span className={classes.message}>
+                    {createElement(iconsByVariant[variant], {
+                        className:classNames(classes.icon, classes.iconVariant)
+                    })}
+                    {title} {subheader}
+                    <br />
+                    {content}
+                </span>
+            }
+            action={[
+                <IconButton
+                    key="close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={() => dismiss.next(messageId)}
+                >
+                    <Close className={classes.icon} />
+                </IconButton>,
+            ]}
+            {...other}
+        />
+    </Snackbar>));
 
-export default Notifications;
+const Notifications = ({ notifications }) => (
+    <div>
+        {notifications.map(notification => (
+            <Notification 
+                {...notification}
+            />
+        ))}
+    </div>);
+
+export default connect(state$)(Notifications);
