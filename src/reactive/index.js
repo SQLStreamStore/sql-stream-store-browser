@@ -18,7 +18,9 @@ export const createState = (reducer$, initialState$ = Rx.Observable.of({})) => i
 
 export const connect = (state$, selector = state => state) => WrappedComponent => class Connect extends Component {
     componentWillMount() {
-        this.subscription = state$.subscribe(s => this.setState(selector(s)));
+        this.subscription = state$.subscribe(s => {
+            this.setState(selector(s));
+        });
     }
 
     componentWillUnmount() {
