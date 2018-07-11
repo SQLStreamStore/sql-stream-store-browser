@@ -4,11 +4,14 @@ RUN apk add --no-cache git
 
 WORKDIR /app
 
+COPY package.json yarn.lock ./
+
+RUN yarn --frozen-lockfile
+
 COPY . .
 
-RUN yarn
-
-RUN yarn build
+RUN yarn build && \
+    yarn cache clean
 
 FROM nginx:1.15.0-alpine AS runtime
 
