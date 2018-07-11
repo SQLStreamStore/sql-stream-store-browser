@@ -1,5 +1,9 @@
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import SqlStreamStoreBrowser from './SqlStreamStoreBrowser';
 
-render(<SqlStreamStoreBrowser />, document.getElementById('root'));
+window.SqlStreamStoreBrowser = SqlStreamStoreBrowser;
+window.ReactDOM = ReactDOM;
+window.React = React;
+
+export default SqlStreamStoreBrowser;

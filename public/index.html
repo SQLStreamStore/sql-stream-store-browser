@@ -12,5 +12,12 @@
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root"></div>
+    <script type="text/javascript">
+        window.onload = function() {
+            window.ReactDOM.render(
+                window.React.createElement(window.SqlStreamStoreBrowser),
+                document.getElementById('root'));
+        };
+    </script>
   </body>
 </html>
