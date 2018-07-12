@@ -5,6 +5,7 @@ import { createState, connect } from '../../reactive';
 import rels from '../rels';
 import store from '../store';
 import { preventDefault } from '../../utils';
+import { withAuthorization } from '../../components';
 
 const links$ = store.links$
     .map(links => () => links);
@@ -25,19 +26,19 @@ const relsToTitle = {
     [rels.feed]: 'All Stream',
 };
 
-const Links = ({ links, onNavigate }) => (
+const Links = withAuthorization(({ links, onNavigate, authorization }) => (
     <List>
         {Object.keys(links).map((rel, key) => (
             <ListItem key={key}>
                 <a
                     href={links[rel].href}
-                    onClick={preventDefault(() => onNavigate(links[rel].href))}
+                    onClick={preventDefault(() => onNavigate(links[rel].href, authorization))}
                 >
                     {relsToTitle[rel]}
                 </a>
             </ListItem>
         ))}
-    </List>);
+    </List>));
 
 Links.defaultProps = {
     links: [],

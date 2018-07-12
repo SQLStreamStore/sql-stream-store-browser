@@ -11,6 +11,7 @@ import { createState, connect } from '../../reactive';
 import { preventDefault } from '../../utils';
 import rels from '../rels';
 import store from '../store';
+import { withAuthorization } from '../../components';
 import {
     Table,
     TableBody,
@@ -43,7 +44,8 @@ const StreamMetadataHeader = () => (
     </TableRow>);
 
 
-const StreamMetadataDetails = ({
+const StreamMetadataDetails = withAuthorization(({
+    authorization,
     streamId,
     maxAge,
     maxCount,
@@ -53,7 +55,7 @@ const StreamMetadataDetails = ({
     <TableRow>
         <TableCell style={nowrap}>
             <a
-                onClick={preventDefault(() => onNavigate(links[rels.feed].href))}
+                onClick={preventDefault(() => onNavigate(links[rels.feed].href, authorization))}
                 href={links[rels.feed].href}
             >
                 {streamId}
@@ -71,7 +73,7 @@ const StreamMetadataDetails = ({
         >
             {maxCount}
         </TableCell>
-    </TableRow>);
+    </TableRow>));
 
 class StreamMetadataJson extends PureComponent {
     constructor(props) {

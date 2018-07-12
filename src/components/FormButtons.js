@@ -11,7 +11,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 import { SchemaForm } from 'react-schema-form';
-
+import { withAuthorization } from './AuthorizationProvider';
 import RelIcon from './RelIcon';
 import UuidField from './UuidField';
 import { createState, connect } from '../reactive';
@@ -52,7 +52,7 @@ const mapper = {
     uuid: UuidField,
 };
 
-const FormButton = withStyles(styles)(class FormButton extends PureComponent {
+const FormButton = withAuthorization(withStyles(styles)(class FormButton extends PureComponent {
     state = {
         open: false,
     };
@@ -68,13 +68,16 @@ const FormButton = withStyles(styles)(class FormButton extends PureComponent {
     _onSubmit = (e) => {
         e.preventDefault();
 
-        const { rel, url, actions } = this.props;
+        const { rel, url, actions, authorization } = this.props;
         const { model: body } = this.state;
 
         if (actions[rel]) {
             actions[rel].next({
                 body,
                 url,
+                headers: {
+                    authorization
+                }
             });
         }
 
@@ -94,7 +97,10 @@ const FormButton = withStyles(styles)(class FormButton extends PureComponent {
 
     render() {
         const {
-            rel, title, schema, classes,
+            rel,
+            title,
+            schema,
+            classes,
         } = this.props;
         const { open, model } = this.state;
         return (
@@ -143,7 +149,7 @@ const FormButton = withStyles(styles)(class FormButton extends PureComponent {
             </span>
         );
     }
-});
+}));
 
 const FormButtons = ({ forms, url, actions }) => (
     <Card>

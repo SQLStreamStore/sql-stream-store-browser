@@ -9,6 +9,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 import {
     mount,
+    AuthorizationProvider,
     Notifications,
     FormButtons,
     NavigationLinks,
@@ -47,7 +48,7 @@ const state$ = createState(
 
 const initialNavigation = () => actions.get.next({ url: window.location.href });
 
-const onNavigate = url => actions.get.next({ url });
+const onNavigate = (url, authorization) => actions.get.next({ url, headers: { authorization } });
 
 const Hero = () => (
     <AppBar position={'static'} color={'default'}>
@@ -59,33 +60,35 @@ const Hero = () => (
         </Toolbar>
     </AppBar>);
 
-const SqlStreamStoreBrowser = ({ self, links, forms }) => (
-    <MuiThemeProvider theme={theme}>
-        <div>
-            <CssBaseline />
-            <Hero />
-            <section>
-                <NavigationLinks
-                    onNavigate={onNavigate}
-                    links={links}
-                />
-                <FormButtons
-                    actions={{
-                        [rels.append]: actions.post,
-                        [rels.metadata]: actions.post,
-                        [rels.delete]: actions.delete,
-                    }}
-                    forms={forms}
-                />
-                {createElement(views[self] || empty, {
-                    links,
-                    forms,
-                    self,
-                    onNavigate,
-                })}
-            </section>
-            <Notifications />
-        </div>
-    </MuiThemeProvider>);
+const SqlStreamStoreBrowser = ({ self, links, forms, authorization }) => (
+    <AuthorizationProvider authorization={authorization}>
+        <MuiThemeProvider theme={theme}>
+            <div>
+                <CssBaseline />
+                <Hero />
+                <section>
+                    <NavigationLinks
+                        onNavigate={onNavigate}
+                        links={links}
+                    />
+                    <FormButtons
+                        actions={{
+                            [rels.append]: actions.post,
+                            [rels.metadata]: actions.post,
+                            [rels.delete]: actions.delete,
+                        }}
+                        forms={forms}
+                    />
+                    {createElement(views[self] || empty, {
+                        links,
+                        forms,
+                        self,
+                        onNavigate,
+                    })}
+                </section>
+                <Notifications />
+            </div>
+        </MuiThemeProvider>
+    </AuthorizationProvider>);
 
 export default mount(initialNavigation)(connect(state$)(SqlStreamStoreBrowser));

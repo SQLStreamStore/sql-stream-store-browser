@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Observable as obs } from 'rxjs';
 import { createState, connect } from '../../reactive';
 import { resolveLinks, preventDefault } from '../../utils';
+import { withAuthorization } from '../../components'
 import rels from '../rels';
 import store from '../store';
 import {
@@ -36,7 +37,8 @@ const messagePropType = {
     type: PropTypes.string.isRequired,
 };
 
-const Message = ({
+const Message = withAuthorization(({
+    authorization,
     messageId,
     createdUtc,
     position,
@@ -60,7 +62,7 @@ const Message = ({
         </TableCell>
         <TableCell style={nowrap}>
             <a
-                onClick={preventDefault(() => onNavigate(links[rels.feed].href))}
+                onClick={preventDefault(() => onNavigate(links[rels.feed].href, authorization))}
                 href={links[rels.feed].href}
             >
                 {streamId}
@@ -68,7 +70,7 @@ const Message = ({
         </TableCell>
         <TableCell>
             <a
-                onClick={preventDefault(() => onNavigate(links.self.href))}
+                onClick={preventDefault(() => onNavigate(links.self.href, authorization))}
                 href={links.self.href}
             >
                 {streamId}
@@ -79,7 +81,7 @@ const Message = ({
         <TableCell>
             {position}
         </TableCell>
-    </TableRow>);
+    </TableRow>));
 
 Message.propTypes = {
     onNavigate: PropTypes.func.isRequired,

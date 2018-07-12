@@ -7,6 +7,7 @@ import {
     ExpansionPanelDetails,
 } from '@material-ui/core';
 import { Code } from '@material-ui/icons';
+import { withAuthorization } from '../../components';
 import {
     Table,
     TableBody,
@@ -65,7 +66,8 @@ const nowrap = { whiteSpace: 'nowrap' };
 
 const getFeed = links => (links[rels.feed] || {}).href;
 
-const StreamMessageDetails = ({
+const StreamMessageDetails = withAuthorization(({
+    authorization,
     messageId,
     createdUtc,
     position,
@@ -78,7 +80,7 @@ const StreamMessageDetails = ({
     <TableRow>
         <TableCell style={nowrap}>
             <a
-                onClick={preventDefault(() => onNavigate(links[rels.feed].href))}
+                onClick={preventDefault(() => onNavigate(links[rels.feed].href, authorization))}
                 href={getFeed(links)}
             >
                 {streamId}
@@ -95,7 +97,7 @@ const StreamMessageDetails = ({
         </TableCell>
         <TableCell style={{ width: '100%' }}>
             <a
-                onClick={preventDefault(() => onNavigate(links.self.href))}
+                onClick={preventDefault(() => onNavigate(links.self.href, authorization))}
                 href={getFeed(links)}
             >
                 {streamId}
@@ -106,7 +108,7 @@ const StreamMessageDetails = ({
         <TableCell numeric>
             {position}
         </TableCell>
-    </TableRow>);
+    </TableRow>));
 
 class StreamMessageJson extends PureComponent {
     constructor(props) {

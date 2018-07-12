@@ -4,6 +4,7 @@ import {
     IconButton,
 } from '@material-ui/core';
 import RelIcon from './RelIcon';
+import { withAuthorization } from './AuthorizationProvider';
 import { rels } from '../stream-store';
 import { preventDefault } from '../utils';
 
@@ -38,14 +39,14 @@ const NavigationLink = ({ onClick, rel }) => (
     </Button>
 );
 
-const NavigationLinks = ({ onNavigate, links }) => (
+const NavigationLinks = ({ onNavigate, links, authorization }) => (
     <div>
         <nav>
             {[...feedNavigation].map(rel => (
                 <FeedNavigationLink
                     disabled={!links[rel]}
                     key={rel}
-                    onClick={preventDefault(() => onNavigate(links[rel].href))}
+                    onClick={preventDefault(() => onNavigate(links[rel].href, authorization))}
                     link={links[rel]}
                     rel={rel}
                 />))}
@@ -57,7 +58,7 @@ const NavigationLinks = ({ onNavigate, links }) => (
                 .map(rel => (
                     <NavigationLink
                         key={rel}
-                        onClick={preventDefault(() => onNavigate(links[rel].href))}
+                        onClick={preventDefault(() => onNavigate(links[rel].href, authorization))}
                         link={links[rel]}
                         rel={rel}
                     >
@@ -66,4 +67,4 @@ const NavigationLinks = ({ onNavigate, links }) => (
         </nav>
     </div>);
 
-export default NavigationLinks;
+export default withAuthorization(NavigationLinks);
