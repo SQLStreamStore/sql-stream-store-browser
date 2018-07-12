@@ -7,24 +7,34 @@ const tryParseJson = (body) => {
     try {
         return JSON.parse(body);
     } catch (e) {
-        return body;
+        return {};
     }
 };
 
-const mapResponse = response => response
-    .text()
-    .then((body) => {
-        const {
-            ok, status, statusText, url,
-        } = response;
-        return {
-            body: tryParseJson(body),
-            ok,
-            status,
-            statusText,
-            url,
-        };
-    });
+const getHeaders = headers => [...headers.entries()]
+    .reduce((acc, [key, value]) => ({
+        ...acc,
+        [key]: value
+    }), {});
+
+const mapResponse = async response => {
+    const {
+        ok,
+        status,
+        statusText,
+        url,
+        headers
+    } = response;
+
+    return {
+        body: tryParseJson(await response.text()),
+        headers: getHeaders(headers),
+        ok,
+        status,
+        statusText,
+        url,
+    };
+}
 
 const get = ({ url, headers = {} }) => fetch(url, {
     headers: new Headers({
