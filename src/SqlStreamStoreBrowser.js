@@ -15,8 +15,6 @@ import { actions, store, rels, views } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 
-const empty = () => null;
-
 const getSelfAlias = links =>
     Object.keys(links)
         .filter(rel => rel.indexOf('streamStore:') === 0)

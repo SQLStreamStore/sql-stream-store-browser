@@ -7,7 +7,7 @@ import rels from '../rels';
 
 export default {
     [rels.feed]: Stream,
-    //[rels.message]: StreamMessage,
+    [rels.message]: StreamMessage,
     [rels.index]: Home,
     [rels.metadata]: StreamMetadata,
     _unknown: Unknown,
