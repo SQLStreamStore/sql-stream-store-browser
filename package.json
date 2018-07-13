@@ -5,12 +5,14 @@
   "repository": "https://github.com/thefringeninja/sql-stream-store-browser.git",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "build": "prettier --list-different \"src/**/*.js\" && react-scripts build",
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"src/**/*.js\""
   },
   "private": false,
   "devDependencies": {
-    "babel-plugin-module-resolver": "3.1.1"
+    "babel-plugin-module-resolver": "3.1.1",
+    "prettier": "1.13.7"
   },
   "dependencies": {
     "@material-ui/core": "1.2.3",

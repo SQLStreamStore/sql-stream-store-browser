@@ -2,7 +2,7 @@ import React from 'react';
 import { Observable as obs } from 'rxjs';
 import { createState, connect } from '../../reactive';
 import { resolveLinks, preventDefault } from '../../utils';
-import { withAuthorization } from '../../components'
+import { withAuthorization } from '../../components';
 import rels from '../rels';
 import store from '../store';
 import {
@@ -15,11 +15,12 @@ import {
 
 const messages$ = store.body$
     .zip(store.url$)
-    .map(([{ _embedded }, url]) => () => _embedded[rels.message]
-        .map(({ _links, ...message }) => ({
+    .map(([{ _embedded }, url]) => () =>
+        _embedded[rels.message].map(({ _links, ...message }) => ({
             ...message,
             links: resolveLinks(url, _links),
-        })));
+        })),
+    );
 
 const state$ = createState(
     messages$.map(messages => ['messages', messages]),
@@ -28,74 +29,59 @@ const state$ = createState(
 
 const nowrap = { whiteSpace: 'nowrap' };
 
-const Message = withAuthorization(({
-    authorization,
-    messageId,
-    createdUtc,
-    position,
-    streamId,
-    streamVersion,
-    type,
-    links,
-    onNavigate,
-}) => (
-    <TableRow>
-        <TableCell
-            style={nowrap}
-        >
-            {messageId}
-        </TableCell>
-        <TableCell style={nowrap}>
-            {createdUtc}
-        </TableCell>
-        <TableCell style={nowrap}>
-            {type}
-        </TableCell>
-        <TableCell style={nowrap}>
-            <a
-                onClick={preventDefault(() => onNavigate(links[rels.feed].href, authorization))}
-                href={links[rels.feed].href}
-            >
-                {streamId}
-            </a>
-        </TableCell>
-        <TableCell>
-            <a
-                onClick={preventDefault(() => onNavigate(links.self.href, authorization))}
-                href={links.self.href}
-            >
-                {streamId}
-                {'@'}
-                {streamVersion}
-            </a>
-        </TableCell>
-        <TableCell>
-            {position}
-        </TableCell>
-    </TableRow>));
+const Message = withAuthorization(
+    ({
+        authorization,
+        messageId,
+        createdUtc,
+        position,
+        streamId,
+        streamVersion,
+        type,
+        links,
+        onNavigate,
+    }) => (
+        <TableRow>
+            <TableCell style={nowrap}>{messageId}</TableCell>
+            <TableCell style={nowrap}>{createdUtc}</TableCell>
+            <TableCell style={nowrap}>{type}</TableCell>
+            <TableCell style={nowrap}>
+                <a
+                    onClick={preventDefault(() =>
+                        onNavigate(links[rels.feed].href, authorization),
+                    )}
+                    href={links[rels.feed].href}
+                >
+                    {streamId}
+                </a>
+            </TableCell>
+            <TableCell>
+                <a
+                    onClick={preventDefault(() =>
+                        onNavigate(links.self.href, authorization),
+                    )}
+                    href={links.self.href}
+                >
+                    {streamId}
+                    {'@'}
+                    {streamVersion}
+                </a>
+            </TableCell>
+            <TableCell>{position}</TableCell>
+        </TableRow>
+    ),
+);
 
 const Messages = ({ messages, onNavigate }) => (
     <Table>
         <TableHead>
             <TableRow>
-                <TableCell>
-                    {'Message Id'}
-                </TableCell>
-                <TableCell>
-                    {'Created UTC'}
-                </TableCell>
-                <TableCell>
-                    {'Type'}
-                </TableCell>
-                <TableCell>
-                    {'Stream'}
-                </TableCell>
-                <TableCell>
-                    {'Stream Id@Version'}
-                </TableCell>
-                <TableCell numeric>
-                    {'Position'}
-                </TableCell>
+                <TableCell>{'Message Id'}</TableCell>
+                <TableCell>{'Created UTC'}</TableCell>
+                <TableCell>{'Type'}</TableCell>
+                <TableCell>{'Stream'}</TableCell>
+                <TableCell>{'Stream Id@Version'}</TableCell>
+                <TableCell numeric>{'Position'}</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
@@ -104,24 +90,21 @@ const Messages = ({ messages, onNavigate }) => (
                     key={message.messageId}
                     onNavigate={onNavigate}
                     {...message}
-                />))}
+                />
+            ))}
         </TableBody>
-    </Table>);
+    </Table>
+);
 
 Messages.defaultProps = {
     messages: [],
 };
 
-const Stream = ({
-    messages,
-    onNavigate,
-}) => (
+const Stream = ({ messages, onNavigate }) => (
     <section>
-        <Messages
-            messages={messages}
-            onNavigate={onNavigate}
-        />
-    </section>);
+        <Messages messages={messages} onNavigate={onNavigate} />
+    </section>
+);
 
 Stream.defaultProps = {
     messages: [],

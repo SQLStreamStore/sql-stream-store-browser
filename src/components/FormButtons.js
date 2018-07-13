@@ -19,11 +19,9 @@ import { actions as ssActions } from '../stream-store';
 
 const url$ = ssActions.getResponse.map(({ url }) => () => url);
 
-const state$ = createState(
-    url$.map(url => ['url', url]),
-);
+const state$ = createState(url$.map(url => ['url', url]));
 
-const getValue = (value) => {
+const getValue = value => {
     if (typeof value === 'object') {
         try {
             return JSON.parse(value.target.value);
@@ -41,115 +39,109 @@ const styles = theme => ({
     },
 });
 
-const SlideUp = props => (
-    <Slide
-        direction={'up'}
-        {...props}
-    />
-);
+const SlideUp = props => <Slide direction={'up'} {...props} />;
 
 const mapper = {
     uuid: UuidField,
 };
 
-const FormButton = withAuthorization(withStyles(styles)(class FormButton extends PureComponent {
-    state = {
-        open: false,
-    };
+const FormButton = withAuthorization(
+    withStyles(styles)(
+        class FormButton extends PureComponent {
+            state = {
+                open: false,
+            };
 
-    _onOpen = () => this.setState({
-        open: true,
-    });
+            _onOpen = () =>
+                this.setState({
+                    open: true,
+                });
 
-    _onClose = () => this.setState({
-        open: false,
-    });
+            _onClose = () =>
+                this.setState({
+                    open: false,
+                });
 
-    _onSubmit = (e) => {
-        e.preventDefault();
+            _onSubmit = e => {
+                e.preventDefault();
 
-        const { rel, url, actions, authorization } = this.props;
-        const { model: body } = this.state;
+                const { rel, url, actions, authorization } = this.props;
+                const { model: body } = this.state;
 
-        if (actions[rel]) {
-            actions[rel].next({
-                body,
-                url,
-                headers: {
-                    authorization
+                if (actions[rel]) {
+                    actions[rel].next({
+                        body,
+                        url,
+                        headers: {
+                            authorization,
+                        },
+                    });
                 }
-            });
-        }
 
-        this._onClose();
-    };
+                this._onClose();
+            };
 
-    _onModelChange = (key, value) => {
-        const { model, ...state } = this.state;
-        this.setState({
-            ...state,
-            model: {
-                ...model,
-                [key]: getValue(value),
-            },
-        });
-    };
+            _onModelChange = (key, value) => {
+                const { model, ...state } = this.state;
+                this.setState({
+                    ...state,
+                    model: {
+                        ...model,
+                        [key]: getValue(value),
+                    },
+                });
+            };
 
-    render() {
-        const {
-            rel,
-            title,
-            schema,
-            classes,
-        } = this.props;
-        const { open, model } = this.state;
-        return (
-            <span>
-                <Button
-                    variant={'contained'}
-                    color={'secondary'}
-                    label={title}
-                    onClick={this._onOpen}
-                    className={classes.button}
-                >
-                    <RelIcon rel={rel} />
-                    {schema.title}
-                </Button>
-                <Dialog
-                    open={open}
-                    TransitionComponent={SlideUp}
-                    disableBackdropClick={false}
-                >
-                    <DialogTitle>
-                        {schema.title}
-                    </DialogTitle>
-                    <DialogContent>
-                        <SchemaForm
-                            schema={schema}
-                            model={model}
-                            mapper={mapper}
-                            onModelChange={this._onModelChange}
-                        />
-                    </DialogContent>
-                    <DialogActions>
+            render() {
+                const { rel, title, schema, classes } = this.props;
+                const { open, model } = this.state;
+                return (
+                    <span>
                         <Button
-                            color={'primary'}
-                            onClick={this._onClose}
+                            variant={'contained'}
+                            color={'secondary'}
+                            label={title}
+                            onClick={this._onOpen}
+                            className={classes.button}
                         >
-                            {'Cancel'}
+                            <RelIcon rel={rel} />
+                            {schema.title}
                         </Button>
-                        <Button
-                            color={'primary'}
-                            onClick={this._onSubmit}
+                        <Dialog
+                            open={open}
+                            TransitionComponent={SlideUp}
+                            disableBackdropClick={false}
                         >
-                            {'Submit'}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </span>
-        );
-    }
-}));
+                            <DialogTitle>{schema.title}</DialogTitle>
+                            <DialogContent>
+                                <SchemaForm
+                                    schema={schema}
+                                    model={model}
+                                    mapper={mapper}
+                                    onModelChange={this._onModelChange}
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    color={'primary'}
+                                    onClick={this._onClose}
+                                >
+                                    {'Cancel'}
+                                </Button>
+                                <Button
+                                    color={'primary'}
+                                    onClick={this._onSubmit}
+                                >
+                                    {'Submit'}
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </span>
+                );
+            }
+        },
+    ),
+);
 
 const FormButtons = ({ forms, url, actions }) => (
     <Card>
@@ -161,8 +153,10 @@ const FormButtons = ({ forms, url, actions }) => (
                     url={url}
                     actions={actions}
                     schema={forms[rel]}
-                />))}
+                />
+            ))}
         </CardActions>
-    </Card>);
+    </Card>
+);
 
 export default connect(state$)(FormButtons);

@@ -4,7 +4,7 @@ const removeOrigin = href => href.substring(new URL(href).origin.length);
 
 const history = createBrowserHistory();
 
-const push = (url) => {
+const push = url => {
     const pathNameAndQuery = removeOrigin(url);
 
     if (removeOrigin(window.location.href) === pathNameAndQuery) {
@@ -13,7 +13,6 @@ const push = (url) => {
 
     history.push(pathNameAndQuery);
 };
-
 
 export default {
     ...history,

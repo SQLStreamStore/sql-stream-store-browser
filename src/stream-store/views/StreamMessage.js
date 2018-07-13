@@ -20,7 +20,7 @@ import rels from '../rels';
 import store from '../store';
 import { preventDefault } from '../../utils';
 
-const tryParseJson = (payload) => {
+const tryParseJson = payload => {
     try {
         return JSON.parse(payload);
     } catch (e) {
@@ -28,12 +28,11 @@ const tryParseJson = (payload) => {
     }
 };
 
-const message$ = store.body$
-    .map(({ payload, metadata, ...body }) => () => ({
-        ...body,
-        payload: tryParseJson(payload),
-        metadata: tryParseJson(metadata),
-    }));
+const message$ = store.body$.map(({ payload, metadata, ...body }) => () => ({
+    ...body,
+    payload: tryParseJson(payload),
+    metadata: tryParseJson(metadata),
+}));
 
 const state$ = createState(
     message$.map(message => ['message', message]),
@@ -42,73 +41,61 @@ const state$ = createState(
 
 const StreamMessageHeader = () => (
     <TableRow>
-        <TableCell>
-            {'StreamId'}
-        </TableCell>
-        <TableCell>
-            {'Message Id'}
-        </TableCell>
-        <TableCell>
-            {'Created UTC'}
-        </TableCell>
-        <TableCell>
-            {'Type'}
-        </TableCell>
-        <TableCell style={{ width: '100%' }}>
-            {'Stream Id@Version'}
-        </TableCell>
-        <TableCell>
-            {'Position'}
-        </TableCell>
-    </TableRow>);
+        <TableCell>{'StreamId'}</TableCell>
+        <TableCell>{'Message Id'}</TableCell>
+        <TableCell>{'Created UTC'}</TableCell>
+        <TableCell>{'Type'}</TableCell>
+        <TableCell style={{ width: '100%' }}>{'Stream Id@Version'}</TableCell>
+        <TableCell>{'Position'}</TableCell>
+    </TableRow>
+);
 
 const nowrap = { whiteSpace: 'nowrap' };
 
 const getFeed = links => (links[rels.feed] || {}).href;
 
-const StreamMessageDetails = withAuthorization(({
-    authorization,
-    messageId,
-    createdUtc,
-    position,
-    streamId,
-    streamVersion,
-    type,
-    links,
-    onNavigate,
-}) => (
-    <TableRow>
-        <TableCell style={nowrap}>
-            <a
-                onClick={preventDefault(() => onNavigate(links[rels.feed].href, authorization))}
-                href={getFeed(links)}
-            >
-                {streamId}
-            </a>
-        </TableCell>
-        <TableCell style={nowrap}>
-            {messageId}
-        </TableCell>
-        <TableCell style={nowrap}>
-            {createdUtc}
-        </TableCell>
-        <TableCell style={nowrap}>
-            {type}
-        </TableCell>
-        <TableCell style={{ width: '100%' }}>
-            <a
-                onClick={preventDefault(() => onNavigate(links.self.href, authorization))}
-                href={getFeed(links)}
-            >
-                {streamId}
-@
-                {streamVersion}
-            </a>
-        </TableCell>
-        <TableCell numeric>
-            {position}
-        </TableCell>
-    </TableRow>));
+const StreamMessageDetails = withAuthorization(
+    ({
+        authorization,
+        messageId,
+        createdUtc,
+        position,
+        streamId,
+        streamVersion,
+        type,
+        links,
+        onNavigate,
+    }) => (
+        <TableRow>
+            <TableCell style={nowrap}>
+                <a
+                    onClick={preventDefault(() =>
+                        onNavigate(links[rels.feed].href, authorization),
+                    )}
+                    href={getFeed(links)}
+                >
+                    {streamId}
+                </a>
+            </TableCell>
+            <TableCell style={nowrap}>{messageId}</TableCell>
+            <TableCell style={nowrap}>{createdUtc}</TableCell>
+            <TableCell style={nowrap}>{type}</TableCell>
+            <TableCell style={{ width: '100%' }}>
+                <a
+                    onClick={preventDefault(() =>
+                        onNavigate(links.self.href, authorization),
+                    )}
+                    href={getFeed(links)}
+                >
+                    {streamId}
+                    @
+                    {streamVersion}
+                </a>
+            </TableCell>
+            <TableCell numeric>{position}</TableCell>
+        </TableRow>
+    ),
+);
 
 class StreamMessageJson extends PureComponent {
     constructor(props) {
@@ -123,44 +110,30 @@ class StreamMessageJson extends PureComponent {
         this.setState({
             expanded: !expanded,
         });
-    }
+    };
 
     render() {
         const { json, title } = this.props;
         const { expanded } = this.state;
         return (
-            <ExpansionPanel
-                expanded={expanded}
-                onClick={this._handleClick}
-            >
-                <ExpansionPanelSummary
-                    expandIcon={<Code />}
-                >
-                    <Typography variant={'title'}>
-                        {title}
-                    </Typography>
+            <ExpansionPanel expanded={expanded} onClick={this._handleClick}>
+                <ExpansionPanelSummary expandIcon={<Code />}>
+                    <Typography variant={'title'}>{title}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <pre>
-                        {JSON.stringify(json, null, 4)}
-                    </pre>
+                    <pre>{JSON.stringify(json, null, 4)}</pre>
                 </ExpansionPanelDetails>
-            </ExpansionPanel>);
+            </ExpansionPanel>
+        );
     }
 }
 
 const StreamMessageData = ({ payload }) => (
-    <StreamMessageJson
-        title={'Data'}
-        json={payload}
-    />
+    <StreamMessageJson title={'Data'} json={payload} />
 );
 
 const StreamMessageMetadata = ({ payload }) => (
-    <StreamMessageJson
-        title={'Metadata'}
-        json={payload}
-    />
+    <StreamMessageJson title={'Metadata'} json={payload} />
 );
 
 const StreamMessage = ({ message, links, onNavigate }) => (
@@ -179,6 +152,7 @@ const StreamMessage = ({ message, links, onNavigate }) => (
         </Table>
         <StreamMessageData payload={message.payload} />
         <StreamMessageMetadata payload={message.metadata} />
-    </section>);
+    </section>
+);
 
 export default connect(state$)(StreamMessage);

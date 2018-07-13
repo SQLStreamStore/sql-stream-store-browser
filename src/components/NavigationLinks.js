@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    IconButton,
-} from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
 import RelIcon from './RelIcon';
 import { withAuthorization } from './AuthorizationProvider';
 import { rels } from '../stream-store';
@@ -21,19 +18,13 @@ const feedNavigation = [
 const feedNavigationSet = new Set(feedNavigation);
 
 const FeedNavigationLink = ({ disabled, onClick, rel }) => (
-    <IconButton
-        variant={'raised'}
-        disabled={disabled}
-        onClick={onClick}
-    >
+    <IconButton variant={'raised'} disabled={disabled} onClick={onClick}>
         <RelIcon rel={rel} />
-    </IconButton>);
+    </IconButton>
+);
 
 const NavigationLink = ({ onClick, rel }) => (
-    <Button
-        variant={'text'}
-        onClick={onClick}
-    >
+    <Button variant={'text'} onClick={onClick}>
         <RelIcon rel={rel} />
         {rel}
     </Button>
@@ -46,25 +37,31 @@ const NavigationLinks = ({ onNavigate, links, authorization }) => (
                 <FeedNavigationLink
                     disabled={!links[rel]}
                     key={rel}
-                    onClick={preventDefault(() => onNavigate(links[rel].href, authorization))}
+                    onClick={preventDefault(() =>
+                        onNavigate(links[rel].href, authorization),
+                    )}
                     link={links[rel]}
                     rel={rel}
-                />))}
+                />
+            ))}
         </nav>
         <nav>
-            {Object
-                .keys(links)
+            {Object.keys(links)
                 .filter(rel => !feedNavigationSet.has(rel))
                 .map(rel => (
                     <NavigationLink
                         key={rel}
-                        onClick={preventDefault(() => onNavigate(links[rel].href, authorization))}
+                        onClick={preventDefault(() =>
+                            onNavigate(links[rel].href, authorization),
+                        )}
                         link={links[rel]}
                         rel={rel}
                     >
                         {rel}
-                    </NavigationLink>))}
+                    </NavigationLink>
+                ))}
         </nav>
-    </div>);
+    </div>
+);
 
 export default withAuthorization(NavigationLinks);

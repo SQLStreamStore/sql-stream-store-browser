@@ -1,9 +1,8 @@
 import React from 'react';
 import { TextField as LegacyTextField } from '@material-ui/core';
 
-const getType = type => ((type !== 'text' || type === 'textarea')
-    ? undefined
-    : type);
+const getType = type =>
+    type !== 'text' || type === 'textarea' ? undefined : type;
 
 const TextField = ({
     floatingLabelText,

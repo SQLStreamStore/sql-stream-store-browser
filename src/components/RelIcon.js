@@ -25,6 +25,7 @@ const fontIconByRel = {
     [rels.delete]: DeleteForever,
 };
 
-const RelIcon = ({ rel }) => createElement(fontIconByRel[rel] || SqlStreamStore);
+const RelIcon = ({ rel }) =>
+    createElement(fontIconByRel[rel] || SqlStreamStore);
 
 export default RelIcon;
