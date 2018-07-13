@@ -26,6 +26,6 @@ const fontIconByRel = {
 };
 
 const RelIcon = ({ rel }) =>
-    createElement(fontIconByRel[rel] || SqlStreamStore);
+    createElement(fontIconByRel[rel] || SqlStreamStore, { color: 'action' });
 
 export default RelIcon;

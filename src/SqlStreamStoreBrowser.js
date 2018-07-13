@@ -47,9 +47,9 @@ const formActions = {
 };
 
 const Hero = () => (
-    <AppBar position={'static'} color={'default'}>
+    <AppBar position={'static'}>
         <Toolbar>
-            <SqlStreamStore />
+            <SqlStreamStore color={'action'} />
             <Typography variant={'title'} color={'inherit'}>
                 Sql Stream Store
             </Typography>

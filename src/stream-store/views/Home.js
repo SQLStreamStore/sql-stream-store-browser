@@ -1,11 +1,10 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import { List, ListItem } from '@material-ui/core';
+import { List, ListItem, Typography } from '@material-ui/core';
 import { createState, connect } from '../../reactive';
 import rels from '../rels';
 import store from '../store';
-import { preventDefault } from '../../utils';
-import { withAuthorization } from '../../components';
+import { Hyperlink } from '../../components';
 
 const links$ = store.links$.map(links => () => links);
 
@@ -25,22 +24,19 @@ const relsToTitle = {
     [rels.feed]: 'All Stream',
 };
 
-const Links = withAuthorization(({ links, onNavigate, authorization }) => (
+const Links = ({ links, onNavigate }) => (
     <List>
         {Object.keys(links).map((rel, key) => (
             <ListItem key={key}>
-                <a
-                    href={links[rel].href}
-                    onClick={preventDefault(() =>
-                        onNavigate(links[rel].href, authorization),
-                    )}
-                >
-                    {relsToTitle[rel]}
-                </a>
+                <Hyperlink href={links[rel].href} onNavigate={onNavigate}>
+                    <Typography variant={'title'}>
+                        {relsToTitle[rel]}
+                    </Typography>
+                </Hyperlink>
             </ListItem>
         ))}
     </List>
-));
+);
 
 Links.defaultProps = {
     links: [],

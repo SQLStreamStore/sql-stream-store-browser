@@ -7,7 +7,6 @@ import {
     ExpansionPanelDetails,
 } from '@material-ui/core';
 import { Code } from '@material-ui/icons';
-import { withAuthorization } from '../../components';
 import {
     Table,
     TableBody,
@@ -15,10 +14,10 @@ import {
     TableHead,
     TableCell,
 } from '../../components/StripeyTable';
+import { Hyperlink } from '../../components';
 import { createState, connect } from '../../reactive';
 import rels from '../rels';
 import store from '../store';
-import { preventDefault } from '../../utils';
 
 const tryParseJson = payload => {
     try {
@@ -50,51 +49,38 @@ const StreamMessageHeader = () => (
     </TableRow>
 );
 
+const getHref = (links, rel) => (links[rel] || {}).href;
+
 const nowrap = { whiteSpace: 'nowrap' };
 
-const getFeed = links => (links[rels.feed] || {}).href;
-
-const StreamMessageDetails = withAuthorization(
-    ({
-        authorization,
-        messageId,
-        createdUtc,
-        position,
-        streamId,
-        streamVersion,
-        type,
-        links,
-        onNavigate,
-    }) => (
-        <TableRow>
-            <TableCell style={nowrap}>
-                <a
-                    onClick={preventDefault(() =>
-                        onNavigate(links[rels.feed].href, authorization),
-                    )}
-                    href={getFeed(links)}
-                >
-                    {streamId}
-                </a>
-            </TableCell>
-            <TableCell style={nowrap}>{messageId}</TableCell>
-            <TableCell style={nowrap}>{createdUtc}</TableCell>
-            <TableCell style={nowrap}>{type}</TableCell>
-            <TableCell style={{ width: '100%' }}>
-                <a
-                    onClick={preventDefault(() =>
-                        onNavigate(links.self.href, authorization),
-                    )}
-                    href={getFeed(links)}
-                >
-                    {streamId}
-                    @
-                    {streamVersion}
-                </a>
-            </TableCell>
-            <TableCell numeric>{position}</TableCell>
-        </TableRow>
-    ),
+const StreamMessageDetails = ({
+    messageId,
+    createdUtc,
+    position,
+    streamId,
+    streamVersion,
+    type,
+    links,
+    onNavigate,
+}) => (
+    <TableRow>
+        <TableCell style={nowrap}>
+            <Hyperlink href={getHref(links, rels.feed)} onNavigate={onNavigate}>
+                {streamId}
+            </Hyperlink>
+        </TableCell>
+        <TableCell style={nowrap}>{messageId}</TableCell>
+        <TableCell style={nowrap}>{createdUtc}</TableCell>
+        <TableCell style={nowrap}>{type}</TableCell>
+        <TableCell style={{ width: '100%' }}>
+            <Hyperlink href={getHref(links, rels.self)} onNavigate={onNavigate}>
+                {streamId}
+                {'@'}
+                {streamVersion}
+            </Hyperlink>
+        </TableCell>
+        <TableCell numeric>{position}</TableCell>
+    </TableRow>
 );
 
 class StreamMessageJson extends PureComponent {

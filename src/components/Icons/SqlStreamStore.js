@@ -2,7 +2,7 @@ import React from 'react';
 import { SvgIcon } from '@material-ui/core';
 /* eslint-disable max-len */
 const SqlStreamStore = props => (
-    <SvgIcon color={'primary'} {...props} viewBox={'0 0 448.687 627.153'}>
+    <SvgIcon {...props} viewBox={'0 0 448.687 627.153'}>
         <g transform={'translate(-88.5 -116.776)'}>
             <ellipse
                 ry={'100.857'}

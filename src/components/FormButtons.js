@@ -98,8 +98,6 @@ const FormButton = withAuthorization(
                 return (
                     <span>
                         <Button
-                            variant={'contained'}
-                            color={'secondary'}
                             label={title}
                             onClick={this._onOpen}
                             className={classes.button}

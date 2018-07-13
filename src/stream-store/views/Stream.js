@@ -1,8 +1,7 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
 import { createState, connect } from '../../reactive';
-import { resolveLinks, preventDefault } from '../../utils';
-import { withAuthorization } from '../../components';
+import { resolveLinks } from '../../utils';
 import rels from '../rels';
 import store from '../store';
 import {
@@ -12,6 +11,7 @@ import {
     TableHead,
     TableCell,
 } from '../../components/StripeyTable';
+import { Hyperlink } from '../../components';
 
 const messages$ = store.body$
     .zip(store.url$)
@@ -29,47 +29,34 @@ const state$ = createState(
 
 const nowrap = { whiteSpace: 'nowrap' };
 
-const Message = withAuthorization(
-    ({
-        authorization,
-        messageId,
-        createdUtc,
-        position,
-        streamId,
-        streamVersion,
-        type,
-        links,
-        onNavigate,
-    }) => (
-        <TableRow>
-            <TableCell style={nowrap}>{messageId}</TableCell>
-            <TableCell style={nowrap}>{createdUtc}</TableCell>
-            <TableCell style={nowrap}>{type}</TableCell>
-            <TableCell style={nowrap}>
-                <a
-                    onClick={preventDefault(() =>
-                        onNavigate(links[rels.feed].href, authorization),
-                    )}
-                    href={links[rels.feed].href}
-                >
-                    {streamId}
-                </a>
-            </TableCell>
-            <TableCell>
-                <a
-                    onClick={preventDefault(() =>
-                        onNavigate(links.self.href, authorization),
-                    )}
-                    href={links.self.href}
-                >
-                    {streamId}
-                    {'@'}
-                    {streamVersion}
-                </a>
-            </TableCell>
-            <TableCell>{position}</TableCell>
-        </TableRow>
-    ),
+const Message = ({
+    messageId,
+    createdUtc,
+    position,
+    streamId,
+    streamVersion,
+    type,
+    links,
+    onNavigate,
+}) => (
+    <TableRow>
+        <TableCell style={nowrap}>{messageId}</TableCell>
+        <TableCell style={nowrap}>{createdUtc}</TableCell>
+        <TableCell style={nowrap}>{type}</TableCell>
+        <TableCell style={nowrap}>
+            <Hyperlink href={links[rels.feed].href} onNavigate={onNavigate}>
+                {streamId}
+            </Hyperlink>
+        </TableCell>
+        <TableCell>
+            <Hyperlink href={links.self.href} onNavigate={onNavigate}>
+                {streamId}
+                {'@'}
+                {streamVersion}
+            </Hyperlink>
+        </TableCell>
+        <TableCell>{position}</TableCell>
+    </TableRow>
 );
 
 const Messages = ({ messages, onNavigate }) => (

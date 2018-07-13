@@ -5,3 +5,5 @@ build/**
 
 tools/**
 !tools/packages.config
+
+.idea/

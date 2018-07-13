@@ -8,10 +8,8 @@ import {
 } from '@material-ui/core';
 import { Code } from '@material-ui/icons';
 import { createState, connect } from '../../reactive';
-import { preventDefault } from '../../utils';
 import rels from '../rels';
 import store from '../store';
-import { withAuthorization } from '../../components';
 import {
     Table,
     TableBody,
@@ -19,6 +17,7 @@ import {
     TableHead,
     TableCell,
 } from '../../components/StripeyTable';
+import { Hyperlink } from '../../components';
 
 const metadata$ = store.body$.map(metadata => () => metadata);
 
@@ -37,27 +36,27 @@ const StreamMetadataHeader = () => (
     </TableRow>
 );
 
-const StreamMetadataDetails = withAuthorization(
-    ({ authorization, streamId, maxAge, maxCount, links, onNavigate }) => (
-        <TableRow>
-            <TableCell style={nowrap}>
-                <a
-                    onClick={preventDefault(() =>
-                        onNavigate(links[rels.feed].href, authorization),
-                    )}
-                    href={links[rels.feed].href}
-                >
-                    {streamId}
-                </a>
-            </TableCell>
-            <TableCell style={nowrap} numeric>
-                {maxAge}
-            </TableCell>
-            <TableCell style={nowrap} numeric>
-                {maxCount}
-            </TableCell>
-        </TableRow>
-    ),
+const StreamMetadataDetails = ({
+    authorization,
+    streamId,
+    maxAge,
+    maxCount,
+    links,
+    onNavigate,
+}) => (
+    <TableRow>
+        <TableCell style={nowrap}>
+            <Hyperlink onNavigate={onNavigate} href={links[rels.feed].href}>
+                {streamId}
+            </Hyperlink>
+        </TableCell>
+        <TableCell style={nowrap} numeric>
+            {maxAge}
+        </TableCell>
+        <TableCell style={nowrap} numeric>
+            {maxCount}
+        </TableCell>
+    </TableRow>
 );
 
 class StreamMetadataJson extends PureComponent {

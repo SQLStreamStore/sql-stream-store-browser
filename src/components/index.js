@@ -8,3 +8,4 @@ export { default as Notifications } from './Notifications';
 export { default as FormButtons } from './FormButtons';
 export { default as mount } from './mount';
 export { default as UuidField } from './UuidField';
+export { default as Hyperlink } from './Hyperlink';
