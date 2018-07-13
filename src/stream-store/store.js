@@ -9,7 +9,7 @@ const url$ = actions.getResponse
 
 const links$ = body$
     .zip(url$)
-    .map(([{ _links }, url]) => resolveLinks(url, _links));
+    .map(([{ _links }, url]) => resolveLinks(url, _links || {}));
 
 const forms$ = body$
     .filter(({ _embedded }) => _embedded)
