@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Observable as obs } from 'rxjs';
 import { createState, connect } from '../../reactive';
 import { resolveLinks, preventDefault } from '../../utils';
@@ -28,14 +27,6 @@ const state$ = createState(
 );
 
 const nowrap = { whiteSpace: 'nowrap' };
-
-const messagePropType = {
-    messageId: PropTypes.string.isRequired,
-    createdUtc: PropTypes.string.isRequired,
-    position: PropTypes.number.isRequired,
-    streamId: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-};
 
 const Message = withAuthorization(({
     authorization,
@@ -83,10 +74,6 @@ const Message = withAuthorization(({
         </TableCell>
     </TableRow>));
 
-Message.propTypes = {
-    onNavigate: PropTypes.func.isRequired,
-    ...PropTypes.shape(messagePropType),
-};
 const Messages = ({ messages, onNavigate }) => (
     <Table>
         <TableHead>
@@ -121,11 +108,6 @@ const Messages = ({ messages, onNavigate }) => (
         </TableBody>
     </Table>);
 
-Messages.propTypes = {
-    onNavigate: PropTypes.func.isRequired,
-    messages: PropTypes.arrayOf(PropTypes.shape(messagePropType)),
-};
-
 Messages.defaultProps = {
     messages: [],
 };
@@ -140,11 +122,6 @@ const Stream = ({
             onNavigate={onNavigate}
         />
     </section>);
-
-Stream.propTypes = {
-    onNavigate: PropTypes.func.isRequired,
-    messages: PropTypes.arrayOf(PropTypes.shape(messagePropType)),
-};
 
 Stream.defaultProps = {
     messages: [],
