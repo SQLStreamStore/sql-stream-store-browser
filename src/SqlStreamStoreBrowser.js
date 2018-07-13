@@ -81,7 +81,7 @@ const SqlStreamStoreBrowser = withAuthorization(mount(initialNavigation)(({ self
                     actions={formActions}
                     forms={forms}
                 />
-                {createElement(views[self] || empty, {
+                {createElement(views[self] || views._unknown, {
                     links,
                     forms,
                     self,

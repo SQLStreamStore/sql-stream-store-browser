@@ -20,6 +20,7 @@
     "jss": "9.4.0",
     "react": "16.3.2",
     "react-dom": "16.3.2",
+    "react-inspector": "2.3.0",
     "react-schema-form": "0.3.11",
     "react-scripts": "1.1.4",
     "react-tap-event-plugin": "3.0.2",
