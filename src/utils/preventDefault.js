@@ -1,4 +1,4 @@
-const preventDefault = cb => (e) => {
+const preventDefault = cb => e => {
     e.preventDefault();
     cb();
 };

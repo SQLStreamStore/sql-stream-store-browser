@@ -10,5 +10,5 @@ export default {
     //[rels.message]: StreamMessage,
     [rels.index]: Home,
     [rels.metadata]: StreamMetadata,
-    "_unknown": Unknown
+    _unknown: Unknown,
 };

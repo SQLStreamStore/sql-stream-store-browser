@@ -1,4 +1,7 @@
-export { default as AuthorizationProvider, withAuthorization } from './AuthorizationProvider';
+export {
+    default as AuthorizationProvider,
+    withAuthorization,
+} from './AuthorizationProvider';
 export { default as Form } from './Form';
 export { default as NavigationLinks } from './NavigationLinks';
 export { default as Notifications } from './Notifications';

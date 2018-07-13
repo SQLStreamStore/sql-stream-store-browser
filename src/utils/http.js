@@ -3,7 +3,7 @@ const contentTypes = {
     json: 'application/json',
 };
 
-const tryParseJson = (body) => {
+const tryParseJson = body => {
     try {
         return JSON.parse(body);
     } catch (e) {
@@ -11,20 +11,17 @@ const tryParseJson = (body) => {
     }
 };
 
-const getHeaders = headers => [...headers.entries()]
-    .reduce((acc, [key, value]) => ({
-        ...acc,
-        [key]: value
-    }), {});
+const getHeaders = headers =>
+    [...headers.entries()].reduce(
+        (acc, [key, value]) => ({
+            ...acc,
+            [key]: value,
+        }),
+        {},
+    );
 
 const mapResponse = async response => {
-    const {
-        ok,
-        status,
-        statusText,
-        url,
-        headers
-    } = response;
+    const { ok, status, statusText, url, headers } = response;
 
     return {
         body: tryParseJson(await response.text()),
@@ -34,32 +31,35 @@ const mapResponse = async response => {
         statusText,
         url,
     };
-}
+};
 
-const get = ({ url, headers = {} }) => fetch(url, {
-    headers: new Headers({
-        accept: contentTypes.hal,
-        ...headers,
-    }),
-}).then(mapResponse);
+const get = ({ url, headers = {} }) =>
+    fetch(url, {
+        headers: new Headers({
+            accept: contentTypes.hal,
+            ...headers,
+        }),
+    }).then(mapResponse);
 
-const post = ({ url, body, headers = {} }) => fetch(url, {
-    headers: new Headers({
-        'content-type': contentTypes.json,
-        accept: contentTypes.hal,
-        ...headers,
-    }),
-    method: 'post',
-    body: JSON.stringify(body),
-}).then(mapResponse);
+const post = ({ url, body, headers = {} }) =>
+    fetch(url, {
+        headers: new Headers({
+            'content-type': contentTypes.json,
+            accept: contentTypes.hal,
+            ...headers,
+        }),
+        method: 'post',
+        body: JSON.stringify(body),
+    }).then(mapResponse);
 
-const _delete = ({ url, headers = {} }) => fetch(url, {
-    headers: new Headers({
-        accept: contentTypes.hal,
-        ...headers,
-    }),
-    method: 'delete',
-}).then(mapResponse);
+const _delete = ({ url, headers = {} }) =>
+    fetch(url, {
+        headers: new Headers({
+            accept: contentTypes.hal,
+            ...headers,
+        }),
+        method: 'delete',
+    }).then(mapResponse);
 
 export default {
     get,

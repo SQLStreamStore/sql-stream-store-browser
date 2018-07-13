@@ -1,32 +1,17 @@
 import React, { createElement } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
-    IconButton, 
+    IconButton,
     Snackbar,
     SnackbarContent,
-    withStyles
+    withStyles,
 } from '@material-ui/core';
-import {
-    Close,
-    CheckCircle,
-    Warning,
-    Error,
-    Info,
-} from '@material-ui/icons';
-import {
-    green,
-    amber,
-    blue,
-    red
-} from '@material-ui/core/colors';
+import { Close, CheckCircle, Warning, Error, Info } from '@material-ui/icons';
+import { green, amber, blue, red } from '@material-ui/core/colors';
 import classNames from 'classnames';
 import uuid from 'uuid';
 import { actions } from '../stream-store';
-import { 
-    connect,
-    createAction,
-    createState,
-} from '../reactive';
+import { connect, createAction, createState } from '../reactive';
 
 const iconsByVariant = {
     success: CheckCircle,
@@ -37,21 +22,23 @@ const iconsByVariant = {
 
 const formatTitle = ({ status, statusText }) => `${status} ${statusText}`;
 
-const formatSubheader = ({ title, type }) => (title ? `${title} (${type})` : null);
+const formatSubheader = ({ title, type }) =>
+    title ? `${title} (${type})` : null;
 
-const formatContent = ({ detail }) => (detail
-    ? detail
-        .split(/\r|\n/)
-        .filter(x => x.length)
-        .reduce((akk, line, index) => ([
-            ...akk,
-            (<br key={index * 2} />),
-            (
-                <span key={(index * 2) + 1}>
-                    {line}
-                </span>),
-        ]), [])
-    : null);
+const formatContent = ({ detail }) =>
+    detail
+        ? detail
+              .split(/\r|\n/)
+              .filter(x => x.length)
+              .reduce(
+                  (akk, line, index) => [
+                      ...akk,
+                      <br key={index * 2} />,
+                      <span key={index * 2 + 1}>{line}</span>,
+                  ],
+                  [],
+              )
+        : null;
 
 const responses$ = obs.merge(
     actions.getResponse,
@@ -77,7 +64,8 @@ const serverError$ = responses$
         content: formatContent(body),
     }));
 
-const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
+const success$ = obs
+    .merge(actions.postResponse, actions.deleteResponse)
     .filter(({ status }) => status < 400)
     .map(response => ({
         variant: 'success',
@@ -85,30 +73,30 @@ const success$ = obs.merge(actions.postResponse, actions.deleteResponse)
         autoHideDuration: 2000,
     }));
 
-const dismiss = createAction(); 
+const dismiss = createAction();
 
-const notification$ = obs.merge(
-    clientError$,
-    serverError$,
-    success$,
-).map(notification => ({
-    ...notification,
-    messageId: uuid.v4(),
-}));
+const notification$ = obs
+    .merge(clientError$, serverError$, success$)
+    .map(notification => ({
+        ...notification,
+        messageId: uuid.v4(),
+    }));
 
 const state$ = createState(
     obs.merge(
         notification$.map(notification => [
             'notifications',
-            notifications => [...notifications, notification] 
+            notifications => [...notifications, notification],
         ]),
         dismiss.map(messageId => [
             'notifications',
-            notifications => notifications.filter(n => n.messageId !== messageId)
-        ])
-    ), obs.of({
-        notifications: []
-    })
+            notifications =>
+                notifications.filter(n => n.messageId !== messageId),
+        ]),
+    ),
+    obs.of({
+        notifications: [],
+    }),
 );
 
 const styles = theme => ({
@@ -137,59 +125,63 @@ const styles = theme => ({
     },
 });
 
-const Notification = withStyles(styles)(({
-    classes,
-    className,
-    messageId,
-    title,
-    subheader,
-    content,
-    variant,
-    autoHideDuration,
-    ...other,
-}) => (
-    <Snackbar
-        open
-        anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-        }}
-        autoHideDuration={autoHideDuration}
-    >
-        <SnackbarContent
-            className={classNames(classes[variant], className)}
-            message={
-                <span className={classes.message}>
-                    {createElement(iconsByVariant[variant], {
-                        className:classNames(classes.icon, classes.iconVariant)
-                    })}
-                    {title} {subheader}
-                    <br />
-                    {content}
-                </span>
-            }
-            action={[
-                <IconButton
-                    key="close"
-                    color="inherit"
-                    className={classes.close}
-                    onClick={() => dismiss.next(messageId)}
-                >
-                    <Close className={classes.icon} />
-                </IconButton>,
-            ]}
-            {...other}
-        />
-    </Snackbar>));
+const Notification = withStyles(styles)(
+    ({
+        classes,
+        className,
+        messageId,
+        title,
+        subheader,
+        content,
+        variant,
+        autoHideDuration,
+        ...other
+    }) => (
+        <Snackbar
+            open
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            autoHideDuration={autoHideDuration}
+        >
+            <SnackbarContent
+                className={classNames(classes[variant], className)}
+                message={
+                    <span className={classes.message}>
+                        {createElement(iconsByVariant[variant], {
+                            className: classNames(
+                                classes.icon,
+                                classes.iconVariant,
+                            ),
+                        })}
+                        {title} {subheader}
+                        <br />
+                        {content}
+                    </span>
+                }
+                action={[
+                    <IconButton
+                        key="close"
+                        color="inherit"
+                        className={classes.close}
+                        onClick={() => dismiss.next(messageId)}
+                    >
+                        <Close className={classes.icon} />
+                    </IconButton>,
+                ]}
+                {...other}
+            />
+        </Snackbar>
+    ),
+);
 
 const Notifications = ({ notifications }) => (
     <div>
         {notifications.map(notification => (
-            <Notification
-                key={notification.messageId} 
-                {...notification}
-            />
+            <Notification key={notification.messageId} {...notification} />
         ))}
-    </div>);
+    </div>
+);
 
 export default connect(state$)(Notifications);

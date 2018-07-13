@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-    Button,
-    TextField,
-} from '@material-ui/core';
-import {
-    SpaceBar,
-} from '@material-ui/icons';
+import { Button, TextField } from '@material-ui/core';
+import { SpaceBar } from '@material-ui/icons';
 import uuid from 'uuid';
 import { ComposedComponent } from 'react-schema-form';
 
@@ -44,7 +39,8 @@ class UuidField extends React.PureComponent {
                     New UUID
                     <SpaceBar />
                 </Button>
-            </div>);
+            </div>
+        );
     }
 }
 

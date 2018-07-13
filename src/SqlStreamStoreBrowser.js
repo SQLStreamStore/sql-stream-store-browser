@@ -1,10 +1,5 @@
 import React, { createElement } from 'react';
-import {
-    CssBaseline,
-    AppBar,
-    Toolbar,
-    Typography,
-} from '@material-ui/core';
+import { CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
 import {
@@ -15,24 +10,17 @@ import {
     FormButtons,
     NavigationLinks,
 } from './components';
-import {
-    SqlStreamStore,
-} from './components/Icons';
-import {
-    actions,
-    store,
-    rels,
-    views,
-} from './stream-store';
+import { SqlStreamStore } from './components/Icons';
+import { actions, store, rels, views } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 
 const empty = () => null;
 
-const getSelfAlias = links => Object
-    .keys(links)
-    .filter(rel => rel.indexOf('streamStore:') === 0)
-    .filter(rel => links[rel].href === links.self.href)[0];
+const getSelfAlias = links =>
+    Object.keys(links)
+        .filter(rel => rel.indexOf('streamStore:') === 0)
+        .filter(rel => links[rel].href === links.self.href)[0];
 
 const self$ = store.links$
     .filter(links => links.self)
@@ -44,12 +32,15 @@ const state$ = createState(
         self$.map(self => ['self', () => self]),
         store.links$.map(links => ['links', () => links]),
         store.forms$.map(forms => ['forms', () => forms]),
-    ), obs.of({ links: {}, forms: {} }),
+    ),
+    obs.of({ links: {}, forms: {} }),
 );
 
-const onNavigate = (url, authorization) => actions.get.next({ url, headers: { authorization } });
+const onNavigate = (url, authorization) =>
+    actions.get.next({ url, headers: { authorization } });
 
-const initialNavigation = ({ authorization }) => onNavigate(window.location.href, authorization);
+const initialNavigation = ({ authorization }) =>
+    onNavigate(window.location.href, authorization);
 
 const formActions = {
     [rels.append]: actions.post,
@@ -65,37 +56,35 @@ const Hero = () => (
                 Sql Stream Store
             </Typography>
         </Toolbar>
-    </AppBar>);
+    </AppBar>
+);
 
-const SqlStreamStoreBrowser = withAuthorization(mount(initialNavigation)(({ self, links, forms }) => (
-    <MuiThemeProvider theme={theme}>
-        <div>
-            <CssBaseline />
-            <Hero />
-            <section>
-                <NavigationLinks
-                    onNavigate={onNavigate}
-                    links={links}
-                />
-                <FormButtons
-                    actions={formActions}
-                    forms={forms}
-                />
-                {createElement(views[self] || views._unknown, {
-                    links,
-                    forms,
-                    self,
-                    onNavigate,
-                })}
-            </section>
-            <Notifications />
-        </div>
-    </MuiThemeProvider>)));
-
+const SqlStreamStoreBrowser = withAuthorization(
+    mount(initialNavigation)(({ self, links, forms }) => (
+        <MuiThemeProvider theme={theme}>
+            <div>
+                <CssBaseline />
+                <Hero />
+                <section>
+                    <NavigationLinks onNavigate={onNavigate} links={links} />
+                    <FormButtons actions={formActions} forms={forms} />
+                    {createElement(views[self] || views._unknown, {
+                        links,
+                        forms,
+                        self,
+                        onNavigate,
+                    })}
+                </section>
+                <Notifications />
+            </div>
+        </MuiThemeProvider>
+    )),
+);
 
 const AuthorizedSqlStreamStoreBrowser = ({ authorization, ...props }) => (
     <AuthorizationProvider authorization={authorization}>
         <SqlStreamStoreBrowser {...props} />
-    </AuthorizationProvider>);
+    </AuthorizationProvider>
+);
 
 export default connect(state$)(AuthorizedSqlStreamStoreBrowser);

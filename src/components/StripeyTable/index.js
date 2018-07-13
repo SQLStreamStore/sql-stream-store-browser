@@ -23,16 +23,7 @@ const TableRow = withStyles(theme => ({
         },
     },
 }))(({ classes, ...props }) => (
-    <MaterialTableRow
-        {...props}
-        className={classes.row}
-    />));
+    <MaterialTableRow {...props} className={classes.row} />
+));
 
-export {
-    Table,
-    TableBody,
-    TableHead,
-    TableCell,
-    TableRow,
-    TableFooter,
-};
+export { Table, TableBody, TableHead, TableCell, TableRow, TableFooter };

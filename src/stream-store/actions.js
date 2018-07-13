@@ -22,8 +22,12 @@ actions.delete
 
 actions.getResponse.subscribe(({ url }) => history.push(url));
 
-const getUrl = location => `${location.pathname}${location.search}${location.hash}`;
+const getUrl = location =>
+    `${location.pathname}${location.search}${location.hash}`;
 
-history.listen((location, action) => action === 'POP' && actions.get.next({ url: getUrl(location) }));
+history.listen(
+    (location, action) =>
+        action === 'POP' && actions.get.next({ url: getUrl(location) }),
+);
 
 export default actions;
