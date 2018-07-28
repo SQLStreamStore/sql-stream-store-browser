@@ -7,3 +7,5 @@ tools/**
 !tools/packages.config
 
 .idea/
+
+yarn-error.log
