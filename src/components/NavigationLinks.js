@@ -2,20 +2,9 @@ import React from 'react';
 import { Button, IconButton } from '@material-ui/core';
 import RelIcon from './RelIcon';
 import { withAuthorization } from './AuthorizationProvider';
-import { rels } from '../stream-store';
+import { navigation } from '../stream-store';
 import { preventDefault } from '../utils';
 
-const feedNavigation = [
-    'first',
-    'previous',
-    'self',
-    'next',
-    'last',
-    'metadata',
-    'feed',
-].map(key => rels[key]);
-
-const feedNavigationSet = new Set(feedNavigation);
 
 const FeedNavigationLink = ({ disabled, onClick, rel }) => (
     <IconButton variant={'raised'} disabled={disabled} onClick={onClick}>
@@ -33,7 +22,7 @@ const NavigationLink = ({ onClick, rel }) => (
 const NavigationLinks = ({ onNavigate, links, authorization }) => (
     <div>
         <nav>
-            {[...feedNavigation].map(rel => (
+            {[...navigation].map(rel => (
                 <FeedNavigationLink
                     disabled={!links[rel]}
                     key={rel}
@@ -47,7 +36,7 @@ const NavigationLinks = ({ onNavigate, links, authorization }) => (
         </nav>
         <nav>
             {Object.keys(links)
-                .filter(rel => !feedNavigationSet.has(rel))
+                .filter(rel => !navigation.has(rel))
                 .map(rel => (
                     <NavigationLink
                         key={rel}
