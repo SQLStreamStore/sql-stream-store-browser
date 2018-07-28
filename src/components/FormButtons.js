@@ -15,7 +15,8 @@ import { withAuthorization } from './AuthorizationProvider';
 import RelIcon from './RelIcon';
 import UuidField from './UuidField';
 import { createState, connect } from '../reactive';
-import { store } from '../stream-store';
+import { navigation, store } from '../stream-store';
+import { preventDefault } from '../utils';
 
 const state$ = createState(store.url$.map(url => ['url', () => url]));
 
@@ -43,114 +44,168 @@ const mapper = {
     uuid: UuidField,
 };
 
-const FormButton = withAuthorization(
-    withStyles(styles)(
-        class FormButton extends PureComponent {
-            state = {
+const HyperMediaPopup = withStyles(styles)(
+    class HyperMediaPopup extends PureComponent {
+        state = {
+            open: false,
+        };
+
+        _onOpen = () =>
+            this.setState({
+                open: true,
+            });
+
+        _onClose = () =>
+            this.setState({
                 open: false,
-            };
+            });
 
-            _onOpen = () =>
-                this.setState({
-                    open: true,
-                });
+        _onSubmit = e => {
+            const { onSubmit } = this.props;
+            e.preventDefault();
 
-            _onClose = () =>
-                this.setState({
-                    open: false,
-                });
+            onSubmit();
 
-            _onSubmit = e => {
-                e.preventDefault();
+            this._onClose();
+        };
 
-                const { rel, url, actions, authorization } = this.props;
-                const { model: body } = this.state;
-
-                if (actions[rel]) {
-                    actions[rel].next({
-                        body,
-                        url,
-                        headers: {
-                            authorization,
-                        },
-                    });
-                }
-
-                this._onClose();
-            };
-
-            _onModelChange = (key, value) => {
-                const { model, ...state } = this.state;
-                this.setState({
-                    ...state,
-                    model: {
-                        ...model,
-                        [key]: getValue(value),
-                    },
-                });
-            };
-
-            render() {
-                const { rel, title, schema, classes } = this.props;
-                const { open, model } = this.state;
-                return (
-                    <span>
-                        <Button
-                            label={title}
-                            onClick={this._onOpen}
-                            className={classes.button}
-                        >
-                            <RelIcon rel={rel} />
-                            {schema.title}
-                        </Button>
-                        <Dialog
-                            open={open}
-                            TransitionComponent={SlideUp}
-                            disableBackdropClick={false}
-                        >
-                            <DialogTitle>{schema.title}</DialogTitle>
-                            <DialogContent>
-                                <SchemaForm
-                                    schema={schema}
-                                    model={model}
-                                    mapper={mapper}
-                                    onModelChange={this._onModelChange}
-                                />
-                            </DialogContent>
-                            <DialogActions>
-                                <Button
-                                    color={'primary'}
-                                    onClick={this._onClose}
-                                >
-                                    {'Cancel'}
-                                </Button>
-                                <Button
-                                    color={'primary'}
-                                    onClick={this._onSubmit}
-                                >
-                                    {'Submit'}
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                    </span>
-                );
-            }
-        },
-    ),
+        render() {
+            const {
+                label,
+                rel,
+                title,
+                classes,
+                children,
+                onSubmit,
+            } = this.props;
+            const { open } = this.state;
+            return (
+                <span>
+                    <Button
+                        label={label}
+                        onClick={this._onOpen}
+                        className={classes.button}
+                    >
+                        <RelIcon rel={rel} />
+                        {title}
+                    </Button>
+                    <Dialog
+                        open={open}
+                        TransitionComponent={SlideUp}
+                        disableBackdropClick={false}
+                    >
+                        <DialogTitle>{title}</DialogTitle>
+                        <DialogContent>{children}</DialogContent>
+                        <DialogActions>
+                            <Button color={'primary'} onClick={this._onClose}>
+                                {'Cancel'}
+                            </Button>
+                            <Button color={'primary'} onClick={onSubmit}>
+                                {'Submit'}
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </span>
+            );
+        }
+    },
 );
 
-const FormButtons = ({ forms, url, actions }) => (
+const NonTemplatedLinkButton = withAuthorization(
+    withStyles(styles)(({ link, rel, authorization, onNavigate }) => (
+        <Button
+            variant={'text'}
+            onClick={preventDefault(() => onNavigate(link.href, authorization))}
+        >
+            <RelIcon rel={rel} />
+            {rel}
+        </Button>
+    )),
+);
+
+const LinkButton = ({ link, ...props }) =>
+    link.templated === true ? null : <NonTemplatedLinkButton {...props} />;
+
+const FormButton = withAuthorization(
+    class FormButton extends PureComponent {
+        state = {};
+        _onSubmit = () => {
+            const { rel, url, actions, authorization } = this.props;
+            const { model: body } = this.state;
+
+            if (actions[rel]) {
+                actions[rel].next({
+                    body,
+                    url,
+                    headers: {
+                        authorization,
+                    },
+                });
+            }
+        };
+
+        _onModelChange = (key, value) => {
+            const { model, ...state } = this.state;
+            this.setState({
+                ...state,
+                model: {
+                    ...model,
+                    [key]: getValue(value),
+                },
+            });
+        };
+
+        render() {
+            const { schema, rel, title } = this.props;
+            const { model } = this.state;
+            return (
+                <HyperMediaPopup
+                    labe={title}
+                    rel={rel}
+                    title={schema.title}
+                    onSubmit={this._onSubmit}
+                >
+                    <SchemaForm
+                        schema={schema}
+                        model={model}
+                        mapper={mapper}
+                        onModelChange={this._onModelChange}
+                    />
+                </HyperMediaPopup>
+            );
+        }
+    },
+);
+
+const FormButtons = ({ forms, url, actions, links, onNavigate }) => (
     <Card>
         <CardActions>
-            {Object.keys(forms).map(rel => (
-                <FormButton
-                    key={rel}
-                    rel={rel}
-                    url={url}
-                    actions={actions}
-                    schema={forms[rel]}
-                />
-            ))}
+            <div>
+                {Object.keys(links)
+                    .filter(rel => !navigation.has(rel))
+                    .map(rel => (
+                        <LinkButton
+                            key={rel}
+                            rel={rel}
+                            url={url}
+                            link={links[rel]}
+                            onNavigate={onNavigate}
+                        >
+                            {rel}
+                        </LinkButton>
+                    ))}
+            </div>
+            <div>
+                {Object.keys(forms).map(rel => (
+                    <FormButton
+                        key={rel}
+                        rel={rel}
+                        url={url}
+                        actions={actions}
+                        schema={forms[rel]}
+                    />
+                ))}
+            </div>
         </CardActions>
     </Card>
 );

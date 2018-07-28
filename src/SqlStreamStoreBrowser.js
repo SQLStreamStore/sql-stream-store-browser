@@ -65,7 +65,11 @@ const SqlStreamStoreBrowser = withAuthorization(
                 <Hero />
                 <section>
                     <NavigationLinks onNavigate={onNavigate} links={links} />
-                    <FormButtons actions={formActions} forms={forms} />
+                    <FormButtons
+                        actions={formActions}
+                        forms={forms}
+                        links={links}
+                    />
                     {createElement(views[self] || views._unknown, {
                         links,
                         forms,
