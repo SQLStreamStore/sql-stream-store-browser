@@ -104,7 +104,7 @@ const HyperMediaPopup = withStyles(styles)(
                             <Button color={'primary'} onClick={this._onClose}>
                                 {'Cancel'}
                             </Button>
-                            <Button color={'primary'} onClick={onSubmit}>
+                            <Button color={'primary'} onClick={this._onSubmit}>
                                 {'Submit'}
                             </Button>
                         </DialogActions>
@@ -142,9 +142,9 @@ const TemplatedLinkButton = withAuthorization()(
                     label={link.title}
                     rel={rel}
                     title={link.title}
-                    onSubmit={preventDefault(() =>
-                        onNavigate(template.expand(this.state), authorization),
-                    )}
+                    onSubmit={() =>
+                        onNavigate(template.expand(this.state), authorization)
+                    }
                 >
                     {template.expressions
                         .flatMap(({ params }) => params)
