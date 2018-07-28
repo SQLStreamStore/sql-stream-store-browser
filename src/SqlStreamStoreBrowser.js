@@ -7,7 +7,7 @@ import {
     withAuthorization,
     AuthorizationProvider,
     Notifications,
-    FormButtons,
+    HyperMediaControls,
     NavigationLinks,
 } from './components';
 import { SqlStreamStore } from './components/Icons';
@@ -65,7 +65,7 @@ const SqlStreamStoreBrowser = withAuthorization()(
                 <Hero />
                 <section>
                     <NavigationLinks onNavigate={onNavigate} links={links} />
-                    <FormButtons
+                    <HyperMediaControls
                         actions={formActions}
                         forms={forms}
                         links={links}
