@@ -111,7 +111,7 @@ const HyperMediaPopup = withStyles(styles)(
     },
 );
 
-const NonTemplatedLinkButton = withAuthorization(
+const NonTemplatedLinkButton = withAuthorization()(
     withStyles(styles)(({ link, rel, authorization, onNavigate }) => (
         <Button
             variant={'text'}
@@ -126,7 +126,7 @@ const NonTemplatedLinkButton = withAuthorization(
 const LinkButton = ({ link, ...props }) =>
     link.templated === true ? null : <NonTemplatedLinkButton {...props} />;
 
-const FormButton = withAuthorization(
+const FormButton = withAuthorization()(
     class FormButton extends PureComponent {
         state = {};
         _onSubmit = () => {

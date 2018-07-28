@@ -8,7 +8,7 @@ const AuthorizationProvider = ({ authorization, children }) => (
 
 export default AuthorizationProvider;
 
-export const withAuthorization = WrappedComponent => props => (
+export const withAuthorization = () => WrappedComponent => props => (
     <Consumer>
         {authorization => (
             <WrappedComponent {...props} authorization={authorization} />

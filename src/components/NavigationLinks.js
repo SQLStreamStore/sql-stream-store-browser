@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import RelIcon from './RelIcon';
 import { withAuthorization } from './AuthorizationProvider';
 import { navigation } from '../stream-store';
@@ -27,4 +27,4 @@ const NavigationLinks = ({ onNavigate, links, authorization }) => (
     </nav>
 );
 
-export default withAuthorization(NavigationLinks);
+export default withAuthorization()(NavigationLinks);

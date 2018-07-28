@@ -57,7 +57,7 @@ const Hero = () => (
     </AppBar>
 );
 
-const SqlStreamStoreBrowser = withAuthorization(
+const SqlStreamStoreBrowser = withAuthorization()(
     mount(initialNavigation)(({ self, links, forms }) => (
         <MuiThemeProvider theme={theme}>
             <div>

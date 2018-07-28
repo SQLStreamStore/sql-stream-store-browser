@@ -20,7 +20,7 @@ const styles = {
         },
     },
 };
-const Hyperlink = withAuthorization(
+const Hyperlink = withAuthorization()(
     withStyles(styles)(
         ({ classes, href, children, authorization, onNavigate }) => (
             <a
