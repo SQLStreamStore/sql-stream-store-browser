@@ -9,6 +9,7 @@ import {
     ChevronRight,
     RssFeed,
     Refresh,
+    Search,
 } from '../components/Icons';
 import { SqlStreamStore } from './Icons';
 import { rels } from '../stream-store';
@@ -23,6 +24,7 @@ const fontIconByRel = {
     [rels.append]: Publish,
     [rels.metadata]: Settings,
     [rels.delete]: DeleteForever,
+    [rels.find]: Search,
 };
 
 const RelIcon = ({ rel }) =>

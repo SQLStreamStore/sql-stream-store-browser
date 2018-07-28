@@ -1,16 +1,18 @@
 import React, { PureComponent } from 'react';
 import {
+    Button,
     Card,
     CardActions,
-    Button,
     Dialog,
     DialogTitle,
     DialogActions,
     DialogContent,
     Slide,
+    TextField,
     withStyles,
 } from '@material-ui/core';
 import { SchemaForm } from 'react-schema-form';
+import uriTemplate from 'uri-template';
 import { withAuthorization } from './AuthorizationProvider';
 import RelIcon from './RelIcon';
 import UuidField from './UuidField';
@@ -62,6 +64,7 @@ const HyperMediaPopup = withStyles(styles)(
 
         _onSubmit = e => {
             const { onSubmit } = this.props;
+
             e.preventDefault();
 
             onSubmit();
@@ -79,6 +82,7 @@ const HyperMediaPopup = withStyles(styles)(
                 onSubmit,
             } = this.props;
             const { open } = this.state;
+
             return (
                 <span>
                     <Button
@@ -111,20 +115,67 @@ const HyperMediaPopup = withStyles(styles)(
     },
 );
 
+const RelButton = ({ rel, onClick }) => (
+    <Button variant={'text'} onClick={onClick}>
+        <RelIcon rel={rel} />
+        {rel}
+    </Button>
+);
+
+const TemplatedLinkButton = withAuthorization()(
+    class TemplatedLinkButton extends PureComponent {
+        state = {};
+
+        _onChange = variable => ({ target }) =>
+            this.setState({
+                ...this.state,
+                [variable]: target.value,
+            });
+
+        render() {
+            const { rel, link, authorization, onNavigate } = this.props;
+
+            const template = uriTemplate.parse(decodeURI(link.href));
+
+            return (
+                <HyperMediaPopup
+                    label={link.title}
+                    rel={rel}
+                    title={link.title}
+                    onSubmit={preventDefault(() =>
+                        onNavigate(template.expand(this.state), authorization),
+                    )}
+                >
+                    {template.expressions
+                        .flatMap(({ params }) => params)
+                        .map(({ name }) => (
+                            <TextField
+                                key={name}
+                                label={name}
+                                onChange={this._onChange(name)}
+                            />
+                        ))}
+                </HyperMediaPopup>
+            );
+        }
+    },
+);
+
 const NonTemplatedLinkButton = withAuthorization()(
-    withStyles(styles)(({ link, rel, authorization, onNavigate }) => (
-        <Button
-            variant={'text'}
+    ({ link, rel, authorization, onNavigate }) => (
+        <RelButton
+            rel={rel}
             onClick={preventDefault(() => onNavigate(link.href, authorization))}
-        >
-            <RelIcon rel={rel} />
-            {rel}
-        </Button>
-    )),
+        />
+    ),
 );
 
 const LinkButton = ({ link, ...props }) =>
-    link.templated === true ? null : <NonTemplatedLinkButton {...props} />;
+    link.templated === true ? (
+        <TemplatedLinkButton link={link} {...props} />
+    ) : (
+        <NonTemplatedLinkButton link={link} {...props} />
+    );
 
 const FormButton = withAuthorization()(
     class FormButton extends PureComponent {
@@ -160,7 +211,7 @@ const FormButton = withAuthorization()(
             const { model } = this.state;
             return (
                 <HyperMediaPopup
-                    labe={title}
+                    label={title}
                     rel={rel}
                     title={schema.title}
                     onSubmit={this._onSubmit}

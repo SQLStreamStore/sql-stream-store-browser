@@ -10,6 +10,7 @@ const rels = {
     index: 'streamStore:index',
     append: 'streamStore:append',
     delete: 'streamStore:delete',
+    find: 'streamStore:find',
 };
 
 export default rels;

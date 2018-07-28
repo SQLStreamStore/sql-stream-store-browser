@@ -69,6 +69,7 @@ const SqlStreamStoreBrowser = withAuthorization()(
                         actions={formActions}
                         forms={forms}
                         links={links}
+                        onNavigate={onNavigate}
                     />
                     {createElement(views[self] || views._unknown, {
                         links,
