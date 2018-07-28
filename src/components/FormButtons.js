@@ -15,11 +15,9 @@ import { withAuthorization } from './AuthorizationProvider';
 import RelIcon from './RelIcon';
 import UuidField from './UuidField';
 import { createState, connect } from '../reactive';
-import { actions as ssActions } from '../stream-store';
+import { store } from '../stream-store';
 
-const url$ = ssActions.getResponse.map(({ url }) => () => url);
-
-const state$ = createState(url$.map(url => ['url', url]));
+const state$ = createState(store.url$.map(url => ['url', () => url]));
 
 const getValue = value => {
     if (typeof value === 'object') {
