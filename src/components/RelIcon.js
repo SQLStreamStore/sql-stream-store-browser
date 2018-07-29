@@ -27,7 +27,10 @@ const fontIconByRel = {
     [rels.find]: Search,
 };
 
-const RelIcon = ({ rel }) =>
-    createElement(fontIconByRel[rel] || SqlStreamStore, { color: 'action' });
+const RelIcon = ({ rel, ...props }) =>
+    createElement(fontIconByRel[rel] || SqlStreamStore, {
+        color: 'action',
+        ...props,
+    });
 
 export default RelIcon;

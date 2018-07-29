@@ -67,10 +67,13 @@ export default withStyles(styles)(
                         <DialogTitle>{title}</DialogTitle>
                         <DialogContent>{children}</DialogContent>
                         <DialogActions>
-                            <Button color={'primary'} onClick={this._onClose}>
-                                {'Cancel'}
-                            </Button>
-                            <Button color={'primary'} onClick={this._onSubmit}>
+                            <Button onClick={this._onClose}>{'Cancel'}</Button>
+                            <Button
+                                variant={'contained'}
+                                color={'primary'}
+                                onClick={this._onSubmit}
+                            >
+                                <RelIcon rel={rel} color={'inherit'} />
                                 {'Submit'}
                             </Button>
                         </DialogActions>
