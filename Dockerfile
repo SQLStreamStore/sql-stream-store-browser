@@ -17,6 +17,8 @@ FROM nginx:1.15.0-alpine AS runtime
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
+COPY ./mime.types /etc/nginx/mime.types
+
 COPY --from=build /app/build/ /var/www/
 
 EXPOSE 80
