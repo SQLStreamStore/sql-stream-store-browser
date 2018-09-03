@@ -6,7 +6,7 @@ import {
     ExpansionPanelSummary,
     ExpansionPanelDetails,
 } from '@material-ui/core';
-import { Code } from '@material-ui/icons';
+import { Code } from '../../components/Icons';
 import { createState, connect } from '../../reactive';
 import rels from '../rels';
 import store from '../store';

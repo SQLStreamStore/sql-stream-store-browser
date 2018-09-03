@@ -9,7 +9,7 @@ import {
     ChevronRight,
     RssFeed,
     Refresh,
-} from '@material-ui/icons';
+} from '../components/Icons';
 import { SqlStreamStore } from './Icons';
 import { rels } from '../stream-store';
 
