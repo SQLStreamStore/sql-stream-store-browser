@@ -84,12 +84,9 @@ const StreamMessageDetails = ({
 );
 
 class StreamMessageJson extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            expanded: true,
-        };
-    }
+    state = {
+        expanded: true,
+    };
 
     _handleClick = () => {
         const { expanded } = this.state;

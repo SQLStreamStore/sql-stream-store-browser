@@ -46,7 +46,10 @@ const StreamMetadataDetails = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink onNavigate={onNavigate} href={links[rels.feed].href}>
+            <Hyperlink
+                onNavigate={onNavigate}
+                href={(links[rels.feed] || {}).href}
+            >
                 {streamId}
             </Hyperlink>
         </TableCell>
@@ -60,12 +63,9 @@ const StreamMetadataDetails = ({
 );
 
 class StreamMetadataJson extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            expanded: true,
-        };
-    }
+    state = {
+        expanded: true,
+    };
 
     _handleClick = () => {
         const { expanded } = this.state;
