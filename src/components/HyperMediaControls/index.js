@@ -7,7 +7,7 @@ import FormButton from './FormButton';
 
 const state$ = createState(store.url$.map(url => ['url', () => url]));
 
-const FormButtons = ({ forms, url, actions, links, onNavigate }) => (
+const HyperMediaControls = ({ forms, url, actions, links, onNavigate }) => (
     <Card>
         <CardActions>
             <div>
@@ -20,9 +20,8 @@ const FormButtons = ({ forms, url, actions, links, onNavigate }) => (
                             url={url}
                             link={links[rel]}
                             onNavigate={onNavigate}
-                        >
-                            {rel}
-                        </LinkButton>
+                            color={'active'}
+                        />
                     ))}
             </div>
             <div>
@@ -40,4 +39,4 @@ const FormButtons = ({ forms, url, actions, links, onNavigate }) => (
     </Card>
 );
 
-export default connect(state$)(FormButtons);
+export default connect(state$)(HyperMediaControls);

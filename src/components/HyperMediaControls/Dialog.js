@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 
 import RelIcon from '../RelIcon';
-
+import RelButton from './RelButton';
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
@@ -51,14 +51,14 @@ export default withStyles(styles)(
 
             return (
                 <span>
-                    <Button
+                    <RelButton
                         label={label}
                         onClick={this._onOpen}
                         className={classes.button}
-                    >
-                        <RelIcon rel={rel} />
-                        {title}
-                    </Button>
+                        rel={rel}
+                        title={title}
+                        color={'action'}
+                    />
                     <Dialog
                         open={open}
                         TransitionComponent={SlideUp}

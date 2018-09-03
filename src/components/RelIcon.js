@@ -10,8 +10,8 @@ import {
     RssFeed,
     Refresh,
     Search,
-} from '../components/Icons';
-import { SqlStreamStore } from './Icons';
+    SqlStreamStore,
+} from './Icons';
 import { rels } from '../stream-store';
 
 const fontIconByRel = {
@@ -28,9 +28,6 @@ const fontIconByRel = {
 };
 
 const RelIcon = ({ rel, ...props }) =>
-    createElement(fontIconByRel[rel] || SqlStreamStore, {
-        color: 'action',
-        ...props,
-    });
+    createElement(fontIconByRel[rel] || SqlStreamStore, props);
 
 export default RelIcon;
