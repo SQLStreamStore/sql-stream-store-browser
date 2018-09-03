@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, TextField } from '@material-ui/core';
-import { SpaceBar } from '../components/Icons';
+import { SpaceBar } from '../Icons';
 import uuid from 'uuid';
 import { ComposedComponent } from 'react-schema-form';
 

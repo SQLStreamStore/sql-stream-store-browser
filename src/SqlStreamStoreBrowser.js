@@ -7,7 +7,7 @@ import {
     withAuthorization,
     AuthorizationProvider,
     Notifications,
-    FormButtons,
+    HyperMediaControls,
     NavigationLinks,
 } from './components';
 import { SqlStreamStore } from './components/Icons';
@@ -57,7 +57,7 @@ const Hero = () => (
     </AppBar>
 );
 
-const SqlStreamStoreBrowser = withAuthorization(
+const SqlStreamStoreBrowser = withAuthorization()(
     mount(initialNavigation)(({ self, links, forms }) => (
         <MuiThemeProvider theme={theme}>
             <div>
@@ -65,7 +65,12 @@ const SqlStreamStoreBrowser = withAuthorization(
                 <Hero />
                 <section>
                     <NavigationLinks onNavigate={onNavigate} links={links} />
-                    <FormButtons actions={formActions} forms={forms} />
+                    <HyperMediaControls
+                        actions={formActions}
+                        forms={forms}
+                        links={links}
+                        onNavigate={onNavigate}
+                    />
                     {createElement(views[self] || views._unknown, {
                         links,
                         forms,

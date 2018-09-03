@@ -17,3 +17,4 @@ export { default as ChevronRight } from '@material-ui/icons/ChevronRight';
 export { default as RssFeed } from '@material-ui/icons/RssFeed';
 export { default as Refresh } from '@material-ui/icons/Refresh';
 export { default as SpaceBar } from '@material-ui/icons/SpaceBar';
+export { default as Search } from '@material-ui/icons/Search';

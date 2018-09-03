@@ -9,8 +9,8 @@ const links$ = body$
     .zip(url$)
     .map(([{ _links }, url]) => resolveLinks(url, _links || {}));
 
-const forms$ = body$.filter(({ _embedded }) => _embedded).map(({ _embedded }) =>
-    Object.keys(_embedded)
+const forms$ = body$.map(({ _embedded }) =>
+    Object.keys(_embedded || {})
         .filter(
             rel =>
                 _embedded[rel].$schema &&
