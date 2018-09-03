@@ -6,7 +6,7 @@ import {
     SnackbarContent,
     withStyles,
 } from '@material-ui/core';
-import { Close, CheckCircle, Warning, Error, Info } from '@material-ui/icons';
+import { Close, CheckCircle, Warning, Error, Info } from '../components/Icons';
 import { green, amber, blue, red } from '@material-ui/core/colors';
 import classNames from 'classnames';
 import uuid from 'uuid';

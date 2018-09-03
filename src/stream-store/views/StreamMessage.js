@@ -6,7 +6,7 @@ import {
     ExpansionPanelSummary,
     ExpansionPanelDetails,
 } from '@material-ui/core';
-import { Code } from '@material-ui/icons';
+import { Code } from '../../components/Icons';
 import {
     Table,
     TableBody,
@@ -84,12 +84,9 @@ const StreamMessageDetails = ({
 );
 
 class StreamMessageJson extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            expanded: true,
-        };
-    }
+    state = {
+        expanded: true,
+    };
 
     _handleClick = () => {
         const { expanded } = this.state;
