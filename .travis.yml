@@ -1,3 +1,5 @@
 dist: trusty
 sudo: false
+services:
+  - docker
 script: "./build.sh"
