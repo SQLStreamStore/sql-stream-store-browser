@@ -6,7 +6,11 @@ import { navigation } from '../stream-store';
 import { preventDefault } from '../utils';
 
 const FeedNavigationLink = ({ disabled, onClick, rel }) => (
-    <IconButton variant={disabled ? 'disabled' : 'raised'} disabled={disabled} onClick={onClick}>
+    <IconButton
+        variant={disabled ? 'disabled' : 'raised'}
+        disabled={disabled}
+        onClick={onClick}
+    >
         <RelIcon rel={rel} />
     </IconButton>
 );
