@@ -27,7 +27,7 @@ class FormButton extends PureComponent {
         const { model: body } = this.state;
 
         if (actions[rel]) {
-            actions[rel].next({
+            actions[rel].request.next({
                 body,
                 url,
                 headers: {

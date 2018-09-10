@@ -37,7 +37,7 @@ const state$ = createState(
 );
 
 const onNavigate = (url, authorization) =>
-    actions.get.next({ url, headers: { authorization } });
+    actions.get.request.next({ url, headers: { authorization } });
 
 const initialNavigation = ({ authorization }) =>
     onNavigate(window.location.href, authorization);
