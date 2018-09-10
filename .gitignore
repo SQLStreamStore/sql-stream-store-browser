@@ -1,11 +1,5 @@
 node_modules/**
 build/**
-.node/**
-.yarn/**
-
-tools/**
-!tools/packages.config
-
-.idea/
-
+.idea/**
 yarn-error.log
+*.tgz
