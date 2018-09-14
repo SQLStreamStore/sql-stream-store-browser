@@ -10,6 +10,7 @@
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.js\""
   },
+  "main": "src/index.js",
   "private": false,
   "devDependencies": {
     "babel-plugin-module-resolver": "3.1.1",
