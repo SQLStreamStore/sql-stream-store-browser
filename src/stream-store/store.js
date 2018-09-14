@@ -1,9 +1,10 @@
+import { Observable as obs } from 'rxjs';
 import { resolveLinks } from '../utils';
 import actions from './actions';
 
-const body$ = actions.getResponse.map(({ body }) => body);
+const body$ = actions.get.response.map(({ body }) => body);
 
-const url$ = actions.getResponse.map(({ url }) => url);
+const url$ = actions.get.response.map(({ url }) => url);
 
 const links$ = body$
     .zip(url$)
@@ -19,9 +20,33 @@ const forms$ = body$.map(({ _embedded }) =>
         .reduce((akk, rel) => ({ ...akk, [rel]: _embedded[rel] }), {}),
 );
 
+const verbs = Object.keys(actions);
+
+const requests$ = obs.merge(...verbs.map(verb => actions[verb].request));
+
+const responses$ = obs.merge(...verbs.map(verb => actions[verb].response));
+
+const delayedRequests$ = requests$.delay(1000);
+
+const loading$ = requests$
+    .timestamp()
+    .combineLatest(
+        responses$.timestamp(),
+        delayedRequests$.timestamp(),
+        (
+            { timestamp: requestTs },
+            { timestamp: responseTs },
+            { timestamp: delayedTs },
+        ) =>
+            requestTs > responseTs &&
+            delayedTs > responseTs &&
+            delayedTs >= requestTs,
+    );
+
 export default {
     links$,
     forms$,
     body$,
     url$,
+    loading$,
 };

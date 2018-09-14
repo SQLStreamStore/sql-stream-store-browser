@@ -41,9 +41,7 @@ const formatContent = ({ detail }) =>
         : null;
 
 const responses$ = obs.merge(
-    actions.getResponse,
-    actions.postResponse,
-    actions.deleteResponse,
+    ...Object.keys(actions).map(verb => actions[verb].response),
 );
 
 const clientError$ = responses$
@@ -64,8 +62,12 @@ const serverError$ = responses$
         content: formatContent(body),
     }));
 
+const unsafe = Object.keys(actions)
+    .filter(verb => verb !== 'get')
+    .map(verb => actions[verb].response);
+
 const success$ = obs
-    .merge(actions.postResponse, actions.deleteResponse)
+    .merge(...unsafe)
     .filter(({ status }) => status < 400)
     .map(response => ({
         variant: 'success',

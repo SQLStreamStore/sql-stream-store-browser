@@ -9,6 +9,7 @@ import {
     Notifications,
     HyperMediaControls,
     NavigationLinks,
+    Loading,
 } from './components';
 import { SqlStreamStore } from './components/Icons';
 import { actions, store, rels, views } from './stream-store';
@@ -30,12 +31,13 @@ const state$ = createState(
         self$.map(self => ['self', () => self]),
         store.links$.map(links => ['links', () => links]),
         store.forms$.map(forms => ['forms', () => forms]),
+        store.loading$.map(loading => ['loading', () => loading]),
     ),
-    obs.of({ links: {}, forms: {} }),
+    obs.of({ links: {}, forms: {}, loading: false }),
 );
 
 const onNavigate = (url, authorization) =>
-    actions.get.next({ url, headers: { authorization } });
+    actions.get.request.next({ url, headers: { authorization } });
 
 const initialNavigation = ({ authorization }) =>
     onNavigate(window.location.href, authorization);
@@ -58,9 +60,10 @@ const Hero = () => (
 );
 
 const SqlStreamStoreBrowser = withAuthorization()(
-    mount(initialNavigation)(({ self, links, forms }) => (
+    mount(initialNavigation)(({ self, links, forms, loading }) => (
         <MuiThemeProvider theme={theme}>
             <div>
+                <Loading open={loading} />
                 <CssBaseline />
                 <Hero />
                 <section>
