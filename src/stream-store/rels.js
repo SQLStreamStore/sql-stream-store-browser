@@ -11,7 +11,7 @@ const rels = {
     append: 'streamStore:append',
     delete: 'streamStore:delete',
     find: 'streamStore:find',
-    streamList: 'streamStore:stream-list',
+    browse: 'streamStore:feed-browser',
 };
 
 export default rels;

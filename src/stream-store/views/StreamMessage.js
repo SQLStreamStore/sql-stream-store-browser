@@ -15,6 +15,7 @@ import Inspector, {
     ObjectRootLabel,
     ObjectName,
 } from 'react-inspector';
+import uriTemplate from 'uri-template';
 import { Code } from '../../components/Icons';
 import {
     Table,
@@ -144,18 +145,24 @@ class StreamMessageJson extends PureComponent {
 
     _handlePotentialStreamIdClick = async (
         { currentTarget: anchorElement },
-        value,
+        p,
     ) => {
-        const { authorization } = this.props;
+        const { authorization, links } = this.props;
 
         this.setState({
             anchorElement,
         });
 
+        const template = uriTemplate.parse(
+            decodeURI(links[rels.browse].href),
+        );
+
+        const url = template.expand({ p, t: 'e' });
+
         const responses = await Promise.all(
-            [...new Set([value, String(value).replace('-', '')])].map(p =>
+            [...new Set([p, String(p).replace('-', '')])].map(p =>
                 http.get({
-                    url: `../../stream/browser?p=${p}&t=e`,
+                    url,
                     headers: { authorization },
                 }),
             ),
@@ -235,16 +242,12 @@ class StreamMessageJson extends PureComponent {
     }
 }
 
-const StreamMessageData = ({ payload, onNavigate }) => (
-    <StreamMessageJson title={'Data'} json={payload} onNavigate={onNavigate} />
+const StreamMessageData = ({ payload, ...props }) => (
+    <StreamMessageJson title={'Data'} json={payload} {...props} />
 );
 
-const StreamMessageMetadata = ({ payload, onNavigate }) => (
-    <StreamMessageJson
-        title={'Metadata'}
-        json={payload}
-        onNavigate={onNavigate}
-    />
+const StreamMessageMetadata = ({ payload, ...props }) => (
+    <StreamMessageJson title={'Metadata'} json={payload} {...props} />
 );
 
 const StreamMessage = ({ message, links, onNavigate }) => (
@@ -261,10 +264,15 @@ const StreamMessage = ({ message, links, onNavigate }) => (
                 />
             </TableBody>
         </Table>
-        <StreamMessageData payload={message.payload} onNavigate={onNavigate} />
+        <StreamMessageData
+            payload={message.payload}
+            onNavigate={onNavigate}
+            links={links}
+        />
         <StreamMessageMetadata
             payload={message.metadata}
             onNavigate={onNavigate}
+            links={links}
         />
     </section>
 );
