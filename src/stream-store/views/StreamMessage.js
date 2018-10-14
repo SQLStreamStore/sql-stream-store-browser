@@ -101,7 +101,7 @@ class StreamMessageJson extends PureComponent {
         return (
             <ExpansionPanel expanded={expanded} onClick={this._handleClick}>
                 <ExpansionPanelSummary expandIcon={<Code />}>
-                    <Typography variant={'title'}>{title}</Typography>
+                    <Typography variant={'h6'}>{title}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <pre>{JSON.stringify(json, null, 4)}</pre>
