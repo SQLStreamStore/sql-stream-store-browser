@@ -1,14 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
-    List,
-    ListItem,
     Popover,
     Typography,
     ExpansionPanel,
     ExpansionPanelSummary,
     ExpansionPanelDetails,
-    withStyles,
 } from '@material-ui/core';
 import Inspector, {
     ObjectLabel,
@@ -24,7 +21,7 @@ import {
     TableHead,
     TableCell,
 } from '../../components/StripeyTable';
-import { Hyperlink } from '../../components';
+import { Hyperlink, StreamBrowser } from '../../components';
 import { createState, connect } from '../../reactive';
 import rels from '../rels';
 import { http } from '../../utils';
@@ -38,14 +35,14 @@ const tryParseJson = payload => {
     }
 };
 
-const message$ = store.body$.map(({ payload, metadata, ...body }) => () => ({
+const message$ = store.body$.map(({ payload, metadata, ...body }) => ({
     ...body,
     payload: tryParseJson(payload),
     metadata: tryParseJson(metadata),
 }));
 
 const state$ = createState(
-    message$.map(message => ['message', message]),
+    message$.map(message => ['message', () => message]),
     obs.of({ message: {} }),
 );
 
@@ -102,45 +99,10 @@ const getStreamIds = ({ _embedded = {} }) =>
         .map(({ _links = {} }) => _links[rels.feed])
         .filter(link => link);
 
-const MatchingStreamIds = withStyles(theme => ({
-    paper: {
-        padding: theme.spacing.unit * 2.5,
-    },
-}))(({ matches, onNavigate, ...props }) => (
-    <Popover
-        transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-        }}
-        anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-        }}
-        {...props}
-    >
-        <Typography variant={'subheading'}>Matching Stream Ids</Typography>
-        {matches.length ? (
-            <List>
-                {matches.map(({ title, href }) => (
-                    <ListItem button key={href}>
-                        <Hyperlink href={href} onNavigate={onNavigate}>
-                            {title}
-                        </Hyperlink>
-                    </ListItem>
-                ))}
-            </List>
-        ) : (
-            <Typography variant={'body1'}>
-                No matching streams found.
-            </Typography>
-        )}
-    </Popover>
-));
-
 class StreamMessageJson extends PureComponent {
     state = {
         anchorElement: undefined,
-        matches: [],
+        streams: [],
     };
 
     _handlePotentialStreamIdClick = async (
@@ -153,23 +115,19 @@ class StreamMessageJson extends PureComponent {
             anchorElement,
         });
 
-        const template = uriTemplate.parse(
-            decodeURI(links[rels.browse].href),
-        );
-
-        const url = template.expand({ p, t: 'e' });
+        const template = uriTemplate.parse(decodeURI(links[rels.browse].href));
 
         const responses = await Promise.all(
             [...new Set([p, String(p).replace('-', '')])].map(p =>
                 http.get({
-                    url,
+                    url: template.expand({ p, t: 'e' }),
                     headers: { authorization },
                 }),
             ),
         );
 
         this.setState({
-            matches: Object.values(
+            streams: Object.values(
                 responses.flatMap(({ body }) => getStreamIds(body)).reduce(
                     (akk, { href, title }) => ({
                         ...akk,
@@ -217,7 +175,7 @@ class StreamMessageJson extends PureComponent {
 
     render() {
         const { json, title, onNavigate } = this.props;
-        const { anchorElement, matches } = this.state;
+        const { anchorElement, streams } = this.state;
         return (
             <ExpansionPanel expanded>
                 <ExpansionPanelSummary expandIcon={<Code />}>
@@ -229,13 +187,24 @@ class StreamMessageJson extends PureComponent {
                         expandLevel={32}
                         nodeRenderer={this._renderNode}
                     />
-                    <MatchingStreamIds
+                    <Popover
                         open={!!anchorElement}
                         anchorEl={anchorElement}
                         onClose={this._handlePotentialStreamIdClose}
-                        matches={matches}
-                        onNavigate={onNavigate}
-                    />
+                        transformOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                    >
+                        <StreamBrowser
+                            streams={streams}
+                            onNavigate={onNavigate}
+                        />
+                    </Popover>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         );
