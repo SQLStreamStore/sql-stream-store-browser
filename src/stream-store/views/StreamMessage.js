@@ -1,11 +1,20 @@
 import React, { PureComponent } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
+    List,
+    ListItem,
+    Popover,
     Typography,
     ExpansionPanel,
     ExpansionPanelSummary,
     ExpansionPanelDetails,
+    withStyles,
 } from '@material-ui/core';
+import Inspector, {
+    ObjectLabel,
+    ObjectRootLabel,
+    ObjectName,
+} from 'react-inspector';
 import { Code } from '../../components/Icons';
 import {
     Table,
@@ -17,6 +26,7 @@ import {
 import { Hyperlink } from '../../components';
 import { createState, connect } from '../../reactive';
 import rels from '../rels';
+import { http } from '../../utils';
 import store from '../store';
 
 const tryParseJson = payload => {
@@ -83,40 +93,158 @@ const StreamMessageDetails = ({
     </TableRow>
 );
 
+const isPotentialStreamId = data =>
+    typeof data === 'number' || typeof data === 'string';
+
+const getStreamIds = ({ _embedded = {} }) =>
+    (_embedded[rels.feed] || [])
+        .map(({ _links = {} }) => _links[rels.feed])
+        .filter(link => link);
+
+const MatchingStreamIds = withStyles(theme => ({
+    paper: {
+        padding: theme.spacing.unit * 2.5,
+    },
+}))(({ matches, onNavigate, ...props }) => (
+    <Popover
+        transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+        }}
+        anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+        }}
+        {...props}
+    >
+        <Typography variant={'subheading'}>Matching Stream Ids</Typography>
+        {matches.length ? (
+            <List>
+                {matches.map(({ title, href }) => (
+                    <ListItem button key={href}>
+                        <Hyperlink href={href} onNavigate={onNavigate}>
+                            {title}
+                        </Hyperlink>
+                    </ListItem>
+                ))}
+            </List>
+        ) : (
+            <Typography variant={'body1'}>
+                No matching streams found.
+            </Typography>
+        )}
+    </Popover>
+));
+
 class StreamMessageJson extends PureComponent {
     state = {
-        expanded: true,
+        anchorElement: undefined,
+        matches: [],
     };
 
-    _handleClick = () => {
-        const { expanded } = this.state;
+    _handlePotentialStreamIdClick = async (
+        { currentTarget: anchorElement },
+        value,
+    ) => {
+        const { authorization } = this.props;
+
         this.setState({
-            expanded: !expanded,
+            anchorElement,
+        });
+
+        const responses = await Promise.all(
+            [...new Set([value, String(value).replace('-', '')])].map(p =>
+                http.get({
+                    url: `../../stream/browser?p=${p}&t=e`,
+                    headers: { authorization },
+                }),
+            ),
+        );
+
+        this.setState({
+            matches: Object.values(
+                responses.flatMap(({ body }) => getStreamIds(body)).reduce(
+                    (akk, { href, title }) => ({
+                        ...akk,
+                        [href]: { href, title },
+                    }),
+                    {},
+                ),
+            ),
         });
     };
 
+    _handlePotentialStreamIdClose = () =>
+        this.setState({
+            anchorElement: undefined,
+        });
+
+    _renderNode = ({ depth, name, data, path, isNonEnumerable, ...props }) =>
+        depth === 0 ? (
+            <ObjectRootLabel
+                name={name}
+                data={{}}
+                path={path}
+                isNonEnumerable={isNonEnumerable}
+                {...props}
+            />
+        ) : isPotentialStreamId(data) ? (
+            <span>
+                <ObjectName name={name} dimmed={isNonEnumerable} />
+                <span>: </span>
+                <span
+                    onClick={e => this._handlePotentialStreamIdClick(e, data)}
+                >
+                    {data}
+                </span>
+            </span>
+        ) : (
+            <ObjectLabel
+                name={name}
+                data={props.children ? {} : data}
+                path={path}
+                isNonEnumerable={isNonEnumerable}
+                {...props}
+            />
+        );
+
     render() {
-        const { json, title } = this.props;
-        const { expanded } = this.state;
+        const { json, title, onNavigate } = this.props;
+        const { anchorElement, matches } = this.state;
         return (
-            <ExpansionPanel expanded={expanded} onClick={this._handleClick}>
+            <ExpansionPanel expanded>
                 <ExpansionPanelSummary expandIcon={<Code />}>
                     <Typography variant={'h6'}>{title}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <pre>{JSON.stringify(json, null, 4)}</pre>
+                    <Inspector
+                        data={json}
+                        expandLevel={32}
+                        nodeRenderer={this._renderNode}
+                    />
+                    <MatchingStreamIds
+                        open={!!anchorElement}
+                        anchorEl={anchorElement}
+                        onClose={this._handlePotentialStreamIdClose}
+                        matches={matches}
+                        onNavigate={onNavigate}
+                    />
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         );
     }
 }
 
-const StreamMessageData = ({ payload }) => (
-    <StreamMessageJson title={'Data'} json={payload} />
+const StreamMessageData = ({ payload, onNavigate }) => (
+    <StreamMessageJson title={'Data'} json={payload} onNavigate={onNavigate} />
 );
 
-const StreamMessageMetadata = ({ payload }) => (
-    <StreamMessageJson title={'Metadata'} json={payload} />
+const StreamMessageMetadata = ({ payload, onNavigate }) => (
+    <StreamMessageJson
+        title={'Metadata'}
+        json={payload}
+        onNavigate={onNavigate}
+    />
 );
 
 const StreamMessage = ({ message, links, onNavigate }) => (
@@ -133,8 +261,11 @@ const StreamMessage = ({ message, links, onNavigate }) => (
                 />
             </TableBody>
         </Table>
-        <StreamMessageData payload={message.payload} />
-        <StreamMessageMetadata payload={message.metadata} />
+        <StreamMessageData payload={message.payload} onNavigate={onNavigate} />
+        <StreamMessageMetadata
+            payload={message.metadata}
+            onNavigate={onNavigate}
+        />
     </section>
 );
 

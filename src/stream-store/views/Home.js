@@ -17,7 +17,7 @@ const state$ = createState(
         links$.map(links => ['links', links]),
         recent$.map(recent => ['recent', recent]),
     ),
-    obs.of({ recent: { streamIds: [] }, links: {} }),
+    obs.of({ recent: { matches: [] }, links: {} }),
 );
 
 const relsToTitle = {
