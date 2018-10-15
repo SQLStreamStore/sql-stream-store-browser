@@ -4,6 +4,10 @@ import { connect, createState } from '../../reactive';
 import { navigation, store } from '../../stream-store';
 import LinkButton from './LinkButton';
 import FormButton from './FormButton';
+import { rels } from '../../stream-store';
+
+const isNotSelf = (rel, links) =>
+    links[rels.self] && links[rel].href !== links[rels.self].href;
 
 const state$ = createState(store.url$.map(url => ['url', () => url]));
 
@@ -13,6 +17,7 @@ const HyperMediaControls = ({ forms, url, actions, links, onNavigate }) => (
             <div>
                 {Object.keys(links)
                     .filter(rel => !navigation.has(rel))
+                    .filter(rel => isNotSelf(rel, links))
                     .map(rel => (
                         <LinkButton
                             key={rel}
