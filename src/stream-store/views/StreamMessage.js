@@ -4,7 +4,7 @@ import {
     Card,
     CardActions,
     CardContent,
-    Popover,
+    Drawer,
     Tab,
     Tabs,
     withStyles,
@@ -107,11 +107,15 @@ const StreamMessageJson = withStyles({
             textDecoration: 'underline',
         },
     },
+    drawerPaper: {
+        width: 480,
+    },
 })(
     class StreamMessageJson extends PureComponent {
         state = {
-            anchorElement: undefined,
             streams: [],
+            loading: false,
+            open: false,
         };
 
         _handlePotentialStreamIdClick = async (
@@ -121,7 +125,8 @@ const StreamMessageJson = withStyles({
             const { authorization, links } = this.props;
 
             this.setState({
-                anchorElement,
+                loading: true,
+                open: true,
             });
 
             if (!links[rels.browse]) {
@@ -152,12 +157,13 @@ const StreamMessageJson = withStyles({
                         {},
                     ),
                 ),
+                loading: false,
             });
         };
 
         _handlePotentialStreamIdClose = () =>
             this.setState({
-                anchorElement: undefined,
+                open: false,
             });
 
         _renderNode = ({
@@ -200,8 +206,8 @@ const StreamMessageJson = withStyles({
             );
 
         render() {
-            const { json, onNavigate } = this.props;
-            const { anchorElement, streams } = this.state;
+            const { json, onNavigate, classes } = this.props;
+            const { streams, loading, open } = this.state;
             return (
                 <div>
                     <Inspector
@@ -209,24 +215,21 @@ const StreamMessageJson = withStyles({
                         expandLevel={32}
                         nodeRenderer={this._renderNode}
                     />
-                    <Popover
-                        open={!!anchorElement}
-                        anchorEl={anchorElement}
+                    <Drawer
+                        variant={'temporary'}
+                        open={open}
                         onClose={this._handlePotentialStreamIdClose}
-                        transformOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
+                        anchor={'right'}
+                        classes={{
+                            paper: classes.drawerPaper,
                         }}
                     >
                         <StreamBrowser
                             streams={streams}
                             onNavigate={onNavigate}
+                            loading={loading}
                         />
-                    </Popover>
+                    </Drawer>
                 </div>
             );
         }
