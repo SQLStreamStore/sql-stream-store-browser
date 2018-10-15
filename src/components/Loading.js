@@ -1,28 +1,14 @@
 import React from 'react';
-import { CircularProgress, Modal } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-const centered = {
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-};
+import { LinearProgress, Modal } from '@material-ui/core';
 
-const styles = theme => ({
-    paper: {
-        position: 'absolute',
-        width: 0,
-        backgroundColor: 'transparent',
-        boxShadow: 'none',
-        padding: theme.spacing.unit * 4,
-        textAlign: 'center',
-    },
-});
-const Loading = ({ open, classes }) => (
-    <Modal disableBackdropClick disableEscapeKeyDown open={open}>
-        <div style={centered} className={classes.paper}>
-            <CircularProgress />
+const Loading = ({ open }) =>
+    open ? (
+        <div>
+            <LinearProgress variant={'indeterminate'} />
+            <Modal disableBackdropClick disableEscapeKeyDown open>
+                <span />
+            </Modal>
         </div>
-    </Modal>
-);
+    ) : null;
 
-export default withStyles(styles)(Loading);
+export default Loading;
