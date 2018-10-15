@@ -7,8 +7,13 @@ const palette = {
     },
 };
 
+const typography = {
+    useNextVariants: true,
+};
+
 const theme = createMuiTheme({
     palette,
+    typography,
 });
 
 export default theme;

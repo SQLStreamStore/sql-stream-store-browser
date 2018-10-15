@@ -52,7 +52,7 @@ const Hero = () => (
     <AppBar position={'static'}>
         <Toolbar>
             <SqlStreamStore color={'action'} />
-            <Typography variant={'title'} color={'inherit'}>
+            <Typography variant={'h6'} color={'inherit'}>
                 Sql Stream Store
             </Typography>
         </Toolbar>

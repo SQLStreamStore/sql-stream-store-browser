@@ -1,4 +1,4 @@
-FROM node:10.5.0-alpine AS build
+FROM node:10.12.0-alpine AS build
 
 RUN apk add --no-cache git
 
@@ -13,7 +13,7 @@ COPY . .
 RUN yarn build && \
     yarn cache clean
 
-FROM nginx:1.15.0-alpine AS runtime
+FROM nginx:1.15.5-alpine AS runtime
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
 

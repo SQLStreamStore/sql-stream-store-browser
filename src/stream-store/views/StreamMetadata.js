@@ -80,7 +80,7 @@ class StreamMetadataJson extends PureComponent {
         return (
             <ExpansionPanel expanded={expanded} onClick={this._handleClick}>
                 <ExpansionPanelSummary expandIcon={<Code />}>
-                    <Typography variant={'title'}>{'Metadata'}</Typography>
+                    <Typography variant={'h6'}>{'Metadata'}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <pre>{JSON.stringify(metadataJson, null, 4)}</pre>
