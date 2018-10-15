@@ -21,7 +21,7 @@ const StreamBrowser = withStyles(theme => ({
         ) : streams.length ? (
             <List>
                 {streams.map(({ title, href }) => (
-                    <ListItem button key={href}>
+                    <ListItem key={href}>
                         <ListItemText>
                             <Hyperlink href={href} onNavigate={onNavigate}>
                                 {title}
