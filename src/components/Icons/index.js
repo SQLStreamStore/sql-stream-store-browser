@@ -9,6 +9,7 @@ export { default as Error } from '@material-ui/icons/Error';
 export { default as Info } from '@material-ui/icons/Info';
 export { default as Publish } from '@material-ui/icons/Publish';
 export { default as Settings } from '@material-ui/icons/Settings';
+export { default as Notes } from '@material-ui/icons/Notes';
 export { default as DeleteForever } from '@material-ui/icons/DeleteForever';
 export { default as FirstPage } from '@material-ui/icons/FirstPage';
 export { default as LastPage } from '@material-ui/icons/LastPage';

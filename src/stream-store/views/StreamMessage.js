@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
+    Card,
+    CardActions,
+    CardContent,
     Popover,
-    Typography,
-    ExpansionPanel,
-    ExpansionPanelSummary,
-    ExpansionPanelDetails,
+    Tab,
+    Tabs,
     withStyles,
 } from '@material-ui/core';
 import Inspector, {
@@ -14,7 +15,6 @@ import Inspector, {
     ObjectName,
 } from 'react-inspector';
 import uriTemplate from 'uri-template';
-import { Code } from '../../components/Icons';
 import {
     Table,
     TableBody,
@@ -23,6 +23,7 @@ import {
     TableCell,
 } from '../../components/StripeyTable';
 import { Hyperlink, StreamBrowser } from '../../components';
+import { Notes, Settings } from '../../components/Icons';
 import { createState, connect } from '../../reactive';
 import rels from '../rels';
 import { http } from '../../utils';
@@ -179,14 +180,14 @@ const StreamMessageJson = withStyles({
                 <span>
                     <ObjectName name={name} dimmed={isNonEnumerable} />
                     <span>: </span>
-                    <span
+                    <a
                         className={this.props.classes.streamId}
                         onClick={e =>
                             this._handlePotentialStreamIdClick(e, data)
                         }
                     >
                         {data}
-                    </span>
+                    </a>
                 </span>
             ) : (
                 <ObjectLabel
@@ -232,13 +233,52 @@ const StreamMessageJson = withStyles({
     },
 );
 
-const StreamMessageData = ({ payload, ...props }) => (
-    <StreamMessageJson title={'Data'} json={payload} {...props} />
-);
+class StreamMessageTabs extends PureComponent {
+    state = {
+        value: 0,
+    };
 
-const StreamMessageMetadata = ({ payload, ...props }) => (
-    <StreamMessageJson title={'Metadata'} json={payload} {...props} />
-);
+    _handleChange = (e, value) => this.setState({ value });
+
+    render() {
+        const {
+            message: { payload, metadata },
+            links,
+            onNavigate,
+        } = this.props;
+        const { value } = this.state;
+        return (
+            <Card>
+                <CardActions>
+                    <Tabs
+                        value={value}
+                        onChange={this._handleChange}
+                        indicatorColor={'primary'}
+                    >
+                        <Tab label={'Data'} icon={<Notes />} />
+                        <Tab label={'Metadata'} icon={<Settings />} />
+                    </Tabs>
+                </CardActions>
+                <CardContent>
+                    {value === 0 && (
+                        <StreamMessageJson
+                            json={payload}
+                            onNavigate={onNavigate}
+                            links={links}
+                        />
+                    )}
+                    {value === 1 && (
+                        <StreamMessageJson
+                            json={metadata}
+                            onNavigate={onNavigate}
+                            links={links}
+                        />
+                    )}
+                </CardContent>
+            </Card>
+        );
+    }
+}
 
 const StreamMessage = ({ message, links, onNavigate }) => (
     <section>
@@ -254,13 +294,8 @@ const StreamMessage = ({ message, links, onNavigate }) => (
                 />
             </TableBody>
         </Table>
-        <StreamMessageData
-            payload={message.payload}
-            onNavigate={onNavigate}
-            links={links}
-        />
-        <StreamMessageMetadata
-            payload={message.metadata}
+        <StreamMessageTabs
+            message={message}
             onNavigate={onNavigate}
             links={links}
         />
