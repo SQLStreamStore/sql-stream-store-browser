@@ -63,9 +63,9 @@ const SqlStreamStoreBrowser = withAuthorization()(
     mount(initialNavigation)(({ self, links, forms, loading }) => (
         <MuiThemeProvider theme={theme}>
             <div>
-                <Loading open={loading} />
                 <CssBaseline />
                 <Hero />
+                <Loading open={loading} />
                 <section>
                     <NavigationLinks onNavigate={onNavigate} links={links} />
                     <HyperMediaControls
