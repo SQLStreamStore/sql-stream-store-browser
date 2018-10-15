@@ -3,9 +3,11 @@ import { SchemaForm } from 'react-schema-form';
 import { withAuthorization } from '../AuthorizationProvider';
 import Dialog from './Dialog';
 import UuidField from './UuidField';
+import TextAreaField from './TextAreaField';
 
 const mapper = {
     uuid: UuidField,
+    textarea: TextAreaField,
 };
 
 const getValue = value => {
