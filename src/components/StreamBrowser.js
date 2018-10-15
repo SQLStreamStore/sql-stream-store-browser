@@ -2,15 +2,19 @@ import React from 'react';
 import { List, ListItem, Typography, withStyles } from '@material-ui/core';
 import Hyperlink from './Hyperlink';
 
-const StreamBrowser = ({ streams, onNavigate }) => (
-    <div>
+const StreamBrowser = withStyles(theme => ({
+    popover: {
+        padding: theme.spacing.unit * 2.5,
+    },
+}))(({ streams, onNavigate, classes }) => (
+    <div className={classes.popover}>
         <Typography variant={'title'}>Stream Browser</Typography>
         {streams.length ? (
             <List>
                 {streams.map(({ title, href }) => (
                     <ListItem button key={href}>
                         <Hyperlink href={href} onNavigate={onNavigate}>
-                            {title}
+                            <span>{title}</span>
                         </Hyperlink>
                     </ListItem>
                 ))}
@@ -21,10 +25,6 @@ const StreamBrowser = ({ streams, onNavigate }) => (
             </Typography>
         )}
     </div>
-);
+));
 
-export default withStyles(theme => ({
-    paper: {
-        padding: theme.spacing.unit * 2.5,
-    },
-}))(StreamBrowser);
+export default StreamBrowser;

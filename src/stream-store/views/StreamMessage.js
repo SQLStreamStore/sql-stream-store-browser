@@ -6,6 +6,7 @@ import {
     ExpansionPanel,
     ExpansionPanelSummary,
     ExpansionPanelDetails,
+    withStyles,
 } from '@material-ui/core';
 import Inspector, {
     ObjectLabel,
@@ -99,89 +100,109 @@ const getStreamIds = ({ _embedded = {} }) =>
         .map(({ _links = {} }) => _links[rels.feed])
         .filter(link => link);
 
-class StreamMessageJson extends PureComponent {
-    state = {
-        anchorElement: undefined,
-        streams: [],
-    };
-
-    _handlePotentialStreamIdClick = async (
-        { currentTarget: anchorElement },
-        p,
-    ) => {
-        const { authorization, links } = this.props;
-
-        this.setState({
-            anchorElement,
-        });
-
-        const template = uriTemplate.parse(decodeURI(links[rels.browse].href));
-
-        const responses = await Promise.all(
-            [...new Set([p, String(p).replace('-', '')])].map(p =>
-                http.get({
-                    url: template.expand({ p, t: 'e' }),
-                    headers: { authorization },
-                }),
-            ),
-        );
-
-        this.setState({
-            streams: Object.values(
-                responses.flatMap(({ body }) => getStreamIds(body)).reduce(
-                    (akk, { href, title }) => ({
-                        ...akk,
-                        [href]: { href, title },
-                    }),
-                    {},
-                ),
-            ),
-        });
-    };
-
-    _handlePotentialStreamIdClose = () =>
-        this.setState({
+const StreamMessageJson = withStyles({
+    streamId: {
+        '&:hover': {
+            textDecoration: 'underline',
+        },
+    },
+})(
+    class StreamMessageJson extends PureComponent {
+        state = {
             anchorElement: undefined,
-        });
+            streams: [],
+        };
 
-    _renderNode = ({ depth, name, data, path, isNonEnumerable, ...props }) =>
-        depth === 0 ? (
-            <ObjectRootLabel
-                name={name}
-                data={{}}
-                path={path}
-                isNonEnumerable={isNonEnumerable}
-                {...props}
-            />
-        ) : isPotentialStreamId(data) ? (
-            <span>
-                <ObjectName name={name} dimmed={isNonEnumerable} />
-                <span>: </span>
-                <span
-                    onClick={e => this._handlePotentialStreamIdClick(e, data)}
-                >
-                    {data}
+        _handlePotentialStreamIdClick = async (
+            { currentTarget: anchorElement },
+            pattern,
+        ) => {
+            const { authorization, links } = this.props;
+
+            this.setState({
+                anchorElement,
+            });
+
+            if (!links[rels.browse]) {
+                return;
+            }
+
+            const template = uriTemplate.parse(
+                decodeURI(links[rels.browse].href),
+            );
+
+            const responses = await Promise.all(
+                [...new Set([pattern, String(pattern).replace('-', '')])].map(
+                    p =>
+                        http.get({
+                            url: template.expand({ p, t: 'e' }),
+                            headers: { authorization },
+                        }),
+                ),
+            );
+
+            this.setState({
+                streams: Object.values(
+                    responses.flatMap(({ body }) => getStreamIds(body)).reduce(
+                        (akk, { href, title }) => ({
+                            ...akk,
+                            [href]: { href, title },
+                        }),
+                        {},
+                    ),
+                ),
+            });
+        };
+
+        _handlePotentialStreamIdClose = () =>
+            this.setState({
+                anchorElement: undefined,
+            });
+
+        _renderNode = ({
+            depth,
+            name,
+            data,
+            path,
+            isNonEnumerable,
+            ...props
+        }) =>
+            depth === 0 ? (
+                <ObjectRootLabel
+                    name={name}
+                    data={{}}
+                    path={path}
+                    isNonEnumerable={isNonEnumerable}
+                    {...props}
+                />
+            ) : isPotentialStreamId(data) ? (
+                <span>
+                    <ObjectName name={name} dimmed={isNonEnumerable} />
+                    <span>: </span>
+                    <span
+                        className={this.props.classes.streamId}
+                        onClick={e =>
+                            this._handlePotentialStreamIdClick(e, data)
+                        }
+                    >
+                        {data}
+                    </span>
                 </span>
-            </span>
-        ) : (
-            <ObjectLabel
-                name={name}
-                data={props.children ? {} : data}
-                path={path}
-                isNonEnumerable={isNonEnumerable}
-                {...props}
-            />
-        );
+            ) : (
+                <ObjectLabel
+                    name={name}
+                    data={props.children ? {} : data}
+                    path={path}
+                    isNonEnumerable={isNonEnumerable}
+                    {...props}
+                />
+            );
 
-    render() {
-        const { json, title, onNavigate } = this.props;
-        const { anchorElement, streams } = this.state;
-        return (
-            <ExpansionPanel expanded>
-                <ExpansionPanelSummary expandIcon={<Code />}>
-                    <Typography variant={'h6'}>{title}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+        render() {
+            const { json, onNavigate } = this.props;
+            const { anchorElement, streams } = this.state;
+            return (
+                <div>
                     <Inspector
                         data={json}
                         expandLevel={32}
@@ -205,11 +226,11 @@ class StreamMessageJson extends PureComponent {
                             onNavigate={onNavigate}
                         />
                     </Popover>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        );
-    }
-}
+                </div>
+            );
+        }
+    },
+);
 
 const StreamMessageData = ({ payload, ...props }) => (
     <StreamMessageJson title={'Data'} json={payload} {...props} />
