@@ -63,6 +63,8 @@ export default withStyles(styles)(
                         open={open}
                         TransitionComponent={SlideUp}
                         disableBackdropClick={false}
+                        fullWidth
+                        onEscapeKeyDown={this._onClose}
                     >
                         <DialogTitle>{title}</DialogTitle>
                         <DialogContent>{children}</DialogContent>
