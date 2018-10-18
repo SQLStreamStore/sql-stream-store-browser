@@ -11,6 +11,7 @@ import {
     Refresh,
     Search,
     SqlStreamStore,
+    List,
 } from './Icons';
 import { rels } from '../stream-store';
 
@@ -25,6 +26,7 @@ const fontIconByRel = {
     [rels.metadata]: Settings,
     [rels.delete]: DeleteForever,
     [rels.find]: Search,
+    [rels.browse]: List,
 };
 
 const RelIcon = ({ rel, ...props }) =>
