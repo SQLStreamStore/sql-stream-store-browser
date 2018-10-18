@@ -37,6 +37,7 @@ const TemplatedLinkButton = withAuthorization()(
                                 key={name}
                                 label={name}
                                 onChange={this._onChange(name)}
+                                fullWidth
                             />
                         ))}
                 </Dialog>
