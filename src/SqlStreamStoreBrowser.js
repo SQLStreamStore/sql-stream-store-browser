@@ -15,6 +15,7 @@ import { SqlStreamStore } from './components/Icons';
 import { actions, store, rels, views } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
+import { mediaTypes } from './utils';
 
 const getSelfAlias = links =>
     Object.keys(links)
@@ -36,11 +37,14 @@ const state$ = createState(
     obs.of({ links: {}, forms: {}, loading: false }),
 );
 
-const onNavigate = (url, authorization) =>
-    actions.get.request.next({ url, headers: { authorization } });
+const onNavigate = (link, authorization) =>
+    actions.get.request.next({ link, headers: { authorization } });
 
 const initialNavigation = ({ authorization }) =>
-    onNavigate(window.location.href, authorization);
+    onNavigate(
+        { href: window.location.href, type: mediaTypes.hal },
+        authorization,
+    );
 
 const formActions = {
     [rels.append]: actions.post,

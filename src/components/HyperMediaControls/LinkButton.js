@@ -27,7 +27,10 @@ const TemplatedLinkButton = withAuthorization()(
                     rel={rel}
                     title={link.title}
                     onSubmit={() =>
-                        onNavigate(template.expand(this.state), authorization)
+                        onNavigate(
+                            { ...link, href: template.expand(this.state) },
+                            authorization,
+                        )
                     }
                 >
                     {template.expressions
@@ -52,7 +55,7 @@ const NonTemplatedLinkButton = withAuthorization()(
             rel={rel}
             title={link.title}
             color={'action'}
-            onClick={preventDefault(() => onNavigate(link.href, authorization))}
+            onClick={preventDefault(() => onNavigate(link, authorization))}
         />
     ),
 );

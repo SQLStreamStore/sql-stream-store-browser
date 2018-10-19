@@ -25,13 +25,13 @@ const getValue = value => {
 class FormButton extends PureComponent {
     state = {};
     _onSubmit = () => {
-        const { rel, url, actions, authorization } = this.props;
+        const { rel, link, actions, authorization } = this.props;
         const { model: body } = this.state;
 
         if (actions[rel]) {
             actions[rel].request.next({
                 body,
-                url,
+                link,
                 headers: {
                     authorization,
                 },

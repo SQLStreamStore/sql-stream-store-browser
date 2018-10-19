@@ -22,11 +22,11 @@ const styles = {
 };
 const Hyperlink = withAuthorization()(
     withStyles(styles)(
-        ({ classes, href, children, authorization, onNavigate }) => (
+        ({ classes, link, children, authorization, onNavigate }) => (
             <a
-                href={href}
+                href={link.href}
                 className={classes.hyperlink}
-                onClick={preventDefault(() => onNavigate(href, authorization))}
+                onClick={preventDefault(() => onNavigate(link, authorization))}
             >
                 {children}
             </a>

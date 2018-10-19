@@ -1,7 +1,4 @@
-const contentTypes = {
-    hal: 'application/hal+json',
-    json: 'application/json',
-};
+import mediaTypes from './mediaTypes';
 
 const tryParseJson = body => {
     try {
@@ -33,29 +30,29 @@ const mapResponse = async response => {
     };
 };
 
-const get = ({ url, headers = {} }) =>
-    fetch(url, {
+const get = ({ link, headers = {} }) =>
+    fetch(link.href, {
         headers: new Headers({
-            accept: contentTypes.hal,
+            accept: link.type || mediaTypes.hal,
             ...headers,
         }),
     }).then(mapResponse);
 
-const post = ({ url, body, headers = {} }) =>
-    fetch(url, {
+const post = ({ link, body, headers = {} }) =>
+    fetch(link.href, {
         headers: new Headers({
-            'content-type': contentTypes.json,
-            accept: contentTypes.hal,
+            'content-type': mediaTypes.json,
+            accept: link.type || mediaTypes.hal,
             ...headers,
         }),
         method: 'post',
         body: JSON.stringify(body),
     }).then(mapResponse);
 
-const _delete = ({ url, headers = {} }) =>
-    fetch(url, {
+const _delete = ({ link, headers = {} }) =>
+    fetch(link.href, {
         headers: new Headers({
-            accept: contentTypes.hal,
+            accept: link.type || mediaTypes.hal,
             ...headers,
         }),
         method: 'delete',
