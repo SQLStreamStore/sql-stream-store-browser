@@ -20,6 +20,8 @@ const styles = theme => ({
 
 const SlideUp = props => <Slide direction={'up'} {...props} />;
 
+const isStandardRel = rel => rel.indexOf(':') === -1;
+
 export default withStyles(styles)(
     class HyperMediaDialog extends PureComponent {
         state = {
@@ -70,7 +72,9 @@ export default withStyles(styles)(
                         <DialogTitle>{title}</DialogTitle>
                         <DialogContent>{children}</DialogContent>
                         <DialogActions>
-                            <HelpButton rel={rel} curies={curies} />
+                            {!isStandardRel(rel) && (
+                                <HelpButton rel={rel} curies={curies} />
+                            )}
                             <Button onClick={this._onClose}>{'Cancel'}</Button>
                             <Button
                                 variant={'contained'}
