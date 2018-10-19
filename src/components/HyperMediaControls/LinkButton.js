@@ -17,7 +17,7 @@ const TemplatedLinkButton = withAuthorization()(
             });
 
         render() {
-            const { rel, link, authorization, onNavigate } = this.props;
+            const { rel, link, authorization, onNavigate, curies } = this.props;
 
             const template = uriTemplate.parse(decodeURI(link.href));
 
@@ -26,6 +26,7 @@ const TemplatedLinkButton = withAuthorization()(
                     label={link.title}
                     rel={rel}
                     title={link.title}
+                    curies={curies}
                     onSubmit={() =>
                         onNavigate(
                             { ...link, href: template.expand(this.state) },

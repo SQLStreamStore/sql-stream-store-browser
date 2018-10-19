@@ -25,6 +25,7 @@ const HyperMediaControls = ({ forms, href, actions, links, onNavigate }) => (
                             link={links[rel]}
                             onNavigate={onNavigate}
                             color={'active'}
+                            curies={[links[rels.curies]]}
                         />
                     ))}
             </div>
@@ -36,6 +37,7 @@ const HyperMediaControls = ({ forms, href, actions, links, onNavigate }) => (
                         link={{ href }}
                         actions={actions}
                         schema={forms[rel]}
+                        curies={[links[rels.curies]]}
                     />
                 ))}
             </div>

@@ -11,6 +11,7 @@ import {
 
 import RelIcon from '../RelIcon';
 import RelButton from './RelButton';
+import HelpButton from './HelpButton';
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
@@ -46,7 +47,7 @@ export default withStyles(styles)(
         };
 
         render() {
-            const { label, rel, title, classes, children } = this.props;
+            const { label, rel, title, classes, children, curies } = this.props;
             const { open } = this.state;
 
             return (
@@ -69,6 +70,7 @@ export default withStyles(styles)(
                         <DialogTitle>{title}</DialogTitle>
                         <DialogContent>{children}</DialogContent>
                         <DialogActions>
+                            <HelpButton rel={rel} curies={curies} />
                             <Button onClick={this._onClose}>{'Cancel'}</Button>
                             <Button
                                 variant={'contained'}

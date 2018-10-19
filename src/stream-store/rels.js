@@ -4,6 +4,7 @@ const rels = {
     previous: 'previous',
     next: 'next',
     last: 'last',
+    curies: 'curies',
     feed: 'streamStore:feed',
     message: 'streamStore:message',
     metadata: 'streamStore:metadata',

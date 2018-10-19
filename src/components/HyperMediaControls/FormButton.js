@@ -51,13 +51,14 @@ class FormButton extends PureComponent {
     };
 
     render() {
-        const { schema, rel, title } = this.props;
+        const { schema, rel, title, curies } = this.props;
         const { model } = this.state;
         return (
             <Dialog
                 label={title}
                 rel={rel}
                 title={schema.title}
+                curies={curies}
                 onSubmit={this._onSubmit}
             >
                 <SchemaForm
