@@ -25,13 +25,13 @@ const getValue = value => {
 class FormButton extends PureComponent {
     state = {};
     _onSubmit = () => {
-        const { rel, url, actions, authorization } = this.props;
+        const { rel, link, actions, authorization } = this.props;
         const { model: body } = this.state;
 
         if (actions[rel]) {
             actions[rel].request.next({
                 body,
-                url,
+                link,
                 headers: {
                     authorization,
                 },
@@ -51,13 +51,14 @@ class FormButton extends PureComponent {
     };
 
     render() {
-        const { schema, rel, title } = this.props;
+        const { schema, rel, title, curies } = this.props;
         const { model } = this.state;
         return (
             <Dialog
                 label={title}
                 rel={rel}
                 title={schema.title}
+                curies={curies}
                 onSubmit={this._onSubmit}
             >
                 <SchemaForm

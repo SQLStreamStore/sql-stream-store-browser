@@ -59,8 +59,6 @@ const StreamMessageHeader = () => (
     </TableRow>
 );
 
-const getHref = (links, rel) => (links[rel] || {}).href;
-
 const nowrap = { whiteSpace: 'nowrap' };
 
 const StreamMessageDetails = ({
@@ -75,7 +73,7 @@ const StreamMessageDetails = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink href={getHref(links, rels.feed)} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.feed]} onNavigate={onNavigate}>
                 {streamId}
             </Hyperlink>
         </TableCell>
@@ -83,7 +81,7 @@ const StreamMessageDetails = ({
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <Hyperlink href={getHref(links, rels.self)} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.self]} onNavigate={onNavigate}>
                 {streamId}
                 {'@'}
                 {streamVersion}

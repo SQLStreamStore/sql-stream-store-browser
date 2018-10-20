@@ -44,12 +44,12 @@ const Message = ({
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={nowrap}>
-            <Hyperlink href={links[rels.feed].href} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.feed]} onNavigate={onNavigate}>
                 {streamId}
             </Hyperlink>
         </TableCell>
         <TableCell>
-            <Hyperlink href={links.self.href} onNavigate={onNavigate}>
+            <Hyperlink link={links.self} onNavigate={onNavigate}>
                 {streamId}
                 {'@'}
                 {streamVersion}

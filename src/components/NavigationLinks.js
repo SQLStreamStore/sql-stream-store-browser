@@ -22,7 +22,7 @@ const NavigationLinks = ({ onNavigate, links, authorization }) => (
                 disabled={!links[rel]}
                 key={rel}
                 onClick={preventDefault(() =>
-                    onNavigate(links[rel].href, authorization),
+                    onNavigate(links[rel], authorization),
                 )}
                 link={links[rel]}
                 rel={rel}

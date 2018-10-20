@@ -9,9 +9,9 @@ import { rels } from '../../stream-store';
 const isNotSelf = (rel, links) =>
     links[rels.self] && links[rel].href !== links[rels.self].href;
 
-const state$ = createState(store.url$.map(url => ['url', () => url]));
+const state$ = createState(store.url$.map(href => ['href', () => href]));
 
-const HyperMediaControls = ({ forms, url, actions, links, onNavigate }) => (
+const HyperMediaControls = ({ forms, href, actions, links, onNavigate }) => (
     <Card>
         <CardActions>
             <div>
@@ -22,10 +22,10 @@ const HyperMediaControls = ({ forms, url, actions, links, onNavigate }) => (
                         <LinkButton
                             key={rel}
                             rel={rel}
-                            url={url}
                             link={links[rel]}
                             onNavigate={onNavigate}
                             color={'active'}
+                            curies={[links[rels.curies]]}
                         />
                     ))}
             </div>
@@ -34,9 +34,10 @@ const HyperMediaControls = ({ forms, url, actions, links, onNavigate }) => (
                     <FormButton
                         key={rel}
                         rel={rel}
-                        url={url}
+                        link={{ href }}
                         actions={actions}
                         schema={forms[rel]}
+                        curies={[links[rels.curies]]}
                     />
                 ))}
             </div>

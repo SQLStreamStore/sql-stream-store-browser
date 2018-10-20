@@ -46,10 +46,7 @@ const StreamMetadataDetails = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink
-                onNavigate={onNavigate}
-                href={(links[rels.feed] || {}).href}
-            >
+            <Hyperlink onNavigate={onNavigate} link={links[rels.feed]}>
                 {streamId}
             </Hyperlink>
         </TableCell>

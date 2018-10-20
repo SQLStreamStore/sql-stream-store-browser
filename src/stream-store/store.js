@@ -15,7 +15,7 @@ const forms$ = body$.map(({ _embedded }) =>
         .filter(
             rel =>
                 _embedded[rel].$schema &&
-                _embedded[rel].$schema.endsWith('hyper-schema#'),
+                _embedded[rel].$schema.endsWith('schema#'),
         )
         .reduce((akk, rel) => ({ ...akk, [rel]: _embedded[rel] }), {}),
 );

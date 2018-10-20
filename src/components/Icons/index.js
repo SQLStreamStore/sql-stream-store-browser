@@ -20,3 +20,4 @@ export { default as Refresh } from '@material-ui/icons/Refresh';
 export { default as SpaceBar } from '@material-ui/icons/SpaceBar';
 export { default as Search } from '@material-ui/icons/Search';
 export { default as List } from '@material-ui/icons/List';
+export { default as Help } from '@material-ui/icons/Help';

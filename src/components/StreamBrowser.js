@@ -20,11 +20,11 @@ const StreamBrowser = withStyles(theme => ({
             <LinearProgress />
         ) : streams.length ? (
             <List>
-                {streams.map(({ title, href }) => (
-                    <ListItem key={href}>
+                {streams.map(link => (
+                    <ListItem key={link.href}>
                         <ListItemText>
-                            <Hyperlink href={href} onNavigate={onNavigate}>
-                                {title}
+                            <Hyperlink link={link} onNavigate={onNavigate}>
+                                {link.title}
                             </Hyperlink>
                         </ListItemText>
                     </ListItem>

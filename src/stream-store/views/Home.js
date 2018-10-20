@@ -28,7 +28,7 @@ const Links = ({ links, onNavigate }) => (
     <List>
         {Object.keys(links).map((rel, key) => (
             <ListItem key={key}>
-                <Hyperlink href={links[rel].href} onNavigate={onNavigate}>
+                <Hyperlink link={links[rel]} onNavigate={onNavigate}>
                     <Typography variant={'h6'}>{relsToTitle[rel]}</Typography>
                 </Hyperlink>
             </ListItem>
