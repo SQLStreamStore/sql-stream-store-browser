@@ -21,13 +21,13 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from '../../components/StripeyTable';
-import { Hyperlink, StreamBrowser } from '../../components';
-import { Notes, Settings } from '../../components/Icons';
-import { createState, connect } from '../../reactive';
-import rels from '../rels';
-import { http } from '../../utils';
-import store from '../store';
+} from '../../../components/StripeyTable';
+import { Hyperlink, StreamBrowser } from '../../../components';
+import { Notes, Settings } from '../../../components/Icons';
+import { createState, connect } from '../../../reactive';
+import rels from '../../rels';
+import { http } from '../../../utils';
+import store from '../../store';
 
 const tryParseJson = payload => {
     try {

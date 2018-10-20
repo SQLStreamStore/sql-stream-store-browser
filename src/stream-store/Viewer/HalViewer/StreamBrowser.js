@@ -1,9 +1,9 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import StreamBrowser from '../../components/StreamBrowser';
-import { createState, connect } from '../../reactive';
-import rels from '../rels';
-import store from '../store';
+import StreamBrowser from '../../../components/StreamBrowser';
+import { createState, connect } from '../../../reactive';
+import rels from '../../rels';
+import store from '../../store';
 
 const streams$ = store.body$.map(({ _embedded = {} }) => () =>
     (_embedded[rels.feed] || [])

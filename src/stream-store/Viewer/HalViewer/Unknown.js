@@ -5,9 +5,9 @@ import Inspector, {
     ObjectRootLabel,
     ObjectName,
 } from 'react-inspector';
-import { createState, connect } from '../../reactive';
-import store from '../store';
-import { Hyperlink } from '../../components';
+import { createState, connect } from '../../../reactive';
+import store from '../../store';
+import { Hyperlink } from '../../../components';
 
 const state$ = createState(
     store.body$.map(data => ['data', () => data]),

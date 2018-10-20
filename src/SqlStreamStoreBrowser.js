@@ -1,4 +1,4 @@
-import React, { createElement } from 'react';
+import React from 'react';
 import { CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
@@ -7,12 +7,10 @@ import {
     withAuthorization,
     AuthorizationProvider,
     Notifications,
-    HyperMediaControls,
-    NavigationLinks,
     Loading,
 } from './components';
 import { SqlStreamStore } from './components/Icons';
-import { actions, store, rels, views } from './stream-store';
+import { actions, store, Viewer } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 import { mediaTypes } from './utils';
@@ -33,6 +31,7 @@ const state$ = createState(
         store.links$.map(links => ['links', () => links]),
         store.forms$.map(forms => ['forms', () => forms]),
         store.loading$.map(loading => ['loading', () => loading]),
+        store.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
     ),
     obs.of({ links: {}, forms: {}, loading: false }),
 );
@@ -46,13 +45,6 @@ const initialNavigation = ({ authorization }) =>
         authorization,
     );
 
-const formActions = {
-    [rels.append]: actions.post,
-    [rels.metadata]: actions.post,
-    [rels.deleteStream]: actions.delete,
-    [rels.deleteMessage]: actions.delete,
-};
-
 const Hero = () => (
     <AppBar position={'static'}>
         <Toolbar>
@@ -65,27 +57,13 @@ const Hero = () => (
 );
 
 const SqlStreamStoreBrowser = withAuthorization()(
-    mount(initialNavigation)(({ self, links, forms, loading }) => (
+    mount(initialNavigation)(({ loading, ...props }) => (
         <MuiThemeProvider theme={theme}>
             <div>
                 <CssBaseline />
                 <Hero />
                 <Loading open={loading} />
-                <section>
-                    <NavigationLinks onNavigate={onNavigate} links={links} />
-                    <HyperMediaControls
-                        actions={formActions}
-                        forms={forms}
-                        links={links}
-                        onNavigate={onNavigate}
-                    />
-                    {createElement(views[self] || views._unknown, {
-                        links,
-                        forms,
-                        self,
-                        onNavigate,
-                    })}
-                </section>
+                <Viewer {...props} onNavigate={onNavigate} />
                 <Notifications />
             </div>
         </MuiThemeProvider>

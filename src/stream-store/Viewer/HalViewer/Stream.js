@@ -1,17 +1,17 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import { createState, connect } from '../../reactive';
-import { resolveLinks } from '../../utils';
-import rels from '../rels';
-import store from '../store';
+import { createState, connect } from '../../../reactive';
+import { resolveLinks } from '../../../utils';
+import rels from '../../rels';
+import store from '../../store';
 import {
     Table,
     TableBody,
     TableRow,
     TableHead,
     TableCell,
-} from '../../components/StripeyTable';
-import { Hyperlink } from '../../components';
+} from '../../../components/StripeyTable';
+import { Hyperlink } from '../../../components';
 
 const messages$ = store.body$
     .zip(store.url$)

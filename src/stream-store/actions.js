@@ -28,7 +28,7 @@ const getUrl = location =>
 history.listen(
     (location, action) =>
         action === 'POP' &&
-        actions.get.response.next({ url: getUrl(location) }),
+        actions.get.response.next({ url: getUrl(location), headers: {} }),
 );
 
 export default actions;
