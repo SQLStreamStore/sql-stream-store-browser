@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Button, Drawer, withStyles } from '@material-ui/core';
+import Remarkable from 'react-remarkable';
 import uriTemplate from 'uri-template';
 import { Help } from '../Icons';
 import { withAuthorization } from '../AuthorizationProvider';
 import { http } from '../../utils';
+import Typography from '@material-ui/core/es/Typography/Typography';
 
 const getCurie = (rel, curies) => {
     const [prefix, rest] = rel.split(':', 2);
@@ -20,11 +22,12 @@ const getCurie = (rel, curies) => {
               }))[0] || { href: rel };
 };
 
-const Documentation = withStyles({
+const Documentation = withStyles(theme => ({
     drawerPaper: {
-        width: 480,
+        width: '45%',
+        padding: theme.spacing.unit * 2,
     },
-})(({ open, children, onClose, classes }) => (
+}))(({ open, children, onClose, classes }) => (
     <Drawer
         open={open}
         onClose={onClose}
@@ -33,7 +36,15 @@ const Documentation = withStyles({
             paper: classes.drawerPaper,
         }}
     >
-        {children}
+        <Typography>
+            <Remarkable
+                options={{
+                    typographer: true,
+                }}
+            >
+                {children}
+            </Remarkable>
+        </Typography>
     </Drawer>
 ));
 

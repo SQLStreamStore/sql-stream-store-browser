@@ -1,6 +1,13 @@
 import mediaTypes from './mediaTypes';
 
-const tryParseJson = body => {
+const isJson = mediaType =>
+    mediaType === mediaTypes.json || (mediaType || '').endsWith('+json');
+
+const getBody = async (response, headers) => {
+    const body = await response.text();
+    if (!isJson(headers['content-type'])) {
+        return body;
+    }
     try {
         return JSON.parse(body);
     } catch (e) {
@@ -18,11 +25,13 @@ const getHeaders = headers =>
     );
 
 const mapResponse = async response => {
-    const { ok, status, statusText, url, headers } = response;
+    const { ok, status, statusText, url } = response;
+
+    const headers = getHeaders(response.headers);
 
     return {
-        body: tryParseJson(await response.text()),
-        headers: getHeaders(headers),
+        body: await getBody(response, headers),
+        headers,
         ok,
         status,
         statusText,

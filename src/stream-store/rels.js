@@ -10,7 +10,8 @@ const rels = {
     metadata: 'streamStore:metadata',
     index: 'streamStore:index',
     append: 'streamStore:append',
-    delete: 'streamStore:delete',
+    deleteStream: 'streamStore:delete-stream',
+    deleteMessage: 'streamStore:delete-message',
     find: 'streamStore:find',
     browse: 'streamStore:feed-browser',
 };

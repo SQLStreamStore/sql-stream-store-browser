@@ -49,7 +49,8 @@ const initialNavigation = ({ authorization }) =>
 const formActions = {
     [rels.append]: actions.post,
     [rels.metadata]: actions.post,
-    [rels.delete]: actions.delete,
+    [rels.deleteStream]: actions.delete,
+    [rels.deleteMessage]: actions.delete,
 };
 
 const Hero = () => (
