@@ -1,12 +1,19 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import { List, ListItem, Typography } from '@material-ui/core';
+import inflector from 'inflector-js';
 import { createState, connect } from '../../reactive';
-import rels from '../rels';
 import store from '../store';
-import { Hyperlink } from '../../components';
+import {
+    Table,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from '../../components/StripeyTable';
 
-const links$ = store.links$.map(links => () => links);
+const provider$ = store.body$.map(({ provider }) => () => provider);
+
+const versions$ = store.body$.map(({ versions }) => () => versions);
 
 const recent$ = store.body$
     .filter(({ _embedded }) => _embedded)
@@ -14,35 +21,51 @@ const recent$ = store.body$
 
 const state$ = createState(
     obs.merge(
-        links$.map(links => ['links', links]),
+        provider$.map(provider => ['provider', provider]),
+        versions$.map(versions => ['versions', versions]),
         recent$.map(recent => ['recent', recent]),
     ),
-    obs.of({ recent: { matches: [] }, links: {} }),
+    obs.of({ recent: { matches: [] }, provider: '', versions: {} }),
 );
 
-const relsToTitle = {
-    [rels.feed]: 'All Stream',
-};
-
-const Links = ({ links, onNavigate }) => (
-    <List>
-        {Object.keys(links).map((rel, key) => (
-            <ListItem key={key}>
-                <Hyperlink link={links[rel]} onNavigate={onNavigate}>
-                    <Typography variant={'h6'}>{relsToTitle[rel]}</Typography>
-                </Hyperlink>
-            </ListItem>
-        ))}
-    </List>
+const Links = ({ provider, versions }) => (
+    <Table>
+        <TableHead>
+            <TableRow>
+                <TableCell colspan={2}>{'Server Information'}</TableCell>
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            <TableRow>
+                <TableCell>
+                    <strong>{'Provider'}</strong>
+                </TableCell>
+                <TableCell>
+                    {inflector.camel2words(inflector.underscore(provider))}
+                </TableCell>
+            </TableRow>
+            {Object.keys(versions).map(key => (
+                <TableRow>
+                    <TableCell>
+                        <strong>
+                            {inflector.camel2words(inflector.underscore(key))}{' '}
+                            {'Version'}
+                        </strong>
+                    </TableCell>
+                    <TableCell>{versions[key]}</TableCell>
+                </TableRow>
+            ))}
+        </TableBody>
+    </Table>
 );
 
 Links.defaultProps = {
     links: [],
 };
 
-const Index = ({ links, onNavigate }) => (
+const Index = ({ provider, versions }) => (
     <section>
-        <Links links={links} onNavigate={onNavigate} />
+        <Links provider={provider} versions={versions} />
     </section>
 );
 
