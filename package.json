@@ -31,10 +31,9 @@
     "react-schema-form": "0.5.0",
     "react-scripts": "2.0.5",
     "react-tap-event-plugin": "3.0.2",
-    "resolve-relative-url": "1.0.0",
     "rxjs": "5.4.3",
+    "uri-js": "4.2.2",
     "uri-template": "1.0.1",
-    "url-join": "2.0.2",
     "uuid": "3.3.2"
   },
   "author": "thefringeninja <joao.paul@braganca.name>",

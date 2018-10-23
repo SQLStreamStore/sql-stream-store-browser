@@ -2,6 +2,10 @@ import { Observable as obs } from 'rxjs';
 import { resolveLinks } from '../utils';
 import actions from './actions';
 
+const mediaType$ = actions.get.response.map(
+    ({ headers }) => headers['content-type'].split(';')[0],
+);
+
 const body$ = actions.get.response.map(({ body }) => body);
 
 const url$ = actions.get.response.map(({ url }) => url);
@@ -49,4 +53,5 @@ export default {
     body$,
     url$,
     loading$,
+    mediaType$,
 };

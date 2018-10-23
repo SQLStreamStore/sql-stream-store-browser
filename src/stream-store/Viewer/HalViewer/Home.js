@@ -1,15 +1,15 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
 import inflector from 'inflector-js';
-import { createState, connect } from '../../reactive';
-import store from '../store';
+import { createState, connect } from '../../../reactive';
+import store from '../../store';
 import {
     Table,
     TableBody,
     TableRow,
     TableHead,
     TableCell,
-} from '../../components/StripeyTable';
+} from '../../../components/StripeyTable';
 
 const provider$ = store.body$.map(({ provider }) => () => provider);
 

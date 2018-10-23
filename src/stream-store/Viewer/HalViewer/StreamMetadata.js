@@ -6,18 +6,18 @@ import {
     ExpansionPanelSummary,
     ExpansionPanelDetails,
 } from '@material-ui/core';
-import { Code } from '../../components/Icons';
-import { createState, connect } from '../../reactive';
-import rels from '../rels';
-import store from '../store';
+import { Code } from '../../../components/Icons';
+import { createState, connect } from '../../../reactive';
+import rels from '../../rels';
+import store from '../../store';
 import {
     Table,
     TableBody,
     TableRow,
     TableHead,
     TableCell,
-} from '../../components/StripeyTable';
-import { Hyperlink } from '../../components';
+} from '../../../components/StripeyTable';
+import { Hyperlink } from '../../../components';
 
 const metadata$ = store.body$.map(metadata => () => metadata);
 

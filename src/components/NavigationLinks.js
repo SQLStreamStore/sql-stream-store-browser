@@ -1,34 +1,50 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { IconButton } from '@material-ui/core';
 import RelIcon from './RelIcon';
 import { withAuthorization } from './AuthorizationProvider';
 import { navigation } from '../stream-store';
 import { preventDefault } from '../utils';
 
-const FeedNavigationLink = ({ disabled, onClick, rel }) => (
-    <IconButton
-        variant={disabled ? 'disabled' : 'raised'}
-        disabled={disabled}
-        onClick={onClick}
-    >
-        <RelIcon rel={rel} />
-    </IconButton>
+const FeedNavigationLink = withAuthorization()(
+    class FeedNavigationLink extends PureComponent {
+        _handleOnClick = e => {
+            const { onNavigate, authorization, link } = this.props;
+
+            e.preventDefault();
+
+            if (!link) {
+                return;
+            }
+
+            return onNavigate(link, authorization);
+        };
+
+        render() {
+            const { rel, link } = this.props;
+            return (
+                <IconButton
+                    variant={!link ? 'disabled' : 'raised'}
+                    disabled={!link}
+                    onClick={this._handleOnClick}
+                >
+                    <RelIcon rel={rel} />
+                </IconButton>
+            );
+        }
+    },
 );
 
-const NavigationLinks = ({ onNavigate, links, authorization }) => (
+const NavigationLinks = ({ onNavigate, links }) => (
     <nav>
         {[...navigation].map(rel => (
             <FeedNavigationLink
-                disabled={!links[rel]}
                 key={rel}
-                onClick={preventDefault(() =>
-                    onNavigate(links[rel], authorization),
-                )}
-                link={links[rel]}
+                link={(links[rel] || [])[0]}
+                onNavigate={onNavigate}
                 rel={rel}
             />
         ))}
     </nav>
 );
 
-export default withAuthorization()(NavigationLinks);
+export default NavigationLinks;

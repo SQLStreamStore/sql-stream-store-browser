@@ -1,17 +1,17 @@
 import React from 'react';
 import { Observable as obs } from 'rxjs';
-import { createState, connect } from '../../reactive';
-import { resolveLinks } from '../../utils';
-import rels from '../rels';
-import store from '../store';
+import { createState, connect } from '../../../reactive';
+import { resolveLinks } from '../../../utils';
+import rels from '../../rels';
+import store from '../../store';
 import {
     Table,
     TableBody,
     TableRow,
     TableHead,
     TableCell,
-} from '../../components/StripeyTable';
-import { Hyperlink } from '../../components';
+} from '../../../components/StripeyTable';
+import { Hyperlink } from '../../../components';
 
 const messages$ = store.body$
     .zip(store.url$)
@@ -44,12 +44,12 @@ const Message = ({
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed]} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.feed][0]} onNavigate={onNavigate}>
                 {streamId}
             </Hyperlink>
         </TableCell>
         <TableCell>
-            <Hyperlink link={links.self} onNavigate={onNavigate}>
+            <Hyperlink link={links.self[0]} onNavigate={onNavigate}>
                 {streamId}
                 {'@'}
                 {streamVersion}

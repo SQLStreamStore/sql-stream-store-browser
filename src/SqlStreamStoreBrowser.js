@@ -1,4 +1,4 @@
-import React, { createElement } from 'react';
+import React from 'react';
 import { CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Observable as obs } from 'rxjs';
@@ -7,25 +7,29 @@ import {
     withAuthorization,
     AuthorizationProvider,
     Notifications,
-    HyperMediaControls,
-    NavigationLinks,
     Loading,
 } from './components';
 import { SqlStreamStore } from './components/Icons';
-import { actions, store, rels, views } from './stream-store';
+import { actions, store, Viewer } from './stream-store';
 import theme from './theme';
 import { createState, connect } from './reactive';
 import { mediaTypes } from './utils';
 
 const getSelfAlias = links =>
     Object.keys(links)
-        .filter(rel => rel.indexOf('streamStore:') === 0)
-        .filter(rel => links[rel].href === links.self.href)[0];
+        .flatMap(rel => links[rel])
+        .filter(({ rel }) => rel.indexOf('streamStore:') === 0)
+        .filter(
+            ({ rel, href }) =>
+                !!links.self.filter(link => link.href === href).length,
+        )
+        .map(({ rel }) => rel);
 
 const self$ = store.links$
     .filter(links => links.self)
     .map(getSelfAlias)
-    .filter(rel => !!rel);
+    .filter(rel => !!rel)
+    .map(([link]) => link);
 
 const state$ = createState(
     obs.merge(
@@ -33,11 +37,13 @@ const state$ = createState(
         store.links$.map(links => ['links', () => links]),
         store.forms$.map(forms => ['forms', () => forms]),
         store.loading$.map(loading => ['loading', () => loading]),
+        store.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
     ),
     obs.of({ links: {}, forms: {}, loading: false }),
 );
 
 const onNavigate = (link, authorization) =>
+    link.href.indexOf('#') === -1 &&
     actions.get.request.next({ link, headers: { authorization } });
 
 const initialNavigation = ({ authorization }) =>
@@ -45,13 +51,6 @@ const initialNavigation = ({ authorization }) =>
         { href: window.location.href, type: mediaTypes.hal },
         authorization,
     );
-
-const formActions = {
-    [rels.append]: actions.post,
-    [rels.metadata]: actions.post,
-    [rels.deleteStream]: actions.delete,
-    [rels.deleteMessage]: actions.delete,
-};
 
 const Hero = () => (
     <AppBar position={'static'}>
@@ -65,27 +64,13 @@ const Hero = () => (
 );
 
 const SqlStreamStoreBrowser = withAuthorization()(
-    mount(initialNavigation)(({ self, links, forms, loading }) => (
+    mount(initialNavigation)(({ loading, ...props }) => (
         <MuiThemeProvider theme={theme}>
             <div>
                 <CssBaseline />
                 <Hero />
                 <Loading open={loading} />
-                <section>
-                    <NavigationLinks onNavigate={onNavigate} links={links} />
-                    <HyperMediaControls
-                        actions={formActions}
-                        forms={forms}
-                        links={links}
-                        onNavigate={onNavigate}
-                    />
-                    {createElement(views[self] || views._unknown, {
-                        links,
-                        forms,
-                        self,
-                        onNavigate,
-                    })}
-                </section>
+                <Viewer {...props} onNavigate={onNavigate} />
                 <Notifications />
             </div>
         </MuiThemeProvider>

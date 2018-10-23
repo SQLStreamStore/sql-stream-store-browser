@@ -21,13 +21,13 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from '../../components/StripeyTable';
-import { Hyperlink, StreamBrowser } from '../../components';
-import { Notes, Settings } from '../../components/Icons';
-import { createState, connect } from '../../reactive';
-import rels from '../rels';
-import { http } from '../../utils';
-import store from '../store';
+} from '../../../components/StripeyTable';
+import { Hyperlink, StreamBrowser } from '../../../components';
+import { Notes, Settings } from '../../../components/Icons';
+import { createState, connect } from '../../../reactive';
+import rels from '../../rels';
+import { http } from '../../../utils';
+import store from '../../store';
 
 const tryParseJson = payload => {
     try {
@@ -73,7 +73,7 @@ const StreamMessageDetails = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed]} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.feed][0]} onNavigate={onNavigate}>
                 {streamId}
             </Hyperlink>
         </TableCell>
@@ -81,7 +81,7 @@ const StreamMessageDetails = ({
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <Hyperlink link={links[rels.self]} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.self][0]} onNavigate={onNavigate}>
                 {streamId}
                 {'@'}
                 {streamVersion}
