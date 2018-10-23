@@ -6,6 +6,7 @@ import {
     mount,
     withAuthorization,
     AuthorizationProvider,
+    NavigationProvider,
     Notifications,
     Loading,
 } from './components';
@@ -70,8 +71,10 @@ const SqlStreamStoreBrowser = withAuthorization()(
                 <CssBaseline />
                 <Hero />
                 <Loading open={loading} />
-                <Viewer {...props} onNavigate={onNavigate} />
-                <Notifications />
+                <NavigationProvider onNavigate={onNavigate}>
+                    <Viewer {...props} />
+                    <Notifications />
+                </NavigationProvider>
             </div>
         </MuiThemeProvider>
     )),

@@ -25,20 +25,18 @@ const views = {
     _unknown: Unknown,
 };
 
-const HalViewer = ({ self, links, forms, onNavigate }) => (
+const HalViewer = ({ self, links, forms }) => (
     <section>
-        <NavigationLinks onNavigate={onNavigate} links={links} />
+        <NavigationLinks links={links} />
         <HyperMediaControls
             actions={formActions}
             forms={forms}
             links={links}
-            onNavigate={onNavigate}
         />
         {createElement(views[self] || views._unknown, {
             links,
             forms,
             self,
-            onNavigate,
         })}
     </section>
 );

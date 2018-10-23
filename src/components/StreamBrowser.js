@@ -13,7 +13,7 @@ const StreamBrowser = withStyles(theme => ({
     browser: {
         padding: theme.spacing.unit * 2.5,
     },
-}))(({ streams, onNavigate, classes, loading }) => (
+}))(({ streams, classes, loading }) => (
     <div className={classes.browser}>
         <Typography variant={'title'}>Stream Browser</Typography>
         {loading ? (
@@ -23,7 +23,7 @@ const StreamBrowser = withStyles(theme => ({
                 {streams.map(link => (
                     <ListItem key={link.href}>
                         <ListItemText>
-                            <Hyperlink link={link} onNavigate={onNavigate}>
+                            <Hyperlink link={link}>
                                 {link.title}
                             </Hyperlink>
                         </ListItemText>

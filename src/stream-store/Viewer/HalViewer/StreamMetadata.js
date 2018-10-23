@@ -37,16 +37,14 @@ const StreamMetadataHeader = () => (
 );
 
 const StreamMetadataDetails = ({
-    authorization,
     streamId,
     maxAge,
     maxCount,
-    links,
-    onNavigate,
+    links
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink onNavigate={onNavigate} link={links[rels.feed]}>
+            <Hyperlink link={links[rels.feed]}>
                 {streamId}
             </Hyperlink>
         </TableCell>
@@ -87,7 +85,7 @@ class StreamMetadataJson extends PureComponent {
     }
 }
 
-const StreamMetadata = ({ metadata, links, onNavigate }) => (
+const StreamMetadata = ({ metadata, links }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
@@ -97,7 +95,6 @@ const StreamMetadata = ({ metadata, links, onNavigate }) => (
                 <StreamMetadataDetails
                     {...metadata}
                     links={links}
-                    onNavigate={onNavigate}
                 />
             </TableBody>
         </Table>
