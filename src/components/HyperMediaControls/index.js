@@ -11,7 +11,7 @@ const isNotSelf = (rel, links) =>
 
 const state$ = createState(store.url$.map(href => ['href', () => href]));
 
-const HyperMediaControls = ({ forms, href, actions, links, onNavigate }) => (
+const HyperMediaControls = ({ forms, href, actions, links }) => (
     <Card>
         <CardActions>
             <div>
@@ -23,7 +23,6 @@ const HyperMediaControls = ({ forms, href, actions, links, onNavigate }) => (
                             key={rel}
                             rel={rel}
                             link={links[rel][0]}
-                            onNavigate={onNavigate}
                             color={'active'}
                             curies={links[rels.curies]}
                         />

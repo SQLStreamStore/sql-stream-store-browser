@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
 import { preventDefault } from '../utils';
-import { withAuthorization } from './AuthorizationProvider';
+import { withNavigation } from './NavigationProvider';
 import theme from '../theme';
 
 const color = theme.palette.action.active;
@@ -20,7 +20,7 @@ const styles = {
         },
     },
 };
-const Hyperlink = withAuthorization()(
+const Hyperlink = withNavigation()(
     withStyles(styles)(
         ({ classes, link, children, authorization, onNavigate }) => (
             <a

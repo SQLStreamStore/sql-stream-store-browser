@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { TextField } from '@material-ui/core';
 import uriTemplate from 'uri-template';
-import { withAuthorization } from '../AuthorizationProvider';
+import { withNavigation } from '../NavigationProvider';
 import Dialog from './Dialog';
 import RelButton from './RelButton';
 import { preventDefault } from '../../utils';
 
-const TemplatedLinkButton = withAuthorization()(
+const TemplatedLinkButton = withNavigation()(
     class TemplatedLinkButton extends PureComponent {
         state = {};
 
@@ -50,7 +50,7 @@ const TemplatedLinkButton = withAuthorization()(
     },
 );
 
-const NonTemplatedLinkButton = withAuthorization()(
+const NonTemplatedLinkButton = withNavigation()(
     ({ link, rel, authorization, onNavigate }) => (
         <RelButton
             rel={rel}

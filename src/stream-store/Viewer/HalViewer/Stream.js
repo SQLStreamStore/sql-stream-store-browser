@@ -37,19 +37,16 @@ const Message = ({
     streamVersion,
     type,
     links,
-    onNavigate,
 }) => (
     <TableRow>
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed][0]} onNavigate={onNavigate}>
-                {streamId}
-            </Hyperlink>
+            <Hyperlink link={links[rels.feed][0]}>{streamId}</Hyperlink>
         </TableCell>
         <TableCell>
-            <Hyperlink link={links.self[0]} onNavigate={onNavigate}>
+            <Hyperlink link={links.self[0]}>
                 {streamId}
                 {'@'}
                 {streamVersion}
@@ -59,7 +56,7 @@ const Message = ({
     </TableRow>
 );
 
-const Messages = ({ messages, onNavigate }) => (
+const Messages = ({ messages }) => (
     <Table>
         <TableHead>
             <TableRow>
@@ -73,11 +70,7 @@ const Messages = ({ messages, onNavigate }) => (
         </TableHead>
         <TableBody>
             {messages.map(message => (
-                <Message
-                    key={message.messageId}
-                    onNavigate={onNavigate}
-                    {...message}
-                />
+                <Message key={message.messageId} {...message} />
             ))}
         </TableBody>
     </Table>
@@ -87,9 +80,9 @@ Messages.defaultProps = {
     messages: [],
 };
 
-const Stream = ({ messages, onNavigate }) => (
+const Stream = ({ messages }) => (
     <section>
-        <Messages messages={messages} onNavigate={onNavigate} />
+        <Messages messages={messages} />
     </section>
 );
 

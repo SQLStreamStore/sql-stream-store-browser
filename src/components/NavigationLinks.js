@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import { IconButton } from '@material-ui/core';
 import RelIcon from './RelIcon';
-import { withAuthorization } from './AuthorizationProvider';
+import { withNavigation } from './NavigationProvider';
 import { navigation } from '../stream-store';
-import { preventDefault } from '../utils';
 
-const FeedNavigationLink = withAuthorization()(
-    class FeedNavigationLink extends PureComponent {
+const FeedNavigationLink = withNavigation()(
+    class What extends PureComponent {
         _handleOnClick = e => {
             const { onNavigate, authorization, link } = this.props;
 
@@ -34,13 +33,12 @@ const FeedNavigationLink = withAuthorization()(
     },
 );
 
-const NavigationLinks = ({ onNavigate, links }) => (
+const NavigationLinks = ({ links }) => (
     <nav>
         {[...navigation].map(rel => (
             <FeedNavigationLink
                 key={rel}
                 link={(links[rel] || [])[0]}
-                onNavigate={onNavigate}
                 rel={rel}
             />
         ))}

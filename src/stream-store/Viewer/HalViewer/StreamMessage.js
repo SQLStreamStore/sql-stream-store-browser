@@ -69,19 +69,16 @@ const StreamMessageDetails = ({
     streamVersion,
     type,
     links,
-    onNavigate,
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed][0]} onNavigate={onNavigate}>
-                {streamId}
-            </Hyperlink>
+            <Hyperlink link={links[rels.feed][0]}>{streamId}</Hyperlink>
         </TableCell>
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <Hyperlink link={links[rels.self][0]} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.self][0]}>
                 {streamId}
                 {'@'}
                 {streamVersion}
@@ -204,7 +201,7 @@ const StreamMessageJson = withStyles({
             );
 
         render() {
-            const { json, onNavigate, classes } = this.props;
+            const { json, classes } = this.props;
             const { streams, loading, open } = this.state;
             return (
                 <div>
@@ -222,11 +219,7 @@ const StreamMessageJson = withStyles({
                             paper: classes.drawerPaper,
                         }}
                     >
-                        <StreamBrowser
-                            streams={streams}
-                            onNavigate={onNavigate}
-                            loading={loading}
-                        />
+                        <StreamBrowser streams={streams} loading={loading} />
                     </Drawer>
                 </div>
             );
@@ -245,7 +238,6 @@ class StreamMessageTabs extends PureComponent {
         const {
             message: { payload, metadata },
             links,
-            onNavigate,
         } = this.props;
         const { value } = this.state;
         return (
@@ -262,18 +254,10 @@ class StreamMessageTabs extends PureComponent {
                 </CardActions>
                 <CardContent>
                     {value === 0 && (
-                        <StreamMessageJson
-                            json={payload}
-                            onNavigate={onNavigate}
-                            links={links}
-                        />
+                        <StreamMessageJson json={payload} links={links} />
                     )}
                     {value === 1 && (
-                        <StreamMessageJson
-                            json={metadata}
-                            onNavigate={onNavigate}
-                            links={links}
-                        />
+                        <StreamMessageJson json={metadata} links={links} />
                     )}
                 </CardContent>
             </Card>
@@ -281,25 +265,17 @@ class StreamMessageTabs extends PureComponent {
     }
 }
 
-const StreamMessage = ({ message, links, onNavigate }) => (
+const StreamMessage = ({ message, links }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
                 <StreamMessageHeader />
             </TableHead>
             <TableBody>
-                <StreamMessageDetails
-                    {...message}
-                    links={links}
-                    onNavigate={onNavigate}
-                />
+                <StreamMessageDetails {...message} links={links} />
             </TableBody>
         </Table>
-        <StreamMessageTabs
-            message={message}
-            onNavigate={onNavigate}
-            links={links}
-        />
+        <StreamMessageTabs message={message} links={links} />
     </section>
 );
 

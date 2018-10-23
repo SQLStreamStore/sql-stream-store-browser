@@ -16,25 +16,23 @@ const state$ = createState(
     }),
 );
 
-const MaybeLinkLabel = ({ name, data, onNavigate, authorization, ...props }) =>
+const MaybeLinkLabel = ({ name, data, ...props }) =>
     name === 'href' ? (
         <span>
             <ObjectName name={name} dimmed={props.isNonEnumerable} />
             <span>: </span>
-            <Hyperlink link={{ href: data }} onNavigate={onNavigate}>
-                {data}
-            </Hyperlink>
+            <Hyperlink link={{ href: data }}>{data}</Hyperlink>
         </span>
     ) : (
         <ObjectLabel name={name} data={data} {...props} />
     );
 
-class UnknownRelViewer extends React.PureComponent {
+class UnrecognizedRelViewer extends React.PureComponent {
     _nodeRenderer = ({ depth, ...props }) =>
         depth === 0 ? (
             <ObjectRootLabel {...props} />
         ) : (
-            <MaybeLinkLabel {...props} onNavigate={this.props.onNavigate} />
+            <MaybeLinkLabel {...props} />
         );
 
     render() {
@@ -48,4 +46,4 @@ class UnknownRelViewer extends React.PureComponent {
     }
 }
 
-export default connect(state$)(UnknownRelViewer);
+export default connect(state$)(UnrecognizedRelViewer);
