@@ -17,13 +17,19 @@ import { mediaTypes } from './utils';
 
 const getSelfAlias = links =>
     Object.keys(links)
-        .filter(rel => rel.indexOf('streamStore:') === 0)
-        .filter(rel => links[rel].href === links.self.href)[0];
+        .flatMap(rel => links[rel])
+        .filter(({ rel }) => rel.indexOf('streamStore:') === 0)
+        .filter(
+            ({ rel, href }) =>
+                !!links.self.filter(link => link.href === href).length,
+        )
+        .map(({ rel }) => rel);
 
 const self$ = store.links$
     .filter(links => links.self)
     .map(getSelfAlias)
-    .filter(rel => !!rel);
+    .filter(rel => !!rel)
+    .map(([link]) => link);
 
 const state$ = createState(
     obs.merge(

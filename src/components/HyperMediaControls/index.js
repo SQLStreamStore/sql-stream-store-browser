@@ -7,7 +7,7 @@ import FormButton from './FormButton';
 import { rels } from '../../stream-store';
 
 const isNotSelf = (rel, links) =>
-    links[rels.self] && links[rel].href !== links[rels.self].href;
+    links[rels.self] && links[rel][0].href !== links[rels.self][0].href;
 
 const state$ = createState(store.url$.map(href => ['href', () => href]));
 
@@ -22,10 +22,10 @@ const HyperMediaControls = ({ forms, href, actions, links, onNavigate }) => (
                         <LinkButton
                             key={rel}
                             rel={rel}
-                            link={links[rel]}
+                            link={links[rel][0]}
                             onNavigate={onNavigate}
                             color={'active'}
-                            curies={[links[rels.curies]]}
+                            curies={links[rels.curies]}
                         />
                     ))}
             </div>
@@ -37,7 +37,7 @@ const HyperMediaControls = ({ forms, href, actions, links, onNavigate }) => (
                         link={{ href }}
                         actions={actions}
                         schema={forms[rel]}
-                        curies={[links[rels.curies]]}
+                        curies={links[rels.curies]}
                     />
                 ))}
             </div>

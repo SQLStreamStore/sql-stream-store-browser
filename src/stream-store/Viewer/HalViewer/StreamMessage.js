@@ -73,7 +73,7 @@ const StreamMessageDetails = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed]} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.feed][0]} onNavigate={onNavigate}>
                 {streamId}
             </Hyperlink>
         </TableCell>
@@ -81,7 +81,7 @@ const StreamMessageDetails = ({
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <Hyperlink link={links[rels.self]} onNavigate={onNavigate}>
+            <Hyperlink link={links[rels.self][0]} onNavigate={onNavigate}>
                 {streamId}
                 {'@'}
                 {streamVersion}
