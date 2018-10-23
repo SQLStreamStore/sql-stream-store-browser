@@ -25,10 +25,11 @@ actions.get.response.subscribe(({ url }) => history.push(url));
 const getUrl = location =>
     `${location.pathname}${location.search}${location.hash}`;
 
-history.listen(
-    (location, action) =>
-        action === 'POP' &&
-        actions.get.response.next({ url: getUrl(location), headers: {} }),
-);
+history.listen((location, action) => {
+    if (action !== 'POP') {
+        return;
+    }
+    actions.get.request.next({ link: { href: getUrl(location) }, headers: {} });
+});
 
 export default actions;
