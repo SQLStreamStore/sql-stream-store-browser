@@ -6,9 +6,7 @@ import { createState, connect } from '../../../reactive';
 
 const body$ = store.body$.map(body => () => body);
 
-const state$ = createState(
-    body$.map(body => ['body', body])
-);
+const state$ = createState(body$.map(body => ['body', body]));
 
 const MarkdownViewer = ({ body }) => (
     <Typography>

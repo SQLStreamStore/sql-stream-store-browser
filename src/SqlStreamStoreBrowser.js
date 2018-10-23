@@ -37,6 +37,7 @@ const state$ = createState(
 );
 
 const onNavigate = (link, authorization) =>
+    link.href.indexOf('#') === -1 &&
     actions.get.request.next({ link, headers: { authorization } });
 
 const initialNavigation = ({ authorization }) =>

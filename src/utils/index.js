@@ -1,4 +1,4 @@
-import resolve from 'resolve-relative-url';
+import { resolve } from 'uri-js';
 
 export const resolveLinks = (url, links) =>
     Object.keys(links).reduce(
@@ -7,7 +7,7 @@ export const resolveLinks = (url, links) =>
             [rel]: {
                 ...links[rel],
                 rel,
-                href: resolve(links[rel].href, url),
+                href: resolve(url, links[rel].href),
             },
         }),
         {},

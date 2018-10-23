@@ -1,17 +1,19 @@
 import { createBrowserHistory } from 'history';
-
-const removeOrigin = href => href.substring(new URL(href).origin.length);
+import { parse } from 'uri-js';
 
 const history = createBrowserHistory();
 
+const getPathAndQuery = url => {
+    const { path, query } = parse(url);
+
+    return query ? `${path}?${query}` : path;
+};
+
 const push = url => {
-    const pathNameAndQuery = removeOrigin(url);
-
-    if (removeOrigin(window.location.href) === pathNameAndQuery) {
-        return;
+    const pathAndQuery = getPathAndQuery(url);
+    if (pathAndQuery !== getPathAndQuery(window.location.href)) {
+        history.push(pathAndQuery);
     }
-
-    history.push(pathNameAndQuery);
 };
 
 export default {
