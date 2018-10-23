@@ -36,17 +36,10 @@ const StreamMetadataHeader = () => (
     </TableRow>
 );
 
-const StreamMetadataDetails = ({
-    streamId,
-    maxAge,
-    maxCount,
-    links
-}) => (
+const StreamMetadataDetails = ({ streamId, maxAge, maxCount, links }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed]}>
-                {streamId}
-            </Hyperlink>
+            <Hyperlink link={links[rels.feed]}>{streamId}</Hyperlink>
         </TableCell>
         <TableCell style={nowrap} numeric>
             {maxAge}
@@ -92,10 +85,7 @@ const StreamMetadata = ({ metadata, links }) => (
                 <StreamMetadataHeader />
             </TableHead>
             <TableBody>
-                <StreamMetadataDetails
-                    {...metadata}
-                    links={links}
-                />
+                <StreamMetadataDetails {...metadata} links={links} />
             </TableBody>
         </Table>
         <StreamMetadataJson metadata={metadata.metadataJson} />

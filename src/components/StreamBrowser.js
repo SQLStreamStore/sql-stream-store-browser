@@ -23,9 +23,7 @@ const StreamBrowser = withStyles(theme => ({
                 {streams.map(link => (
                     <ListItem key={link.href}>
                         <ListItemText>
-                            <Hyperlink link={link}>
-                                {link.title}
-                            </Hyperlink>
+                            <Hyperlink link={link}>{link.title}</Hyperlink>
                         </ListItemText>
                     </ListItem>
                 ))}

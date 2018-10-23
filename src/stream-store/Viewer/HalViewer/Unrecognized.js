@@ -21,9 +21,7 @@ const MaybeLinkLabel = ({ name, data, ...props }) =>
         <span>
             <ObjectName name={name} dimmed={props.isNonEnumerable} />
             <span>: </span>
-            <Hyperlink link={{ href: data }}>
-                {data}
-            </Hyperlink>
+            <Hyperlink link={{ href: data }}>{data}</Hyperlink>
         </span>
     ) : (
         <ObjectLabel name={name} data={data} {...props} />

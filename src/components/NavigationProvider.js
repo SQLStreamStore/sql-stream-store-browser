@@ -16,10 +16,7 @@ const withNavigation = () => WrappedComponent => {
             )}
         </Consumer>
     );
-    Component.displayName = getDisplayName(
-        'WithNavigation',
-        WrappedComponent,
-    );
+    Component.displayName = getDisplayName('WithNavigation', WrappedComponent);
     return Component;
 };
 

@@ -28,11 +28,7 @@ const views = {
 const HalViewer = ({ self, links, forms }) => (
     <section>
         <NavigationLinks links={links} />
-        <HyperMediaControls
-            actions={formActions}
-            forms={forms}
-            links={links}
-        />
+        <HyperMediaControls actions={formActions} forms={forms} links={links} />
         {createElement(views[self] || views._unrecognized, {
             links,
             forms,

@@ -43,9 +43,7 @@ const Message = ({
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed][0]}>
-                {streamId}
-            </Hyperlink>
+            <Hyperlink link={links[rels.feed][0]}>{streamId}</Hyperlink>
         </TableCell>
         <TableCell>
             <Hyperlink link={links.self[0]}>
@@ -72,10 +70,7 @@ const Messages = ({ messages }) => (
         </TableHead>
         <TableBody>
             {messages.map(message => (
-                <Message
-                    key={message.messageId}
-                    {...message}
-                />
+                <Message key={message.messageId} {...message} />
             ))}
         </TableBody>
     </Table>

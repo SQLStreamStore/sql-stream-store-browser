@@ -72,9 +72,7 @@ const StreamMessageDetails = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink link={links[rels.feed][0]}>
-                {streamId}
-            </Hyperlink>
+            <Hyperlink link={links[rels.feed][0]}>{streamId}</Hyperlink>
         </TableCell>
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
@@ -221,10 +219,7 @@ const StreamMessageJson = withStyles({
                             paper: classes.drawerPaper,
                         }}
                     >
-                        <StreamBrowser
-                            streams={streams}
-                            loading={loading}
-                        />
+                        <StreamBrowser streams={streams} loading={loading} />
                     </Drawer>
                 </div>
             );
@@ -259,16 +254,10 @@ class StreamMessageTabs extends PureComponent {
                 </CardActions>
                 <CardContent>
                     {value === 0 && (
-                        <StreamMessageJson
-                            json={payload}
-                            links={links}
-                        />
+                        <StreamMessageJson json={payload} links={links} />
                     )}
                     {value === 1 && (
-                        <StreamMessageJson
-                            json={metadata}
-                            links={links}
-                        />
+                        <StreamMessageJson json={metadata} links={links} />
                     )}
                 </CardContent>
             </Card>
@@ -283,16 +272,10 @@ const StreamMessage = ({ message, links }) => (
                 <StreamMessageHeader />
             </TableHead>
             <TableBody>
-                <StreamMessageDetails
-                    {...message}
-                    links={links}
-                />
+                <StreamMessageDetails {...message} links={links} />
             </TableBody>
         </Table>
-        <StreamMessageTabs
-            message={message}
-            links={links}
-        />
+        <StreamMessageTabs message={message} links={links} />
     </section>
 );
 
