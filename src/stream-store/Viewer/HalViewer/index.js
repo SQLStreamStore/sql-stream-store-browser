@@ -4,7 +4,7 @@ import Stream from './Stream';
 import StreamBrowser from './StreamBrowser';
 import StreamMessage from './StreamMessage';
 import StreamMetadata from './StreamMetadata';
-import Unknown from './Unknown';
+import Unrecognized from './Unrecognized';
 import rels from '../../rels';
 import { HyperMediaControls, NavigationLinks } from '../../../components';
 import { actions } from '../../index';
@@ -22,7 +22,7 @@ const views = {
     [rels.index]: Home,
     [rels.metadata]: StreamMetadata,
     [rels.browse]: StreamBrowser,
-    _unknown: Unknown,
+    _unrecognized: Unrecognized,
 };
 
 const HalViewer = ({ self, links, forms }) => (
@@ -33,7 +33,7 @@ const HalViewer = ({ self, links, forms }) => (
             forms={forms}
             links={links}
         />
-        {createElement(views[self] || views._unknown, {
+        {createElement(views[self] || views._unrecognized, {
             links,
             forms,
             self,
