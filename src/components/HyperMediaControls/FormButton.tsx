@@ -4,6 +4,7 @@ import { withAuthorization } from '../AuthorizationProvider';
 import Dialog from './Dialog';
 import UuidField from './UuidField';
 import TextAreaField from './TextAreaField';
+import { HalLink, NavigatableProps } from '../../types';
 
 const mapper = {
     uuid: UuidField,
@@ -22,8 +23,28 @@ const getValue = value => {
     return value;
 };
 
-class FormButton extends PureComponent {
-    state = {};
+interface FormButtonProps {
+    rel: string;
+    link: HalLink;
+    actions;
+    curies: HalLink[];
+    schema;
+    title: string;
+}
+
+interface FormButtonState {
+    model: {
+        [key: string]: any;
+    };
+}
+
+class FormButton extends PureComponent<
+    FormButtonProps & NavigatableProps,
+    FormButtonState
+> {
+    state = {
+        model: {},
+    };
     _onSubmit = () => {
         const { rel, link, actions, authorization } = this.props;
         const { model: body } = this.state;
