@@ -21,7 +21,9 @@ export interface EmbeddedResources {
     [rel: string]: HalResource | HalResource[];
 }
 
+export type NavigationHandler = (link: HalLink, authorization?: string) => void;
+
 export interface NavigatableProps {
-    onNavigate: (link: HalLink, authorization?: string) => void;
+    onNavigate: NavigationHandler;
     authorization?: string;
 }

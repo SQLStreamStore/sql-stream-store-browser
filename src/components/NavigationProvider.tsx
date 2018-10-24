@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { ReactNode, StatelessComponent } from 'react';
+import { NavigationHandler } from '../types';
 import getDisplayName from './getDisplayName';
-const { Consumer, Provider } = React.createContext();
 
-const NavigationProvider = ({ onNavigate, children }) => (
+const defaultNavigationHandler: NavigationHandler = (link, authorization) => {
+    return;
+};
+
+const { Consumer, Provider } = React.createContext<NavigationHandler>(
+    defaultNavigationHandler,
+);
+
+const NavigationProvider: StatelessComponent<{
+    onNavigate: NavigationHandler;
+    children: ReactNode;
+}> = ({ onNavigate, children }) => (
     <Provider value={onNavigate}>{children}</Provider>
 );
 
