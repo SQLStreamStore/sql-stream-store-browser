@@ -12,13 +12,13 @@ export interface HalLinks {
     [rel: string]: HalLink[];
 }
 
-export interface EmbeddedResource {
+export interface HalResource {
     readonly _links?: HalLinks;
-    readonly _embedded: EmbeddedResources;
+    readonly _embedded?: EmbeddedResources;
 }
 
 export interface EmbeddedResources {
-    [rel: string]: EmbeddedResource | EmbeddedResource[];
+    [rel: string]: HalResource | HalResource[];
 }
 
 export interface NavigatableProps {
