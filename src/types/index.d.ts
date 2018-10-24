@@ -20,4 +20,8 @@ export interface EmbeddedResource {
 export interface EmbeddedResources {
     [rel: string]: EmbeddedResource | EmbeddedResource[];
 }
+
+export interface NavigatableProps {
+    onNavigate: (link: HalLink, authorization?: string) => void;
+    authorization?: string;
 }

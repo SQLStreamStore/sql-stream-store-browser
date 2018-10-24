@@ -21,6 +21,7 @@
     "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "downlevelIteration": true
   },
   "exclude": [
     "node_modules",

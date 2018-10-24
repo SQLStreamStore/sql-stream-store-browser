@@ -1,4 +1,4 @@
-const rels = {
+const rels: { [rel: string]: string } = {
     self: 'self',
     first: 'first',
     previous: 'previous',
