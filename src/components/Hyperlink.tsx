@@ -9,16 +9,16 @@ const color = theme.palette.action.active;
 
 const styles = {
     hyperlink: {
-        color,
-        '&:hover': {
+        '&:active': {
             color,
         },
-        '&:active': {
+        '&:hover': {
             color,
         },
         '&:visited': {
             color,
         },
+        color,
     },
 };
 

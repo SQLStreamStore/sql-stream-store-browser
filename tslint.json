@@ -6,13 +6,15 @@
   "rules": {
     "interface-name": [false, "always-prefix"],
     "member-access": false,
-    "variable-name": [true, "check-format", "allow-leading-underscore"]
+    "variable-name": [true, "check-format", "allow-leading-underscore", "allow-pascal-case"],
+    "no-submodule-imports": false
   },
-  "defaultSeverity": "warning",
+  "defaultSeverity": "error",
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
-      "node_modules/**/*.ts"
+      "node_modules/**/*.ts",
+      "./**/*.js"
     ]
   }
 }

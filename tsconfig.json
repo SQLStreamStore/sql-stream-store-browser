@@ -27,7 +27,7 @@
     "node_modules",
     "build",
     "scripts",
-    "webpack",
+    "webpack"
   ],
   "types": [
     "typePatches"

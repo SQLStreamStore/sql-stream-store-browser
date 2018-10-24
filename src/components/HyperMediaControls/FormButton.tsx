@@ -7,8 +7,8 @@ import TextAreaField from './TextAreaField';
 import UuidField from './UuidField';
 
 const mapper = {
-    uuid: UuidField,
     textarea: TextAreaField,
+    uuid: UuidField,
 };
 
 const getValue = value => {
@@ -52,10 +52,10 @@ class FormButton extends PureComponent<
         if (actions[rel]) {
             actions[rel].request.next({
                 body,
-                link,
                 headers: {
                     authorization,
                 },
+                link,
             });
         }
     };

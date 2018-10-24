@@ -35,8 +35,8 @@ interface DocumentationProps {
 
 const Documentation = withStyles(theme => ({
     drawerPaper: {
-        width: '45%',
         padding: theme.spacing.unit * 2,
+        width: '45%',
     },
 }))(
     ({
@@ -89,29 +89,29 @@ class HelpButton extends PureComponent<HelpButtonProps, HelpButtonState> {
         ...getCurie(rel, curies),
     });
     state = {
-        open: false,
-        href: '',
-        type: '',
+        curies: [],
         disabled: true,
         documentation: '',
-        curies: [],
+        href: '',
+        open: false,
+        type: '',
     };
 
     _handleOnClick = async () => {
         const { authorization } = this.props;
         const { href, type } = this.state;
         const { body: documentation } = await http.get({
-            link: { href, type },
             headers: { authorization },
+            link: { href, type },
         });
 
         this.setState({
             ...this.state,
-            open: true,
             documentation:
                 typeof documentation === 'string'
                     ? documentation
                     : JSON.stringify(documentation),
+            open: true,
         });
     };
 
