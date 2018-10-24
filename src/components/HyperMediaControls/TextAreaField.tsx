@@ -1,8 +1,27 @@
-import React from 'react';
 import { TextField } from '@material-ui/core';
+import React, { FormEventHandler, StatelessComponent } from 'react';
 import { ComposedComponent } from 'react-schema-form';
 
-const TextAreaField = ({ form, error, onChangeValidate, value }) => (
+interface TextAreaFieldProps {
+    error: string;
+    form: {
+        description: string;
+        htmlClass: string;
+        placeholder: string;
+        readonly: boolean;
+        title: string;
+        type: string;
+    };
+    onChangeValidate: FormEventHandler;
+    value: string;
+}
+
+const TextAreaField: StatelessComponent<TextAreaFieldProps> = ({
+    form,
+    error,
+    onChangeValidate,
+    value,
+}) => (
     <div className={form.htmlClass}>
         <TextField
             type={form.type}
