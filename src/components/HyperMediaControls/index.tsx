@@ -1,17 +1,29 @@
-import React from 'react';
 import { Card, CardActions } from '@material-ui/core';
+import React, { StatelessComponent } from 'react';
 import { connect, createState } from '../../reactive';
-import { navigation, store } from '../../stream-store';
-import LinkButton from './LinkButton';
+import { navigation, rels, store } from '../../stream-store';
+import { HalLinks } from '../../types';
 import FormButton from './FormButton';
-import { rels } from '../../stream-store';
+import LinkButton from './LinkButton';
 
-const isNotSelf = (rel, links) =>
+const isNotSelf = (rel: string, links: HalLinks): boolean =>
     links[rels.self] && links[rel][0].href !== links[rels.self][0].href;
 
 const state$ = createState(store.url$.map(href => ['href', () => href]));
 
-const HyperMediaControls = ({ forms, href, actions, links }) => (
+interface HyperMediaControlsProps {
+    actions: any;
+    href: string;
+    links: HalLinks;
+    forms: { [rel: string]: any };
+}
+
+const HyperMediaControls: StatelessComponent<HyperMediaControlsProps> = ({
+    forms,
+    href,
+    actions,
+    links,
+}) => (
     <Card>
         <CardActions>
             <div>
@@ -23,7 +35,7 @@ const HyperMediaControls = ({ forms, href, actions, links }) => (
                             key={rel}
                             rel={rel}
                             link={links[rel][0]}
-                            color={'active'}
+                            color={'primary'}
                             curies={links[rels.curies]}
                         />
                     ))}

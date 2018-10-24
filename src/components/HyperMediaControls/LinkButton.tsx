@@ -1,4 +1,4 @@
-import { TextField } from '@material-ui/core';
+import { PropTypes, TextField } from '@material-ui/core';
 import React, { PureComponent, StatelessComponent } from 'react';
 import uriTemplate from 'uri-template';
 import { HalLink, NavigatableProps } from '../../types';
@@ -6,10 +6,12 @@ import { preventDefault } from '../../utils';
 import { withNavigation } from '../NavigationProvider';
 import Dialog from './Dialog';
 import RelButton from './RelButton';
+import Color = PropTypes.Color;
 
 interface LinkButtonProps {
     readonly rel: string;
     readonly link: HalLink;
+    color: Color;
 }
 
 interface TemplatedLinkButtonProps extends LinkButtonProps {
