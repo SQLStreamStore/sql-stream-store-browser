@@ -1,4 +1,4 @@
-import React, { StatelessComponent } from 'react';
+import React, { ReactNode, StatelessComponent } from 'react';
 import { Button } from '@material-ui/core';
 import RelIcon from '../RelIcon';
 import { ButtonProps } from '@material-ui/core/Button';

@@ -1,4 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, {
+    FormEventHandler,
+    PureComponent,
+    StatelessComponent,
+} from 'react';
 import {
     Button,
     Dialog,
@@ -7,23 +11,38 @@ import {
     DialogContent,
     Slide,
     withStyles,
+    WithStyles,
 } from '@material-ui/core';
 
 import RelIcon from '../RelIcon';
 import RelButton from './RelButton';
 import HelpButton from './HelpButton';
+import { SlideProps } from '@material-ui/core/Slide';
+import { HalLink } from '../../types';
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
 });
 
-const SlideUp = props => <Slide direction={'up'} {...props} />;
+const SlideUp: StatelessComponent<SlideProps> = props => (
+    <Slide direction={'up'} {...props} />
+);
 
-const isStandardRel = rel => rel.indexOf(':') === -1;
+const isStandardRel = (rel: string) => rel.indexOf(':') === -1;
+
+interface HyperMediaDialogProps {
+    rel: string;
+    title?: string;
+    curies: HalLink[];
+    onSubmit: () => void;
+}
 
 export default withStyles(styles)(
-    class HyperMediaDialog extends PureComponent {
+    class HyperMediaDialog extends PureComponent<
+        HyperMediaDialogProps & WithStyles<typeof styles>,
+        { open: boolean }
+    > {
         state = {
             open: false,
         };
@@ -49,18 +68,17 @@ export default withStyles(styles)(
         };
 
         render() {
-            const { label, rel, title, classes, children, curies } = this.props;
+            const { rel, title, classes, children, curies } = this.props;
             const { open } = this.state;
 
             return (
                 <span>
                     <RelButton
-                        label={label}
                         onClick={this._onOpen}
                         className={classes.button}
                         rel={rel}
                         title={title}
-                        color={'action'}
+                        color={'primary'}
                     />
                     <Dialog
                         open={open}

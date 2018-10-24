@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { SchemaForm } from 'react-schema-form';
+import { HalLink, NavigatableProps } from '../../types';
 import { withAuthorization } from '../AuthorizationProvider';
 import Dialog from './Dialog';
-import UuidField from './UuidField';
 import TextAreaField from './TextAreaField';
-import { HalLink, NavigatableProps } from '../../types';
+import UuidField from './UuidField';
 
 const mapper = {
     uuid: UuidField,
@@ -72,11 +72,10 @@ class FormButton extends PureComponent<
     };
 
     render() {
-        const { schema, rel, title, curies } = this.props;
+        const { schema, rel, curies } = this.props;
         const { model } = this.state;
         return (
             <Dialog
-                label={title}
                 rel={rel}
                 title={schema.title}
                 curies={curies}

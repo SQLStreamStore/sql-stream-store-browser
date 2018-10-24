@@ -79,10 +79,7 @@ interface HelpButtonState extends HalLink {
     disabled: boolean;
 }
 
-class HelpButton extends PureComponent<
-    HelpButtonProps,
-    HelpButtonState
-> {
+class HelpButton extends PureComponent<HelpButtonProps, HelpButtonState> {
     state = {
         open: false,
         href: '',

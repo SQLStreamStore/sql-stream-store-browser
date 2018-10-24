@@ -38,7 +38,6 @@ const TemplatedLinkButton: StatelessComponent<
 
             return (
                 <Dialog
-                    label={link.title}
                     rel={rel}
                     title={link.title}
                     curies={curies}
