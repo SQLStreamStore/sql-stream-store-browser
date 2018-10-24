@@ -12,3 +12,12 @@ export interface HalLinks {
     [rel: string]: HalLink[];
 }
 
+export interface EmbeddedResource {
+    readonly _links?: HalLinks;
+    readonly _embedded: EmbeddedResources;
+}
+
+export interface EmbeddedResources {
+    [rel: string]: EmbeddedResource | EmbeddedResource[];
+}
+}
