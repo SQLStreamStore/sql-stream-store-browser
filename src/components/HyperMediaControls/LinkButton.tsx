@@ -1,11 +1,11 @@
-import React, { PureComponent, StatelessComponent } from 'react';
 import { TextField } from '@material-ui/core';
-import { HalLink, NavigatableProps } from '../../types';
+import React, { PureComponent, StatelessComponent } from 'react';
 import uriTemplate from 'uri-template';
+import { HalLink, NavigatableProps } from '../../types';
+import { preventDefault } from '../../utils';
 import { withNavigation } from '../NavigationProvider';
 import Dialog from './Dialog';
 import RelButton from './RelButton';
-import { preventDefault } from '../../utils';
 
 interface LinkButtonProps {
     readonly rel: string;

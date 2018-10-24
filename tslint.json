@@ -3,6 +3,11 @@
     "tslint:latest",
     "tslint-config-prettier"
   ],
+  "rules": {
+    "interface-name": [false, "always-prefix"],
+    "member-access": false,
+    "variable-name": [true, "check-format", "allow-leading-underscore"]
+  },
   "defaultSeverity": "warning",
   "linterOptions": {
     "exclude": [

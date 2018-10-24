@@ -1,8 +1,8 @@
-import React, { ReactNode, StatelessComponent } from 'react';
 import { Button } from '@material-ui/core';
-import RelIcon from '../RelIcon';
 import { ButtonProps } from '@material-ui/core/Button';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
+import React, { ReactNode, StatelessComponent } from 'react';
+import RelIcon from '../RelIcon';
 
 interface RelButtonProps {
     rel: string;

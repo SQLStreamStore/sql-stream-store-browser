@@ -1,13 +1,13 @@
+import { IconButton } from '@material-ui/core';
 import React, {
     FormEventHandler,
     PureComponent,
     StatelessComponent,
 } from 'react';
-import { IconButton } from '@material-ui/core';
-import { HalLink, HalLinks, NavigatableProps } from '../types';
-import RelIcon from './RelIcon';
-import { withNavigation } from './NavigationProvider';
 import { navigation } from '../stream-store';
+import { HalLink, HalLinks, NavigatableProps } from '../types';
+import { withNavigation } from './NavigationProvider';
+import RelIcon from './RelIcon';
 
 interface FeedNavigationLinkProps {
     link: HalLink;

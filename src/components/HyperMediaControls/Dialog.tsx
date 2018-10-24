@@ -1,24 +1,24 @@
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Slide,
+    withStyles,
+    WithStyles,
+} from '@material-ui/core';
 import React, {
     FormEventHandler,
     PureComponent,
     StatelessComponent,
 } from 'react';
-import {
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
-    Slide,
-    withStyles,
-    WithStyles,
-} from '@material-ui/core';
 
-import RelIcon from '../RelIcon';
-import RelButton from './RelButton';
-import HelpButton from './HelpButton';
 import { SlideProps } from '@material-ui/core/Slide';
 import { HalLink } from '../../types';
+import RelIcon from '../RelIcon';
+import HelpButton from './HelpButton';
+import RelButton from './RelButton';
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit,

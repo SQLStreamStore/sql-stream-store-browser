@@ -1,9 +1,9 @@
-import React, { ReactNode, StatelessComponent } from 'react';
 import { WithStyles, withStyles } from '@material-ui/core';
-import { preventDefault } from '../utils';
-import { withNavigation } from './NavigationProvider';
+import React, { ReactNode, StatelessComponent } from 'react';
 import theme from '../theme';
 import { HalLink, NavigatableProps } from '../types';
+import { preventDefault } from '../utils';
+import { withNavigation } from './NavigationProvider';
 
 const color = theme.palette.action.active;
 

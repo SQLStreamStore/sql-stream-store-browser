@@ -1,4 +1,3 @@
-import React, { PureComponent, ReactNode } from 'react';
 import {
     Button,
     Drawer,
@@ -6,12 +5,13 @@ import {
     WithStyles,
     withStyles,
 } from '@material-ui/core';
+import React, { PureComponent, ReactNode } from 'react';
 import Remarkable from 'react-remarkable';
 import uriTemplate from 'uri-template';
-import { Help } from '../Icons';
-import { withAuthorization } from '../AuthorizationProvider';
-import { http } from '../../utils';
 import { HalLink } from '../../types';
+import { http } from '../../utils';
+import { withAuthorization } from '../AuthorizationProvider';
+import { Help } from '../Icons';
 
 const getCurie = (rel: string, curies: HalLink[]): HalLink => {
     const [prefix, rest] = rel.split(':', 2);
@@ -80,15 +80,6 @@ interface HelpButtonState extends HalLink {
 }
 
 class HelpButton extends PureComponent<HelpButtonProps, HelpButtonState> {
-    state = {
-        open: false,
-        href: '',
-        type: '',
-        disabled: true,
-        documentation: '',
-        curies: [],
-    };
-
     static getDerivedStateFromProps = (
         { rel, curies }: HelpButtonProps,
         state: HelpButtonState,
@@ -97,6 +88,14 @@ class HelpButton extends PureComponent<HelpButtonProps, HelpButtonState> {
         disabled: false,
         ...getCurie(rel, curies),
     });
+    state = {
+        open: false,
+        href: '',
+        type: '',
+        disabled: true,
+        documentation: '',
+        curies: [],
+    };
 
     _handleOnClick = async () => {
         const { authorization } = this.props;
