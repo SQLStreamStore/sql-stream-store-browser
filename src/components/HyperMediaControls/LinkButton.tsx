@@ -82,7 +82,6 @@ const NonTemplatedLinkButton: StatelessComponent<
         <RelButton
             rel={rel}
             title={link.title}
-            color={'inherit'}
             onClick={preventDefault(() => onNavigate(link, authorization))}
         />
     ),

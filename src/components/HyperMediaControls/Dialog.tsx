@@ -78,7 +78,6 @@ export default withStyles(styles)(
                         className={classes.button}
                         rel={rel}
                         title={title}
-                        color={'primary'}
                     />
                     <Dialog
                         open={open}

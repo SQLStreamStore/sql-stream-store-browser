@@ -7,18 +7,16 @@ import RelIcon from '../RelIcon';
 interface RelButtonProps {
     rel: string;
     title?: string;
-    color: SvgIconProps['color'];
 }
 
 const RelButton: StatelessComponent<RelButtonProps & ButtonProps> = ({
     rel,
     onClick,
     title,
-    color,
     ...props
 }) => (
     <Button variant={'text'} onClick={onClick} {...props}>
-        <RelIcon rel={rel} color={color} />
+        <RelIcon rel={rel} color={'action'} />
         {title || rel}
     </Button>
 );
