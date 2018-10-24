@@ -1,13 +1,15 @@
-import React from 'react';
 import {
     Table,
     TableBody,
-    TableRow as MaterialTableRow,
     TableCell as MaterialTableCell,
-    TableHead,
     TableFooter,
+    TableHead,
+    TableRow as MaterialTableRow,
+    WithStyles,
     withStyles,
 } from '@material-ui/core';
+import { TableRowProps } from '@material-ui/core/TableRow';
+import React from 'react';
 
 const TableCell = withStyles(theme => ({
     head: {
@@ -16,14 +18,21 @@ const TableCell = withStyles(theme => ({
     },
 }))(MaterialTableCell);
 
-const TableRow = withStyles(theme => ({
+const tableRowStyles = theme => ({
     row: {
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.background.paper,
         },
     },
-}))(({ classes, ...props }) => (
-    <MaterialTableRow {...props} className={classes.row} />
-));
+});
+
+const TableRow = withStyles(tableRowStyles)(
+    ({
+        classes,
+        ...props
+    }: TableRowProps & WithStyles<typeof tableRowStyles>) => (
+        <MaterialTableRow {...props} className={classes.row} />
+    ),
+);
 
 export { Table, TableBody, TableHead, TableCell, TableRow, TableFooter };

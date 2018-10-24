@@ -27,3 +27,18 @@ export interface NavigatableProps {
     onNavigate: NavigationHandler;
     authorization?: string;
 }
+
+export interface HttpResponse {
+    body: { [key: string]: any } | string | undefined;
+    status: number;
+    statusText: string;
+    ok: boolean;
+}
+
+export interface HttpProblemDetailsResponse extends HttpResponse {
+    body: {
+        detail?: any;
+        title: string;
+        type: string;
+    };
+}
