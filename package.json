@@ -6,9 +6,9 @@
   "scripts": {
     "analyze": "source-map-explorer build/static/js/main.*",
     "start": "react-scripts-ts start",
-    "build": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && react-scripts-ts build",
+    "build": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ && react-scripts-ts build",
     "eject": "react-scripts-ts eject",
-    "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\""
+    "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ --fix"
   },
   "main": "src/index.tsx",
   "private": false,

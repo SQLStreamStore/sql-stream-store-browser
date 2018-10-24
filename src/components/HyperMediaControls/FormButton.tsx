@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react';
 import { SchemaForm } from 'react-schema-form';
+import { HalLink, NavigatableProps } from '../../types';
 import { withAuthorization } from '../AuthorizationProvider';
 import Dialog from './Dialog';
-import UuidField from './UuidField';
 import TextAreaField from './TextAreaField';
+import UuidField from './UuidField';
 
 const mapper = {
-    uuid: UuidField,
     textarea: TextAreaField,
+    uuid: UuidField,
 };
 
 const getValue = value => {
@@ -22,8 +23,28 @@ const getValue = value => {
     return value;
 };
 
-class FormButton extends PureComponent {
-    state = {};
+interface FormButtonProps {
+    rel: string;
+    link: HalLink;
+    actions;
+    curies: HalLink[];
+    schema;
+    title: string;
+}
+
+interface FormButtonState {
+    model: {
+        [key: string]: any;
+    };
+}
+
+class FormButton extends PureComponent<
+    FormButtonProps & NavigatableProps,
+    FormButtonState
+> {
+    state = {
+        model: {},
+    };
     _onSubmit = () => {
         const { rel, link, actions, authorization } = this.props;
         const { model: body } = this.state;
@@ -31,10 +52,10 @@ class FormButton extends PureComponent {
         if (actions[rel]) {
             actions[rel].request.next({
                 body,
-                link,
                 headers: {
                     authorization,
                 },
+                link,
             });
         }
     };
@@ -51,11 +72,10 @@ class FormButton extends PureComponent {
     };
 
     render() {
-        const { schema, rel, title, curies } = this.props;
+        const { schema, rel, curies } = this.props;
         const { model } = this.state;
         return (
             <Dialog
-                label={title}
                 rel={rel}
                 title={schema.title}
                 curies={curies}

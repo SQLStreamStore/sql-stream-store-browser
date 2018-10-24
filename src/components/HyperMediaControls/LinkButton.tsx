@@ -1,13 +1,30 @@
-import React, { PureComponent } from 'react';
-import { TextField } from '@material-ui/core';
+import { PropTypes, TextField } from '@material-ui/core';
+import React, { PureComponent, StatelessComponent } from 'react';
 import uriTemplate from 'uri-template';
+import { HalLink, NavigatableProps } from '../../types';
+import { preventDefault } from '../../utils';
 import { withNavigation } from '../NavigationProvider';
 import Dialog from './Dialog';
 import RelButton from './RelButton';
-import { preventDefault } from '../../utils';
+import Color = PropTypes.Color;
 
-const TemplatedLinkButton = withNavigation()(
-    class TemplatedLinkButton extends PureComponent {
+interface LinkButtonProps {
+    readonly rel: string;
+    readonly link: HalLink;
+    color: Color;
+}
+
+interface TemplatedLinkButtonProps extends LinkButtonProps {
+    readonly curies: HalLink[];
+}
+
+const TemplatedLinkButton: StatelessComponent<
+    TemplatedLinkButtonProps
+> = withNavigation()(
+    class extends PureComponent<
+        TemplatedLinkButtonProps & NavigatableProps,
+        { [variable: string]: string }
+    > {
         state = {};
 
         _onChange = variable => ({ target }) =>
@@ -23,7 +40,6 @@ const TemplatedLinkButton = withNavigation()(
 
             return (
                 <Dialog
-                    label={link.title}
                     rel={rel}
                     title={link.title}
                     curies={curies}
@@ -50,20 +66,39 @@ const TemplatedLinkButton = withNavigation()(
     },
 );
 
-const NonTemplatedLinkButton = withNavigation()(
-    ({ link, rel, authorization, onNavigate }) => (
+interface NonTemplatedLinkButtonProps extends LinkButtonProps {
+    readonly title: string;
+}
+
+const NonTemplatedLinkButton: StatelessComponent<
+    NonTemplatedLinkButtonProps
+> = withNavigation()(
+    ({
+        link,
+        rel,
+        authorization,
+        onNavigate,
+    }: NonTemplatedLinkButtonProps & NavigatableProps) => (
         <RelButton
             rel={rel}
             title={link.title}
-            color={'action'}
             onClick={preventDefault(() => onNavigate(link, authorization))}
         />
     ),
 );
 
-export default ({ link, ...props }) =>
+export default ({
+    link,
+    ...props
+}: TemplatedLinkButtonProps | NonTemplatedLinkButtonProps) =>
     link.templated === true ? (
-        <TemplatedLinkButton link={link} {...props} />
+        <TemplatedLinkButton
+            link={link}
+            {...props as TemplatedLinkButtonProps}
+        />
     ) : (
-        <NonTemplatedLinkButton link={link} {...props} />
+        <NonTemplatedLinkButton
+            link={link}
+            {...props as NonTemplatedLinkButtonProps}
+        />
     );

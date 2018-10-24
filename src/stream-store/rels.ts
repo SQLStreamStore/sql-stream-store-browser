@@ -1,4 +1,5 @@
-const rels = {
+/* tslint:disable:object-literal-sort-keys */
+const rels: { [rel: string]: string } = {
     self: 'self',
     first: 'first',
     previous: 'previous',
