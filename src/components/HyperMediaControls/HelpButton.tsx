@@ -1,13 +1,19 @@
-import React, { PureComponent } from 'react';
-import { Button, Drawer, withStyles } from '@material-ui/core';
+import React, { PureComponent, ReactNode } from 'react';
+import {
+    Button,
+    Drawer,
+    Typography,
+    WithStyles,
+    withStyles,
+} from '@material-ui/core';
 import Remarkable from 'react-remarkable';
 import uriTemplate from 'uri-template';
 import { Help } from '../Icons';
 import { withAuthorization } from '../AuthorizationProvider';
 import { http } from '../../utils';
-import Typography from '@material-ui/core/es/Typography/Typography';
+import { HalLink } from '../../types';
 
-const getCurie = (rel, curies) => {
+const getCurie = (rel: string, curies: HalLink[]): HalLink => {
     const [prefix, rest] = rel.split(':', 2);
 
     return !rest || rest.indexOf(':') !== -1
@@ -22,42 +28,74 @@ const getCurie = (rel, curies) => {
               }))[0] || { href: rel };
 };
 
+interface DocumentationProps {
+    readonly open: boolean;
+    readonly onClose: () => void;
+}
+
 const Documentation = withStyles(theme => ({
     drawerPaper: {
         width: '45%',
         padding: theme.spacing.unit * 2,
     },
-}))(({ open, children, onClose, classes }) => (
-    <Drawer
-        open={open}
-        onClose={onClose}
-        anchor={'right'}
-        classes={{
-            paper: classes.drawerPaper,
-        }}
-    >
-        <Typography>
-            <Remarkable
-                options={{
-                    typographer: true,
-                }}
-            >
-                {children}
-            </Remarkable>
-        </Typography>
-    </Drawer>
-));
+}))(
+    ({
+        open,
+        children,
+        onClose,
+        classes,
+    }: DocumentationProps & WithStyles & { children: ReactNode }) => (
+        <Drawer
+            open={open}
+            onClose={onClose}
+            anchor={'right'}
+            classes={{
+                paper: classes.drawerPaper,
+            }}
+        >
+            <Typography>
+                <Remarkable
+                    options={{
+                        typographer: true,
+                    }}
+                >
+                    {children}
+                </Remarkable>
+            </Typography>
+        </Drawer>
+    ),
+);
 
-class HelpButton extends PureComponent {
+interface HelpButtonProps {
+    rel: string;
+    curies: HalLink[];
+    disabled?: boolean;
+    authorization?: string;
+}
+
+interface HelpButtonState extends HalLink {
+    open: boolean;
+    documentation: string;
+    disabled: boolean;
+}
+
+class HelpButton extends PureComponent<
+    HelpButtonProps,
+    HelpButtonState
+> {
     state = {
         open: false,
-        href: null,
-        type: null,
+        href: '',
+        type: '',
         disabled: true,
-        documentation: null,
+        documentation: '',
+        curies: [],
     };
 
-    static getDerivedStateFromProps = ({ rel, curies }, state) => ({
+    static getDerivedStateFromProps = (
+        { rel, curies }: HelpButtonProps,
+        state: HelpButtonState,
+    ): HelpButtonState => ({
         ...state,
         disabled: false,
         ...getCurie(rel, curies),
