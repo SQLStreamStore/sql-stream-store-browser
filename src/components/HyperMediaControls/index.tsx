@@ -39,8 +39,6 @@ const HyperMediaControls: StatelessComponent<HyperMediaControlsProps> = ({
                             curies={links[rels.curies]}
                         />
                     ))}
-            </div>
-            <div>
                 {Object.keys(forms).map(rel => (
                     <FormButton
                         key={rel}
