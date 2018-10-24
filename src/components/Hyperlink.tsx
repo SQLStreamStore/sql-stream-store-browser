@@ -1,8 +1,9 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core';
+import React, { ReactNode, StatelessComponent } from 'react';
+import { WithStyles, withStyles } from '@material-ui/core';
 import { preventDefault } from '../utils';
 import { withNavigation } from './NavigationProvider';
 import theme from '../theme';
+import { HalLink, NavigatableProps } from '../types';
 
 const color = theme.palette.action.active;
 
@@ -20,9 +21,23 @@ const styles = {
         },
     },
 };
-const Hyperlink = withNavigation()(
+
+interface HyperlinkProps {
+    link: HalLink;
+}
+
+const Hyperlink: StatelessComponent<
+    HyperlinkProps & { children?: ReactNode }
+> = withNavigation()(
     withStyles(styles)(
-        ({ classes, link, children, authorization, onNavigate }) => (
+        ({
+            classes,
+            link,
+            children,
+            authorization,
+            onNavigate,
+        }: HyperlinkProps & { children?: ReactNode } & NavigatableProps &
+            WithStyles<typeof styles>) => (
             <a
                 href={link.href}
                 className={classes.hyperlink}
