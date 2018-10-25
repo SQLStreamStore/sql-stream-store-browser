@@ -15,6 +15,7 @@ export interface HalLinks {
 export interface HalResource {
     readonly _links?: HalLinks;
     readonly _embedded?: EmbeddedResources;
+    [key: string]: any;
 }
 
 export interface EmbeddedResources {
@@ -29,10 +30,12 @@ export interface NavigatableProps {
 }
 
 export interface HttpResponse {
-    body: { [key: string]: any } | string | undefined;
+    body: object | undefined | string;
+    headers: { [key: string]: string };
+    ok: boolean;
     status: number;
     statusText: string;
-    ok: boolean;
+    url: string;
 }
 
 export interface HttpProblemDetailsResponse extends HttpResponse {
@@ -41,4 +44,10 @@ export interface HttpProblemDetailsResponse extends HttpResponse {
         title: string;
         type: string;
     };
+}
+
+export interface HttpRequest {
+    body?: object;
+    link: HalLink;
+    headers: { [key: string]: string | undefined };
 }
