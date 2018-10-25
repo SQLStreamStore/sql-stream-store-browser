@@ -32,7 +32,7 @@ const Links = ({ provider, versions }) => (
     <Table>
         <TableHead>
             <TableRow>
-                <TableCell colspan={2}>{'Server Information'}</TableCell>
+                <TableCell colSpan={2}>{'Server Information'}</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
