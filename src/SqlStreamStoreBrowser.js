@@ -49,7 +49,7 @@ const onNavigate = (link, authorization) =>
 
 const initialNavigation = ({ authorization }) =>
     onNavigate(
-        { href: window.location.href, type: mediaTypes.hal },
+        { href: window.location.href, type: mediaTypes.any },
         authorization,
     );
 

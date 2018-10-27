@@ -55,7 +55,7 @@ const mapResponse = async (response: Response): Promise<HttpResponse> => {
 const get = ({ link, headers = {} }: HttpRequest) =>
     fetch(link.href, {
         headers: new Headers({
-            accept: link.type || mediaTypes.hal,
+            accept: link.type || mediaTypes.any,
             ...headers,
         }),
     }).then(mapResponse);
@@ -72,7 +72,7 @@ const post = <TRequest extends object, TResponse extends object>({
     fetch(link.href, {
         body: JSON.stringify(body),
         headers: new Headers({
-            accept: link.type || mediaTypes.hal,
+            accept: link.type || mediaTypes.any,
             'content-type': mediaTypes.json,
             ...headers,
         }),
@@ -82,7 +82,7 @@ const post = <TRequest extends object, TResponse extends object>({
 const _delete = ({ link, headers = {} }: HttpRequest) =>
     fetch(link.href, {
         headers: new Headers({
-            accept: link.type || mediaTypes.hal,
+            accept: link.type || mediaTypes.any,
             ...headers,
         }),
         method: 'delete',
