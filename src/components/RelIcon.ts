@@ -1,20 +1,21 @@
-import { createElement } from 'react';
+import { SvgIconProps } from '@material-ui/core/SvgIcon';
+import { createElement, ReactElement } from 'react';
+import { rels } from '../stream-store';
 import {
-    Publish,
-    Settings,
-    DeleteForever,
-    FirstPage,
-    LastPage,
     ChevronLeft,
     ChevronRight,
-    RssFeed,
-    Refresh,
-    Search,
-    SqlStreamStore,
-    List,
+    DeleteForever,
+    FirstPage,
     Help,
+    LastPage,
+    List,
+    Publish,
+    Refresh,
+    RssFeed,
+    Search,
+    Settings,
+    SqlStreamStore,
 } from './Icons';
-import { rels } from '../stream-store';
 
 const fontIconByRel = {
     [rels.first]: FirstPage,
@@ -32,7 +33,11 @@ const fontIconByRel = {
     [rels.curies]: Help,
 };
 
-const RelIcon = ({ rel, ...props }) =>
+interface RelIconProps extends SvgIconProps {
+    rel: string;
+}
+
+const RelIcon = ({ rel, ...props }: RelIconProps): ReactElement<SvgIconProps> =>
     createElement(fontIconByRel[rel] || SqlStreamStore, props);
 
 export default RelIcon;

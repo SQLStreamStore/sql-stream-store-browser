@@ -21,7 +21,24 @@ export interface EmbeddedResources {
     [rel: string]: HalResource | HalResource[];
 }
 
+export type NavigationHandler = (link: HalLink, authorization?: string) => void;
+
 export interface NavigatableProps {
-    onNavigate: (link: HalLink, authorization?: string) => void;
+    onNavigate: NavigationHandler;
     authorization?: string;
+}
+
+export interface HttpResponse {
+    body: { [key: string]: any } | string | undefined;
+    status: number;
+    statusText: string;
+    ok: boolean;
+}
+
+export interface HttpProblemDetailsResponse extends HttpResponse {
+    body: {
+        detail?: any;
+        title: string;
+        type: string;
+    };
 }

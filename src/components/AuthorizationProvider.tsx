@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { ReactNode, StatelessComponent } from 'react';
 import getDisplayName from './getDisplayName';
 
-const { Consumer, Provider } = React.createContext();
+const { Consumer, Provider } = React.createContext<string | undefined>(
+    undefined,
+);
 
-const AuthorizationProvider = ({ authorization, children }) => (
+const AuthorizationProvider: StatelessComponent<{
+    authorization: string | undefined;
+    children: ReactNode;
+}> = ({ authorization, children }) => (
     <Provider value={authorization}>{children}</Provider>
 );
 

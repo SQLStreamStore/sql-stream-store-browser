@@ -1,7 +1,8 @@
-import React from 'react';
 import { SvgIcon } from '@material-ui/core';
+import { SvgIconProps } from '@material-ui/core/SvgIcon';
+import React, { ComponentType } from 'react';
 /* eslint-disable max-len */
-const SqlStreamStore = props => (
+const SqlStreamStore: ComponentType<SvgIconProps> = props => (
     <SvgIcon {...props} viewBox={'0 0 448.687 627.153'}>
         <g transform={'translate(-88.5 -116.776)'}>
             <ellipse
