@@ -25,7 +25,20 @@ const getBody = async (
     }
 };
 
-const getHeaders = (headers: Headers) =>
+const createRequestHeaders = (headers: { [key: string]: string }) =>
+    new Headers(
+        Object.keys(headers)
+            .filter(key => headers[key])
+            .reduce(
+                (akk, key) => ({
+                    ...akk,
+                    [key]: headers[key],
+                }),
+                {},
+            ),
+    );
+
+const getResponseHeaders = (headers: Headers) =>
     [...headers.entries()].reduce(
         (acc, [key, value]) =>
             value
@@ -40,7 +53,7 @@ const getHeaders = (headers: Headers) =>
 const mapResponse = async (response: Response): Promise<HttpResponse> => {
     const { ok, status, statusText, url } = response;
 
-    const headers = getHeaders(response.headers);
+    const headers = getResponseHeaders(response.headers);
 
     return {
         body: await getBody(response, headers),
@@ -55,7 +68,7 @@ const mapResponse = async (response: Response): Promise<HttpResponse> => {
 const get = ({ link, headers = {} }: HttpRequest) =>
     fetch(link.href, {
         credentials: 'omit',
-        headers: new Headers({
+        headers: createRequestHeaders({
             accept: link.type || mediaTypes.any,
             ...headers,
         }),
@@ -73,7 +86,7 @@ const post = <TRequest extends object, TResponse extends object>({
     fetch(link.href, {
         body: JSON.stringify(body),
         credentials: 'omit',
-        headers: new Headers({
+        headers: createRequestHeaders({
             accept: link.type || mediaTypes.any,
             'content-type': mediaTypes.json,
             ...headers,
@@ -84,7 +97,7 @@ const post = <TRequest extends object, TResponse extends object>({
 const _delete = ({ link, headers = {} }: HttpRequest) =>
     fetch(link.href, {
         credentials: 'omit',
-        headers: new Headers({
+        headers: createRequestHeaders({
             accept: link.type || mediaTypes.any,
             ...headers,
         }),
