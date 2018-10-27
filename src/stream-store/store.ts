@@ -1,4 +1,6 @@
+import { JSONSchema7 } from 'json-schema';
 import { Observable as obs } from 'rxjs';
+import { HalResource } from '../types';
 import { resolveLinks } from '../utils';
 import actions from './actions';
 
@@ -6,7 +8,7 @@ const mediaType$ = actions.get.response.map(
     ({ headers }) => headers['content-type'].split(';')[0],
 );
 
-const body$ = actions.get.response.map(({ body }) => body);
+const body$ = actions.get.response.map(({ body }) => body as HalResource);
 
 const url$ = actions.get.response.map(({ url }) => url);
 
@@ -14,21 +16,31 @@ const links$ = body$
     .zip(url$)
     .map(([{ _links }, url]) => resolveLinks(url, _links || {}));
 
-const forms$ = body$.map(({ _embedded }) =>
-    Object.keys(_embedded || {})
-        .filter(
-            rel =>
-                _embedded[rel].$schema &&
-                _embedded[rel].$schema.endsWith('schema#'),
-        )
-        .reduce((akk, rel) => ({ ...akk, [rel]: _embedded[rel] }), {}),
+const isJsonSchema = (schema: JSONSchema7 & HalResource) =>
+    schema.$schema && schema.$schema.endsWith('schema#');
+
+const forms$ = body$.map(({ _embedded }) => _embedded || {}).map(embedded =>
+    Object.keys(embedded)
+        .filter(rel => isJsonSchema(embedded[rel]))
+        .reduce(
+            (akk, rel) => ({
+                ...akk,
+                [rel]: embedded[rel],
+            }),
+            // tslint:disable-next-line:no-object-literal-type-assertion
+            {} as JSONSchema7,
+        ),
 );
 
 const verbs = Object.keys(actions);
 
-const requests$ = obs.merge(...verbs.map(verb => actions[verb].request));
+const requests$ = obs.merge(
+    ...verbs.map((verb: keyof typeof actions) => actions[verb].request),
+);
 
-const responses$ = obs.merge(...verbs.map(verb => actions[verb].response));
+const responses$ = obs.merge(
+    ...verbs.map((verb: keyof typeof actions) => actions[verb].response),
+);
 
 const delayedRequests$ = requests$.delay(1000);
 
@@ -48,10 +60,10 @@ const loading$ = requests$
     );
 
 export default {
-    links$,
-    forms$,
     body$,
-    url$,
+    forms$,
+    links$,
     loading$,
     mediaType$,
+    url$,
 };

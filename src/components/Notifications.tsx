@@ -7,7 +7,12 @@ import {
 } from '@material-ui/core';
 import { amber, blue, green, red } from '@material-ui/core/colors';
 import classNames from 'classnames';
-import React, {ComponentType, createElement, ReactNode, StatelessComponent} from 'react';
+import React, {
+    ComponentType,
+    createElement,
+    ReactNode,
+    StatelessComponent,
+} from 'react';
 import { Observable as obs } from 'rxjs';
 import uuid from 'uuid';
 import { CheckCircle, Close, Error, Info, Warning } from '../components/Icons';
@@ -195,7 +200,9 @@ const Notification: ComponentType<NotificationProps> = withStyles(styles)(
     ),
 );
 
-const Notifications: StatelessComponent<{ notifications: NotificationProps[] }> = ({ notifications }) => (
+const Notifications: StatelessComponent<{
+    notifications: NotificationProps[];
+}> = ({ notifications }) => (
     <div>
         {notifications.map(notification => (
             <Notification key={notification.messageId} {...notification} />
