@@ -26,7 +26,7 @@ import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';
 
-const metadata$ = store.body$.map(metadata => metadata);
+const metadata$ = store.hal$.body$.map(metadata => metadata);
 
 interface MetadataState {
     streamId: string;
@@ -75,7 +75,7 @@ const StreamMetadataDetails: StatelessComponent<StreamMetadataDetailsProps> = ({
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink link={_links[rels.feed][0]}>{streamId}</Hyperlink>
+            <Hyperlink _links={_links} rel={rels.feed} />
         </TableCell>
         <TableCell style={nowrap} numeric>
             {maxAge}
@@ -125,7 +125,7 @@ class StreamMetadataJson extends PureComponent<
 }
 
 const StreamMetadata: StatelessComponent<StreamMetadataState> = ({
-    metadata
+    metadata,
 }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>

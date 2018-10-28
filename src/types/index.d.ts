@@ -12,14 +12,14 @@ export interface HalLinks {
     [rel: string]: HalLink[];
 }
 
+export interface EmbeddedResources {
+    [rel: string]: HalResource[];
+}
+
 export interface HalResource {
     readonly _links: HalLinks;
     readonly _embedded: EmbeddedResources;
     [key: string]: any;
-}
-
-export interface EmbeddedResources {
-    [rel: string]: HalResource | HalResource[];
 }
 
 export type NavigationHandler = (link: HalLink, authorization?: string) => void;

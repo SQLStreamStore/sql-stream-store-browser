@@ -1,14 +1,11 @@
 import { resolve } from 'uri-js';
 import { HalLinks } from '../types';
 
-const toArray = maybeArray =>
-    !!maybeArray && Array.isArray(maybeArray) ? maybeArray : [maybeArray];
-
 export const resolveLinks = (url: string, links: HalLinks): HalLinks =>
     Object.keys(links).reduce(
         (akk, rel) => ({
             ...akk,
-            [rel]: toArray(links[rel]).map(({ href, ...link }) => ({
+            [rel]: links[rel].map(({ href, ...link }) => ({
                 ...link,
                 href: resolve(url, href || './', { tolerant: true }),
                 rel,

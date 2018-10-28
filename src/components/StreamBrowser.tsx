@@ -8,7 +8,8 @@ import {
     withStyles,
 } from '@material-ui/core';
 import React, { ComponentType } from 'react';
-import { HalLink } from '../types';
+import rels from '../stream-store/rels';
+import { HalResource } from '../types';
 import Hyperlink from './Hyperlink';
 
 const styles = theme => ({
@@ -19,7 +20,7 @@ const styles = theme => ({
 
 interface StreamBrowserProps {
     loading: boolean;
-    streams: HalLink[];
+    streams: HalResource[];
 }
 
 const StreamBrowser: ComponentType<StreamBrowserProps> = withStyles(styles)(
@@ -34,10 +35,10 @@ const StreamBrowser: ComponentType<StreamBrowserProps> = withStyles(styles)(
                 <LinearProgress />
             ) : streams.length ? (
                 <List>
-                    {streams.map(link => (
-                        <ListItem key={link.href}>
+                    {streams.map(({ _links }) => (
+                        <ListItem>
                             <ListItemText>
-                                <Hyperlink link={link}>{link.title}</Hyperlink>
+                                <Hyperlink _links={_links} rel={rels.feed} />
                             </ListItemText>
                         </ListItem>
                     ))}

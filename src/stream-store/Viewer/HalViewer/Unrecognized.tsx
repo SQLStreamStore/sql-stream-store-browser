@@ -8,8 +8,10 @@ import Inspector, {
 } from 'react-inspector';
 
 import { Observable as obs } from 'rxjs';
-import { Hyperlink } from '../../../components';
+import { withNavigation } from '../../../components';
 import { connect, createState } from '../../../reactive';
+import { NavigatableProps } from '../../../types';
+import { preventDefault } from '../../../utils';
 import store from '../../store';
 import { HalViewerProps } from './types';
 
@@ -17,26 +19,39 @@ interface UnregcognizedRelViewerState {
     data: object;
 }
 const state$ = createState<UnregcognizedRelViewerState>(
-    store.body$.map(data => ['data', () => data]),
+    store.hal$.body$.map(data => ['data', () => data]),
     obs.of<UnregcognizedRelViewerState>({
         data: {},
     }),
 );
 
-const MaybeLinkLabel: StatelessComponent<ObjectLabelProps> = ({
-    name,
-    data,
-    ...props
-}) =>
-    name === 'href' ? (
-        <span>
-            <ObjectName name={name} />
-            <span>: </span>
-            <Hyperlink link={{ href: data }}>{data}</Hyperlink>
-        </span>
-    ) : (
-        <ObjectLabel name={name} data={data} {...props} />
-    );
+const MaybeLinkLabel: StatelessComponent<ObjectLabelProps> = withNavigation()(
+    ({
+        authorization,
+        name,
+        data,
+        onNavigate,
+        ...props
+    }: ObjectLabelProps & NavigatableProps) =>
+        name === 'href' ? (
+            <span>
+                <ObjectName name={name} />
+                <span>: </span>
+                <a
+                    href={data}
+                    onClick={preventDefault(() =>
+                        onNavigate({ href: data }, authorization),
+                    )}
+                >
+                    {data}
+                </a>
+
+                {data}
+            </span>
+        ) : (
+            <ObjectLabel name={name} data={data} {...props} />
+        ),
+);
 
 class UnrecognizedRelViewer extends React.PureComponent<
     UnregcognizedRelViewerState

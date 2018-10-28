@@ -9,7 +9,7 @@ import {
     TableRow,
 } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
-import { HalLinks, HalResource } from '../../../types';
+import { HalResource } from '../../../types';
 import { resolveLinks } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
@@ -25,14 +25,14 @@ interface Message {
     type: string;
 }
 
-const messages$ = store.body$.zip(store.url$).map(([{ _embedded }, url]) =>
-    ((_embedded || {})[rels.message] as HalResource & Message).map(
-        ({ _links, ...message }) => ({
+const messages$ = store.hal$.body$
+    .zip(store.hal$.url$)
+    .map(([{ _embedded }, url]) =>
+        _embedded[rels.message].map(({ _links, ...message }) => ({
             ...message,
             _links: resolveLinks(url, _links),
-        }),
-    ),
-);
+        })),
+    );
 
 const state$ = createState<StreamState>(
     messages$.map(messages => ['messages', () => messages]),
@@ -55,16 +55,10 @@ const Message = ({
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={nowrap}>
-            <Hyperlink link={(_links as HalLinks)[rels.feed][0]}>
-                {streamId}
-            </Hyperlink>
+            <Hyperlink _links={_links} rel={rels.feed} />
         </TableCell>
         <TableCell>
-            <Hyperlink link={(_links as HalLinks).self[0]}>
-                {streamId}
-                {'@'}
-                {streamVersion}
-            </Hyperlink>
+            <Hyperlink _links={_links} rel={rels.self} />
         </TableCell>
         <TableCell>{position}</TableCell>
     </TableRow>

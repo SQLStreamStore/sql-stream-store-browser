@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { connect, createState } from '../../../reactive';
 import store from '../../store';
 
-const body$ = store.body$.map(body => () => body);
+const body$ = store.markdown$.body$.map(body => () => body);
 
 interface MarkdownViewerState {
     body: string;

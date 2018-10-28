@@ -14,9 +14,9 @@ import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';
 
-const provider$ = store.body$.map(({ provider }) => provider);
+const provider$ = store.hal$.body$.map(({ provider }) => provider);
 
-const versions$ = store.body$.map(({ versions }) => versions);
+const versions$ = store.hal$.body$.map(({ versions }) => versions);
 
 interface RecentState {
     recent: HalResource[];
@@ -29,7 +29,7 @@ interface InfoState {
 
 interface IndexState extends RecentState, InfoState {}
 
-const recent$ = store.body$.map(
+const recent$ = store.hal$.body$.map(
     ({ _embedded = {} }) => _embedded[rels.feed] as HalResource[],
 );
 

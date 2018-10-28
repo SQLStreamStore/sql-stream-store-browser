@@ -16,7 +16,7 @@ interface HyperMediaControlsState {
 }
 
 const state$ = createState<HyperMediaControlsState>(
-    store.url$.map(href => ['href', () => href]),
+    store.hal$.url$.map(href => ['href', () => href]),
     Observable.of<HyperMediaControlsState>({ href: '' }),
 );
 

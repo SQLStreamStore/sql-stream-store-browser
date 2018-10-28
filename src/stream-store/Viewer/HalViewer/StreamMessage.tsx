@@ -31,7 +31,7 @@ import {
     TableRow,
 } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
-import { HalLink, HalResource, NavigatableProps } from '../../../types';
+import { HalResource, NavigatableProps } from '../../../types';
 import { http } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
@@ -45,7 +45,7 @@ const tryParseJson = (payload: string): object => {
     }
 };
 
-const message$ = store.body$.map(({ payload, metadata, ...body }) => ({
+const message$ = store.hal$.body$.map(({ payload, metadata, ...body }) => ({
     ...body,
     metadata: tryParseJson(metadata),
     payload: tryParseJson(payload),
@@ -115,17 +115,13 @@ const StreamMessageDetails: StatelessComponent<
 }) => (
     <TableRow>
         <TableCell style={nowrap}>
-            <Hyperlink link={_links[rels.feed][0]}>{streamId}</Hyperlink>
+            <Hyperlink _links={_links} rel={rels.feed} />
         </TableCell>
         <TableCell style={nowrap}>{messageId}</TableCell>
         <TableCell style={nowrap}>{createdUtc}</TableCell>
         <TableCell style={nowrap}>{type}</TableCell>
         <TableCell style={{ width: '100%' }}>
-            <Hyperlink link={_links[rels.self][0]}>
-                {streamId}
-                {'@'}
-                {streamVersion}
-            </Hyperlink>
+            <Hyperlink _links={_links} rel={rels.self} />
         </TableCell>
         <TableCell numeric>{position}</TableCell>
     </TableRow>
@@ -134,13 +130,11 @@ const StreamMessageDetails: StatelessComponent<
 const isPotentialStreamId = data =>
     typeof data === 'number' || typeof data === 'string';
 
-const getStreamLinks = ({ _embedded = {} }: HalResource): HalLink[] =>
-    (_embedded[rels.feed] || [])
-        .map(({ _links = {} }: HalResource) => _links[rels.feed][0])
-        .filter(link => link);
+const getStreamLinks = ({ _embedded }): HalResource[] =>
+    _embedded[rels.feed] || [];
 
 interface StreamMessageJsonState {
-    streams: HalLink[];
+    streams: HalResource[];
     loading: boolean;
     open: boolean;
 }
@@ -184,7 +178,7 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
             open: true,
         });
 
-        if (!_links[rels.browse]) {
+        if (!_links || !_links[rels.browse]) {
             return;
         }
 

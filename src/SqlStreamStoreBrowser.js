@@ -26,7 +26,7 @@ const getSelfAlias = links =>
         )
         .map(({ rel }) => rel);
 
-const self$ = store.links$
+const self$ = store.hal$.links$
     .filter(links => links.self)
     .map(getSelfAlias)
     .filter(rel => !!rel)
@@ -35,10 +35,10 @@ const self$ = store.links$
 const state$ = createState(
     obs.merge(
         self$.map(self => ['self', () => self]),
-        store.links$.map(links => ['links', () => links]),
-        store.forms$.map(forms => ['forms', () => forms]),
-        store.loading$.map(loading => ['loading', () => loading]),
-        store.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
+        store.hal$.links$.map(links => ['links', () => links]),
+        store.hal$.forms$.map(forms => ['forms', () => forms]),
+        store.hal$.loading$.map(loading => ['loading', () => loading]),
+        store.hal$.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
     ),
     obs.of({ links: {}, forms: {}, loading: false }),
 );

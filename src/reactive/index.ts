@@ -23,7 +23,7 @@ export const createState = <TState extends object>(
         .refCount();
 
 const createLogger = <TState>() => (state: TState) =>
-// tslint:disable-next-line:no-console
+    // tslint:disable-next-line:no-console
     console.debug(state, typeof state);
 
 export const connect = <TProps extends object, TState extends object>(

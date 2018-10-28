@@ -2,20 +2,18 @@ import { ComponentType } from 'react';
 import { Observable as obs } from 'rxjs';
 import StreamBrowser from '../../../components/StreamBrowser';
 import { connect, createState } from '../../../reactive';
-import { HalLink } from '../../../types';
+import { HalLink, HalResource } from '../../../types';
 import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';
 
-const streams$ = store.body$.map(({ _embedded = {} }) =>
-    (_embedded[rels.feed] || [])
-        .map(({ _links = {} }) => _links[rels.feed])
-        .filter(link => link),
+const streams$ = store.hal$.body$.map(
+    ({ _embedded = {} }) => _embedded[rels.feed] || [],
 );
 
 interface StreamBrowserState {
     loading: boolean;
-    streams: HalLink[];
+    streams: HalResource[];
 }
 
 const state$ = createState<StreamBrowserState>(
