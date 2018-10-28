@@ -1,10 +1,11 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import { PaletteOptions } from '@material-ui/core/styles/createPalette';
 
-const palette = {
-    type: 'light',
+const palette: PaletteOptions = {
     action: {
         active: '#42c0fb',
     },
+    type: 'light',
 };
 
 const typography = {

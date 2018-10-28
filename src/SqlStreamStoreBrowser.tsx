@@ -1,19 +1,20 @@
-import React from 'react';
-import { CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, CssBaseline, Toolbar, Typography } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import React, { ComponentType } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
-    mount,
-    withAuthorization,
     AuthorizationProvider,
+    Loading,
+    mount,
     NavigationProvider,
     Notifications,
-    Loading,
+    withAuthorization,
 } from './components';
 import { SqlStreamStore } from './components/Icons';
+import { connect, createState } from './reactive';
 import { actions, store, Viewer } from './stream-store';
 import theme from './theme';
-import { createState, connect } from './reactive';
+import { HalLink, HalLinks } from './types';
 import { mediaTypes } from './utils';
 
 const getSelfAlias = links =>
@@ -27,12 +28,18 @@ const getSelfAlias = links =>
         .map(({ rel }) => rel);
 
 const self$ = store.hal$.links$
-    .filter(links => links.self)
+    .filter(links => !!links.self)
     .map(getSelfAlias)
     .filter(rel => !!rel)
     .map(([link]) => link);
 
-const state$ = createState(
+interface SqlStreamStoreBrowserState {
+    loading: boolean;
+    mediaType: string;
+    links: HalLinks;
+    self: HalLink;
+}
+const state$ = createState<SqlStreamStoreBrowserState>(
     obs.merge(
         self$.map(self => ['self', () => self]),
         store.hal$.links$.map(links => ['links', () => links]),
@@ -40,10 +47,18 @@ const state$ = createState(
         store.hal$.loading$.map(loading => ['loading', () => loading]),
         store.hal$.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
     ),
-    obs.of({ links: {}, forms: {}, loading: false }),
+    obs.of({
+        forms: {},
+        links: {},
+        loading: false,
+        mediaType: mediaTypes.hal,
+        self: {
+            href: '',
+        },
+    }),
 );
 
-const onNavigate = (link, authorization) =>
+const onNavigate = (link: HalLink, authorization: string | undefined) =>
     link.href.indexOf('#') === -1 &&
     actions.get.request.next({ link, headers: { authorization } });
 
@@ -64,8 +79,12 @@ const Hero = () => (
     </AppBar>
 );
 
-const SqlStreamStoreBrowser = withAuthorization()(
-    mount(initialNavigation)(({ loading, ...props }) => (
+const SqlStreamStoreBrowser: ComponentType<
+    SqlStreamStoreBrowserState
+> = withAuthorization()(
+    mount<SqlStreamStoreBrowserState & { authorization: string | undefined }>(
+        initialNavigation,
+    )(({ loading, ...props }) => (
         <MuiThemeProvider theme={theme}>
             <div>
                 <CssBaseline />
@@ -80,7 +99,9 @@ const SqlStreamStoreBrowser = withAuthorization()(
     )),
 );
 
-const AuthorizedSqlStreamStoreBrowser = ({ authorization, ...props }) => (
+const AuthorizedSqlStreamStoreBrowser: ComponentType<
+    SqlStreamStoreBrowserState & { authorization: string | undefined }
+> = ({ authorization, ...props }) => (
     <AuthorizationProvider authorization={authorization}>
         <SqlStreamStoreBrowser {...props} />
     </AuthorizationProvider>
