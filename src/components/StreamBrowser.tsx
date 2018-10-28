@@ -3,6 +3,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    Theme,
     Typography,
     WithStyles,
     withStyles,
@@ -12,7 +13,7 @@ import rels from '../stream-store/rels';
 import { HalResource } from '../types';
 import Hyperlink from './Hyperlink';
 
-const styles = theme => ({
+const styles = (theme: Theme) => ({
     browser: {
         padding: theme.spacing.unit * 2.5,
     },
@@ -36,7 +37,9 @@ const StreamBrowser: ComponentType<StreamBrowserProps> = withStyles(styles)(
             ) : streams.length ? (
                 <List>
                     {streams.map(({ _links }) => (
-                        <ListItem>
+                        <ListItem
+                            key={_links[rels.self].map(({ href }) => href)[0]}
+                        >
                             <ListItemText>
                                 <Hyperlink _links={_links} rel={rels.feed} />
                             </ListItemText>

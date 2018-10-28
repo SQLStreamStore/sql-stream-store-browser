@@ -6,6 +6,7 @@ export interface HalLink {
     readonly deprecation?: string;
     readonly hreflang?: string;
     readonly name?: string;
+    readonly rel?: string;
 }
 
 export interface HalLinks {

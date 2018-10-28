@@ -17,7 +17,7 @@ const state$ = createState<MarkdownViewerState>(
     }),
 );
 
-const MarkdownViewer = ({ body }) => (
+const MarkdownViewer = ({ body }: { body: string }) => (
     <Typography>
         <Remarkable
             options={{

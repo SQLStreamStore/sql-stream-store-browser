@@ -1,5 +1,9 @@
 import { PropTypes, TextField } from '@material-ui/core';
-import React, { PureComponent, StatelessComponent } from 'react';
+import React, {
+    FormEventHandler,
+    PureComponent,
+    StatelessComponent,
+} from 'react';
 import uriTemplate from 'uri-template';
 import { HalLink, NavigatableProps } from '../../types';
 import { preventDefault } from '../../utils';
@@ -27,10 +31,14 @@ const TemplatedLinkButton: StatelessComponent<
     > {
         state = {};
 
-        _onChange = variable => ({ target }) =>
+        _onChange = (
+            variable: string,
+        ): FormEventHandler<
+            HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+        > => ({ currentTarget }) =>
             this.setState({
                 ...this.state,
-                [variable]: target.value,
+                [variable]: currentTarget.value,
             });
 
         render() {

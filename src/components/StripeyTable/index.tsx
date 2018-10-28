@@ -5,6 +5,7 @@ import {
     TableFooter,
     TableHead,
     TableRow as MaterialTableRow,
+    Theme,
     WithStyles,
     withStyles,
 } from '@material-ui/core';
@@ -19,7 +20,7 @@ const TableCell = withStyles(theme => ({
     },
 }))(MaterialTableCell) as ComponentType<TableCellProps>;
 
-const tableRowStyles = theme => ({
+const tableRowStyles = (theme: Theme) => ({
     row: {
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.background.paper,

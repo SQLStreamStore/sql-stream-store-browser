@@ -17,10 +17,10 @@ import theme from './theme';
 import { HalLink, HalLinks } from './types';
 import { mediaTypes } from './utils';
 
-const getSelfAlias = links =>
+const getSelfAlias = (links: HalLinks) =>
     Object.keys(links)
         .flatMap(rel => links[rel])
-        .filter(({ rel }) => rel.indexOf('streamStore:') === 0)
+        .filter(({ rel }) => rel && rel.indexOf('streamStore:') === 0)
         .filter(
             ({ rel, href }) =>
                 !!links.self.filter(link => link.href === href).length,
@@ -62,7 +62,11 @@ const onNavigate = (link: HalLink, authorization: string | undefined) =>
     link.href.indexOf('#') === -1 &&
     actions.get.request.next({ link, headers: { authorization } });
 
-const initialNavigation = ({ authorization }) =>
+const initialNavigation = ({
+    authorization,
+}: {
+    authorization: string | undefined;
+}) =>
     onNavigate(
         { href: window.location.href, type: mediaTypes.any },
         authorization,

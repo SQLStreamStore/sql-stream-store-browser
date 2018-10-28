@@ -6,7 +6,7 @@ import { SpaceBar } from '../Icons';
 import { FormInputProps } from './reactSchemaForms';
 
 class UuidField extends React.PureComponent<FormInputProps> {
-    constructor(props) {
+    constructor(props: FormInputProps) {
         super(props);
 
         const { model, form, setDefault } = this.props;

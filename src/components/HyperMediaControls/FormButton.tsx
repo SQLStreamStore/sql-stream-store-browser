@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { FormEvent, PureComponent } from 'react';
 import { SchemaForm } from 'react-schema-form';
 import { HalLink, NavigatableProps } from '../../types';
 import { withAuthorization } from '../AuthorizationProvider';
@@ -11,12 +11,12 @@ const mapper = {
     uuid: UuidField,
 };
 
-const getValue = value => {
+const getValue = (value: FormEvent<HTMLInputElement>) => {
     if (typeof value === 'object') {
         try {
-            return JSON.parse(value.target.value);
+            return JSON.parse(value.currentTarget.value);
         } catch (e) {
-            return value.target.value;
+            return value.currentTarget.value;
         }
     }
 
@@ -60,7 +60,7 @@ class FormButton extends PureComponent<
         }
     };
 
-    _onModelChange = (key, value) => {
+    _onModelChange = (key: string, value: FormEvent<HTMLInputElement>) => {
         const { model, ...state } = this.state;
         this.setState({
             ...state,

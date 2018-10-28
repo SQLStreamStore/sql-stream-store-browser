@@ -1,4 +1,4 @@
-import React, { ReactNode, StatelessComponent } from 'react';
+import React, { ComponentType, ReactNode, StatelessComponent } from 'react';
 import getDisplayName from './getDisplayName';
 
 const { Consumer, Provider } = React.createContext<string | undefined>(
@@ -14,8 +14,8 @@ const AuthorizationProvider: StatelessComponent<{
 
 export default AuthorizationProvider;
 
-const withAuthorization = () => WrappedComponent => {
-    const Component = props => (
+const withAuthorization = () => (WrappedComponent: ComponentType) => {
+    const Component = (props: any) => (
         <Consumer>
             {authorization => (
                 <WrappedComponent {...props} authorization={authorization} />

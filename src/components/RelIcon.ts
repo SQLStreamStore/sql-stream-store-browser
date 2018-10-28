@@ -1,5 +1,5 @@
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
-import { createElement, ReactElement, StatelessComponent } from 'react';
+import { createElement, StatelessComponent } from 'react';
 import { rels } from '../stream-store';
 import {
     ChevronLeft,

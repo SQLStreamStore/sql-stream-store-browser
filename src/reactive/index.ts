@@ -5,7 +5,7 @@ import { Observable, ReplaySubject, Subscription } from 'rxjs';
 export const createAction = <T>() => new ReplaySubject<T>(1);
 
 export const createState = <TState extends object>(
-    reducer$,
+    reducer$: Observable<any>,
     initialState$: Observable<TState>,
 ): Observable<TState> =>
     initialState$
