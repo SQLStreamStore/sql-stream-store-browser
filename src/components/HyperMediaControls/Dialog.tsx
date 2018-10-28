@@ -8,11 +8,7 @@ import {
     withStyles,
     WithStyles,
 } from '@material-ui/core';
-import React, {
-    FormEventHandler,
-    PureComponent,
-    StatelessComponent,
-} from 'react';
+import React, { PureComponent, StatelessComponent } from 'react';
 
 import { SlideProps } from '@material-ui/core/Slide';
 import { HalLink } from '../../types';

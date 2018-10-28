@@ -5,7 +5,7 @@ import {
     WithStyles,
     withStyles,
 } from '@material-ui/core';
-import React, { PureComponent, ReactNode } from 'react';
+import React, { ComponentType, PureComponent, ReactNode } from 'react';
 import Remarkable from 'react-remarkable';
 import uriTemplate from 'uri-template';
 import { HalLink } from '../../types';
@@ -33,7 +33,7 @@ interface DocumentationProps {
     readonly onClose: () => void;
 }
 
-const Documentation = withStyles(theme => ({
+const Documentation: ComponentType<DocumentationProps> = withStyles(theme => ({
     drawerPaper: {
         padding: theme.spacing.unit * 2,
         width: '45%',

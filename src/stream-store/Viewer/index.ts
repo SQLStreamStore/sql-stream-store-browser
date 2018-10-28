@@ -1,7 +1,8 @@
-import React, { createElement } from 'react';
+import { createElement } from 'react';
+import { mediaTypes } from '../../utils';
 import HalViewer from './HalViewer';
 import MarkdownViewer from './MarkdownViewer';
-import { mediaTypes } from '../../utils';
+
 const viewers = {
     [mediaTypes.markdown]: MarkdownViewer,
     [mediaTypes.hal]: HalViewer,

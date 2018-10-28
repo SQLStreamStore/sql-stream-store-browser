@@ -150,6 +150,10 @@ interface NotificationProps {
     variant: string;
 }
 
+interface NotificationsState {
+    notifications: NotificationProps[];
+}
+
 const Notification: ComponentType<NotificationProps> = withStyles(styles)(
     ({
         autoHideDuration,
@@ -200,9 +204,9 @@ const Notification: ComponentType<NotificationProps> = withStyles(styles)(
     ),
 );
 
-const Notifications: StatelessComponent<{
-    notifications: NotificationProps[];
-}> = ({ notifications }) => (
+const Notifications: StatelessComponent<NotificationsState> = ({
+    notifications = [],
+}) => (
     <div>
         {notifications.map(notification => (
             <Notification key={notification.messageId} {...notification} />
@@ -210,4 +214,4 @@ const Notifications: StatelessComponent<{
     </div>
 );
 
-export default connect(state$)(Notifications);
+export default connect<{}, NotificationsState>(state$)(Notifications);

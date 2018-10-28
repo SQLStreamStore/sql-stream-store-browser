@@ -1,29 +1,34 @@
 import { Card, CardActions } from '@material-ui/core';
-import React, { StatelessComponent } from 'react';
+import { JSONSchema7 } from 'json-schema';
+import React, { ComponentType, StatelessComponent } from 'react';
+import { Observable } from 'rxjs';
 import { connect, createState } from '../../reactive';
 import { navigation, rels, store } from '../../stream-store';
-import { HalLinks } from '../../types';
+import { HalLinks, HalResource } from '../../types';
 import FormButton from './FormButton';
 import LinkButton from './LinkButton';
 
 const isNotSelf = (rel: string, links: HalLinks): boolean =>
     links[rels.self] && links[rel][0].href !== links[rels.self][0].href;
 
-const state$ = createState(store.url$.map(href => ['href', () => href]));
+interface HyperMediaControlsState {
+    href: string;
+}
+
+const state$ = createState<HyperMediaControlsState>(
+    store.hal$.url$.map(href => ['href', () => href]),
+    Observable.of<HyperMediaControlsState>({ href: '' }),
+);
 
 interface HyperMediaControlsProps {
     actions: any;
-    href: string;
     links: HalLinks;
-    forms: { [rel: string]: any };
+    forms: { [rel: string]: HalResource & JSONSchema7 };
 }
 
-const HyperMediaControls: StatelessComponent<HyperMediaControlsProps> = ({
-    forms,
-    href,
-    actions,
-    links,
-}) => (
+const HyperMediaControls: StatelessComponent<
+    HyperMediaControlsProps & HyperMediaControlsState
+> = ({ actions, forms, href, links }) => (
     <Card>
         <CardActions>
             <div>
@@ -54,4 +59,6 @@ const HyperMediaControls: StatelessComponent<HyperMediaControlsProps> = ({
     </Card>
 );
 
-export default connect(state$)(HyperMediaControls);
+export default connect(state$)(HyperMediaControls) as ComponentType<
+    HyperMediaControlsProps
+>;

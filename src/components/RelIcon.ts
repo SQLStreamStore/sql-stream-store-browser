@@ -1,5 +1,5 @@
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
-import { createElement, ReactElement } from 'react';
+import { createElement, ReactElement, StatelessComponent } from 'react';
 import { rels } from '../stream-store';
 import {
     ChevronLeft,
@@ -33,11 +33,13 @@ const fontIconByRel = {
     [rels.curies]: Help,
 };
 
-interface RelIconProps extends SvgIconProps {
+interface RelIconProps {
     rel: string;
 }
 
-const RelIcon = ({ rel, ...props }: RelIconProps): ReactElement<SvgIconProps> =>
-    createElement(fontIconByRel[rel] || SqlStreamStore, props);
+const RelIcon: StatelessComponent<RelIconProps & SvgIconProps> = ({
+    rel,
+    ...props
+}) => createElement(fontIconByRel[rel] || SqlStreamStore, props);
 
 export default RelIcon;
