@@ -1,12 +1,21 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
 import Remarkable from 'react-remarkable';
-import { Typography } from '@material-ui/core';
+import { Observable } from 'rxjs';
+import { connect, createState } from '../../../reactive';
 import store from '../../store';
-import { createState, connect } from '../../../reactive';
 
 const body$ = store.body$.map(body => () => body);
 
-const state$ = createState(body$.map(body => ['body', body]));
+interface MarkdownViewerState {
+    body: string;
+}
+const state$ = createState<MarkdownViewerState>(
+    body$.map(body => ['body', body]),
+    Observable.of<MarkdownViewerState>({
+        body: '',
+    }),
+);
 
 const MarkdownViewer = ({ body }) => (
     <Typography>

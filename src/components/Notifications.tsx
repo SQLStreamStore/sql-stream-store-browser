@@ -214,4 +214,4 @@ const Notifications: StatelessComponent<NotificationsState> = ({
     </div>
 );
 
-export default connect(state$)(Notifications);
+export default connect<{}, NotificationsState>(state$)(Notifications);

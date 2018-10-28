@@ -4,9 +4,9 @@ import { Observable, ReplaySubject, Subscription } from 'rxjs';
 
 export const createAction = <T>() => new ReplaySubject<T>(1);
 
-export const createState = <TState>(
+export const createState = <TState extends object>(
     reducer$,
-    initialState$ = Observable.of({}),
+    initialState$: Observable<TState>,
 ): Observable<TState> =>
     initialState$
         .merge(reducer$)
@@ -20,7 +20,11 @@ export const createState = <TState>(
                 } as TState),
         )
         .publishReplay(1)
-        .refCount() as Observable<TState>;
+        .refCount();
+
+const createLogger = <TState>() => (state: TState) =>
+// tslint:disable-next-line:no-console
+    console.debug(state, typeof state);
 
 export const connect = <TProps extends object, TState extends object>(
     state$: Observable<TState>,
@@ -31,8 +35,9 @@ export const connect = <TProps extends object, TState extends object>(
         subscription: Subscription;
 
         componentWillMount() {
-            this.subscription = state$.subscribe(s => {
-                this.setState(s || {});
+            const log = createLogger<TState>();
+            this.subscription = state$.do(log).subscribe(s => {
+                this.setState(s);
             });
         }
 

@@ -13,8 +13,8 @@ export interface HalLinks {
 }
 
 export interface HalResource {
-    readonly _links?: HalLinks;
-    readonly _embedded?: EmbeddedResources;
+    readonly _links: HalLinks;
+    readonly _embedded: EmbeddedResources;
     [key: string]: any;
 }
 

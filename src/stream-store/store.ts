@@ -21,7 +21,7 @@ const isJsonSchema = (schema: JSONSchema7 & HalResource) =>
 
 const forms$ = body$.map(({ _embedded }) => _embedded || {}).map(embedded =>
     Object.keys(embedded)
-        .filter(rel => isJsonSchema(embedded[rel]))
+        .filter(rel => isJsonSchema(embedded[rel] as JSONSchema7 & HalResource))
         .reduce(
             (akk, rel) => ({
                 ...akk,

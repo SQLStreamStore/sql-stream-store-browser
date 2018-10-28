@@ -2,9 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import SqlStreamStoreBrowser from './SqlStreamStoreBrowser';
 
-const anyWindow = window as any;
-anyWindow.SqlStreamStoreBrowser = SqlStreamStoreBrowser;
-anyWindow.ReactDOM = ReactDOM;
-anyWindow.React = React;
+declare global {
+    interface Window {
+        React: typeof React;
+        ReactDOM: typeof ReactDOM;
+        SqlStreamStoreBrowser: typeof SqlStreamStoreBrowser;
+    }
+}
+
+window.SqlStreamStoreBrowser = SqlStreamStoreBrowser;
+window.ReactDOM = ReactDOM;
+window.React = React;
 
 export default SqlStreamStoreBrowser;

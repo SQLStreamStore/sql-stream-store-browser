@@ -51,4 +51,4 @@ const StreamBrowser: ComponentType<StreamBrowserProps> = withStyles(styles)(
     ),
 );
 
-export default StreamBrowser;
+export default StreamBrowser as ComponentType<StreamBrowserProps>;
