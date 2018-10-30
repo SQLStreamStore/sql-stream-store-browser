@@ -22,26 +22,26 @@ const state$ = createState<HyperMediaControlsState>(
 
 interface HyperMediaControlsProps {
     actions: any;
-    links: HalLinks;
+    _links: HalLinks;
     forms: { [rel: string]: HalResource & JSONSchema7 };
 }
 
 const HyperMediaControls: StatelessComponent<
     HyperMediaControlsProps & HyperMediaControlsState
-> = ({ actions, forms, href, links }) => (
+> = ({ actions, forms, href, _links }) => (
     <Card>
         <CardActions>
             <div>
-                {Object.keys(links)
+                {Object.keys(_links)
                     .filter(rel => !navigation.has(rel))
-                    .filter(rel => isNotSelf(rel, links))
+                    .filter(rel => isNotSelf(rel, _links))
                     .map(rel => (
                         <LinkButton
                             key={rel}
                             rel={rel}
-                            link={links[rel][0]}
+                            link={_links[rel][0]}
                             color={'primary'}
-                            curies={links[rels.curies]}
+                            curies={_links[rels.curies]}
                         />
                     ))}
                 {Object.keys(forms).map(rel => (
@@ -51,7 +51,7 @@ const HyperMediaControls: StatelessComponent<
                         link={{ href }}
                         actions={actions}
                         schema={forms[rel]}
-                        curies={links[rels.curies]}
+                        curies={_links[rels.curies]}
                     />
                 ))}
             </div>

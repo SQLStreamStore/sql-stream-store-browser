@@ -3,6 +3,6 @@ import { HalLinks, HalResource } from '../../../types';
 
 export interface HalViewerProps {
     self: string;
-    links: HalLinks;
+    _links: HalLinks;
     forms: { [rel: string]: HalResource & JSONSchema7 };
 }

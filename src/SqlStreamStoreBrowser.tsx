@@ -36,20 +36,20 @@ const self$ = store.hal$.links$
 interface SqlStreamStoreBrowserState {
     loading: boolean;
     mediaType: string;
-    links: HalLinks;
+    _links: HalLinks;
     self: HalLink;
 }
 const state$ = createState<SqlStreamStoreBrowserState>(
     obs.merge(
         self$.map(self => ['self', () => self]),
-        store.hal$.links$.map(links => ['links', () => links]),
+        store.hal$.links$.map(links => ['_links', () => links]),
         store.hal$.forms$.map(forms => ['forms', () => forms]),
         store.hal$.loading$.map(loading => ['loading', () => loading]),
         store.hal$.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
     ),
     obs.of({
+        _links: {},
         forms: {},
-        links: {},
         loading: false,
         mediaType: mediaTypes.hal,
         self: {

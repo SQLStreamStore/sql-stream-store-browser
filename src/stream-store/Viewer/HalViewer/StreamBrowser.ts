@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { Observable as obs } from 'rxjs';
 import StreamBrowser from '../../../components/StreamBrowser';
 import { connect, createState } from '../../../reactive';
-import { HalLink, HalResource } from '../../../types';
+import { HalResource } from '../../../types';
 import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';

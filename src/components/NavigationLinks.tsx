@@ -43,17 +43,17 @@ const FeedNavigationLink: StatelessComponent<
     },
 );
 interface NavigationLinksProps {
-    links: HalLinks;
+    _links: HalLinks;
 }
 
 const NavigationLinks: StatelessComponent<NavigationLinksProps> = ({
-    links,
+    _links,
 }) => (
     <nav>
         {[...navigation].map(rel => (
             <FeedNavigationLink
                 key={rel}
-                link={(links[rel] || [])[0]}
+                link={(_links[rel] || [])[0]}
                 rel={rel}
             />
         ))}

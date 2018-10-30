@@ -32,7 +32,7 @@ import {
 } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
 import { HalResource, NavigatableProps } from '../../../types';
-import { http } from '../../../utils';
+import { hal, http } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';
@@ -200,15 +200,9 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
         this.setState({
             loading: false,
             streams: Object.values(
-                responses
-                    .flatMap(({ body }) => getStreamLinks(body as HalResource))
-                    .reduce(
-                        (akk, { href, title }) => ({
-                            ...akk,
-                            [href]: { href, title },
-                        }),
-                        {},
-                    ),
+                responses.flatMap(({ body }) =>
+                    getStreamLinks(hal.normalizeResource(body as HalResource)),
+                ),
             ),
         });
     };
@@ -244,6 +238,7 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
     render() {
         const { json, classes } = this.props;
         const { streams, loading, open } = this.state;
+
         return (
             <div>
                 <Inspector

@@ -10,7 +10,7 @@ import {
 } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
 import { HalResource } from '../../../types';
-import { resolveLinks } from '../../../utils';
+import { hal } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';
@@ -30,7 +30,7 @@ const messages$ = store.hal$.body$
     .map(([{ _embedded }, url]) =>
         _embedded[rels.message].map(({ _links, ...message }) => ({
             ...message,
-            _links: resolveLinks(url, _links),
+            _links: hal.resolveLinks(url, _links),
         })),
     );
 

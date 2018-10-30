@@ -28,15 +28,19 @@ const views: { [rel: string]: ComponentType<HalViewerProps> } = {
 
 const HalViewer: StatelessComponent<HalViewerProps> = ({
     forms,
-    links,
+    _links,
     self,
 }) => (
     <section>
-        <NavigationLinks links={links} />
-        <HyperMediaControls actions={formActions} forms={forms} links={links} />
+        <NavigationLinks _links={_links} />
+        <HyperMediaControls
+            actions={formActions}
+            forms={forms}
+            _links={_links}
+        />
         {createElement<HalViewerProps>(views[self] || views._unrecognized, {
+            _links,
             forms,
-            links,
             self,
         })}
     </section>
