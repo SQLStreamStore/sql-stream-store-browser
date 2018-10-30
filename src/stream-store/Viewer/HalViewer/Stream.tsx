@@ -92,10 +92,12 @@ interface StreamState {
     messages: Array<Message & HalResource>;
 }
 
-const Stream: StatelessComponent<StreamState> = ({ messages = [] }) => (
+const Stream: ComponentType<StreamState & HalViewerProps> = ({
+    messages = [],
+}) => (
     <section>
         <Messages messages={messages} />
     </section>
 );
 
-export default connect(state$)(Stream) as ComponentType<HalViewerProps>;
+export default connect<HalViewerProps, StreamState>(state$)(Stream);

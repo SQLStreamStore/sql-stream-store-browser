@@ -124,9 +124,9 @@ class StreamMetadataJson extends PureComponent<
     }
 }
 
-const StreamMetadata: StatelessComponent<StreamMetadataState> = ({
-    metadata,
-}) => (
+const StreamMetadata: StatelessComponent<
+    StreamMetadataState & HalViewerProps
+> = ({ metadata }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
@@ -140,4 +140,6 @@ const StreamMetadata: StatelessComponent<StreamMetadataState> = ({
     </section>
 );
 
-export default connect(state$)(StreamMetadata) as ComponentType<HalViewerProps>;
+export default connect<HalViewerProps, StreamMetadataState>(state$)(
+    StreamMetadata,
+);

@@ -73,10 +73,13 @@ const Info: StatelessComponent<InfoState> = ({ provider, versions }) => (
     </Table>
 );
 
-const Index: StatelessComponent<IndexState> = ({ provider, versions }) => (
+const Index: ComponentType<IndexState & HalViewerProps> = ({
+    provider,
+    versions,
+}) => (
     <section>
         <Info provider={provider} versions={versions} />
     </section>
 );
 
-export default connect(state$)(Index) as ComponentType<HalViewerProps>;
+export default connect<HalViewerProps, IndexState>(state$)(Index);

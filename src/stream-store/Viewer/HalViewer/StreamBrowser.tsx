@@ -1,6 +1,6 @@
-import { ComponentType } from 'react';
+import React, { ComponentType } from 'react';
 import { Observable as obs } from 'rxjs';
-import StreamBrowser from '../../../components/StreamBrowser';
+import { StreamBrowser } from '../../../components';
 import { connect, createState } from '../../../reactive';
 import { HalResource } from '../../../types';
 import rels from '../../rels';
@@ -21,4 +21,12 @@ const state$ = createState<StreamBrowserState>(
     obs.of<StreamBrowserState>({ loading: false, streams: [] }),
 );
 
-export default connect(state$)(StreamBrowser);
+const StreamBrowserComponent: ComponentType<
+    StreamBrowserState & HalViewerProps
+> = ({ streams, loading }) => (
+    <StreamBrowser loading={loading} streams={streams} />
+);
+
+export default connect<HalViewerProps, StreamBrowserState>(state$)(
+    StreamBrowserComponent,
+);

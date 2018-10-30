@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import React from 'react';
+import React, { ComponentType } from 'react';
 import Remarkable from 'react-remarkable';
 import { Observable } from 'rxjs';
 import { connect, createState } from '../../../reactive';
@@ -17,7 +17,7 @@ const state$ = createState<MarkdownViewerState>(
     }),
 );
 
-const MarkdownViewer = ({ body }: { body: string }) => (
+const MarkdownViewer: ComponentType<MarkdownViewerState> = ({ body }) => (
     <Typography>
         <Remarkable
             options={{
@@ -28,4 +28,4 @@ const MarkdownViewer = ({ body }: { body: string }) => (
         </Remarkable>
     </Typography>
 );
-export default connect(state$)(MarkdownViewer);
+export default connect<{}, MarkdownViewerState>(state$)(MarkdownViewer);

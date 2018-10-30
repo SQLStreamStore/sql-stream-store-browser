@@ -8,7 +8,7 @@ const viewers = {
     [mediaTypes.hal]: HalViewer,
 };
 
-const Viewer = ({ mediaType, ...props }: { mediaType: string } & any) =>
+const Viewer = ({ mediaType, ...props }: { mediaType: string }) =>
     createElement(viewers[mediaType] || 'div', props);
 
 export default Viewer;

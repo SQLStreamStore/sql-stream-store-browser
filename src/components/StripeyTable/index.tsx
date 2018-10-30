@@ -9,16 +9,15 @@ import {
     WithStyles,
     withStyles,
 } from '@material-ui/core';
-import { TableCellProps } from '@material-ui/core/TableCell';
 import { TableRowProps } from '@material-ui/core/TableRow';
-import React, { ComponentType } from 'react';
+import React from 'react';
 
 const TableCell = withStyles(theme => ({
     head: {
         backgroundColor: theme.palette.primary.dark,
         color: theme.palette.common.white,
     },
-}))(MaterialTableCell) as ComponentType<TableCellProps>;
+}))(MaterialTableCell);
 
 const tableRowStyles = (theme: Theme) => ({
     row: {
@@ -35,6 +34,6 @@ const TableRow = withStyles(tableRowStyles)(
     }: TableRowProps & WithStyles<typeof tableRowStyles>) => (
         <MaterialTableRow {...props} className={classes.row} />
     ),
-) as ComponentType<TableRowProps>;
+);
 
 export { Table, TableBody, TableHead, TableCell, TableRow, TableFooter };

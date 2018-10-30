@@ -1,6 +1,6 @@
 import { Card, CardActions } from '@material-ui/core';
 import { JSONSchema7 } from 'json-schema';
-import React, { ComponentType, StatelessComponent } from 'react';
+import React, { ComponentType } from 'react';
 import { Observable } from 'rxjs';
 import { connect, createState } from '../../reactive';
 import { navigation, rels, store } from '../../stream-store';
@@ -59,4 +59,6 @@ const HyperMediaControls: ComponentType<
     </Card>
 );
 
-export default connect(state$)(HyperMediaControls);
+export default connect<HyperMediaControlsProps, HyperMediaControlsState>(
+    state$,
+)(HyperMediaControls);
