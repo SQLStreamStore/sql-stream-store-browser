@@ -1,5 +1,6 @@
 import { IconButton } from '@material-ui/core';
 import React, {
+    ComponentType,
     FormEventHandler,
     PureComponent,
     StatelessComponent,
@@ -14,12 +15,10 @@ interface FeedNavigationLinkProps {
     rel: string;
 }
 
-const FeedNavigationLink: StatelessComponent<
+const FeedNavigationLink: ComponentType<
     FeedNavigationLinkProps
-> = withNavigation()(
-    class What extends PureComponent<
-        FeedNavigationLinkProps & NavigatableProps
-    > {
+> = withNavigation<FeedNavigationLinkProps>()(
+    class extends PureComponent<FeedNavigationLinkProps & NavigatableProps> {
         _handleOnClick: FormEventHandler = e => {
             const { onNavigate, authorization, link } = this.props;
 

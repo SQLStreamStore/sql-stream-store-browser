@@ -1,5 +1,5 @@
-import React, { ReactNode, StatelessComponent } from 'react';
-import { NavigationHandler } from '../types';
+import React, { ComponentType, ReactNode, StatelessComponent } from 'react';
+import { NavigatableProps, NavigationHandler } from '../types';
 import getDisplayName from './getDisplayName';
 
 const defaultNavigationHandler: NavigationHandler = (link, authorization) => {
@@ -19,8 +19,10 @@ const NavigationProvider: StatelessComponent<{
 
 export default NavigationProvider;
 
-const withNavigation = () => WrappedComponent => {
-    const Component = props => (
+const withNavigation = <T extends object>() => (
+    WrappedComponent: ComponentType<T & NavigatableProps>,
+) => {
+    const Component = (props: T) => (
         <Consumer>
             {onNavigate => (
                 <WrappedComponent {...props} onNavigate={onNavigate} />
@@ -28,7 +30,7 @@ const withNavigation = () => WrappedComponent => {
         </Consumer>
     );
     Component.displayName = getDisplayName('WithNavigation', WrappedComponent);
-    return Component;
+    return Component as ComponentType<T & NavigatableProps>;
 };
 
 export { withNavigation };

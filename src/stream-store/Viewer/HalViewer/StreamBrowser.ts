@@ -21,4 +21,4 @@ const state$ = createState<StreamBrowserState>(
     obs.of<StreamBrowserState>({ loading: false, streams: [] }),
 );
 
-export default connect(state$)(StreamBrowser) as ComponentType<HalViewerProps>;
+export default connect(state$)(StreamBrowser);

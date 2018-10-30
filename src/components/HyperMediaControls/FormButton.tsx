@@ -1,6 +1,7 @@
+import { JSONSchema7 } from 'json-schema';
 import React, { FormEvent, PureComponent } from 'react';
 import { SchemaForm } from 'react-schema-form';
-import { HalLink, NavigatableProps } from '../../types';
+import { AuthorizationProps, FormActions, HalLink } from '../../types';
 import { withAuthorization } from '../AuthorizationProvider';
 import Dialog from './Dialog';
 import TextAreaField from './TextAreaField';
@@ -26,10 +27,9 @@ const getValue = (value: FormEvent<HTMLInputElement>) => {
 interface FormButtonProps {
     rel: string;
     link: HalLink;
-    actions;
+    actions: FormActions;
     curies: HalLink[];
-    schema;
-    title: string;
+    schema: JSONSchema7;
 }
 
 interface FormButtonState {
@@ -39,7 +39,7 @@ interface FormButtonState {
 }
 
 class FormButton extends PureComponent<
-    FormButtonProps & NavigatableProps,
+    FormButtonProps & AuthorizationProps,
     FormButtonState
 > {
     state = {

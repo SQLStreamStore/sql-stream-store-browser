@@ -25,9 +25,12 @@ const mount = <T extends object>(
         }
     }
 
+    (Mount as ComponentType<T>).displayName = getDisplayName(
+        'Mount',
+        WrappedComponent,
+    );
+
     return Mount;
 };
-
-mount.displayName = 'Mount';
 
 export default mount;

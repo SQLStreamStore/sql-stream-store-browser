@@ -25,7 +25,9 @@ const state$ = createState<UnregcognizedRelViewerState>(
     }),
 );
 
-const MaybeLinkLabel: StatelessComponent<ObjectLabelProps> = withNavigation()(
+const MaybeLinkLabel: ComponentType<ObjectLabelProps> = withNavigation<
+    ObjectLabelProps
+>()(
     ({
         authorization,
         name,
@@ -74,6 +76,4 @@ class UnrecognizedRelViewer extends React.PureComponent<
     }
 }
 
-export default connect(state$)(UnrecognizedRelViewer) as ComponentType<
-    HalViewerProps
->;
+export default connect(state$)(UnrecognizedRelViewer);

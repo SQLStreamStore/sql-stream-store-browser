@@ -1,12 +1,14 @@
 import { Button, TextField } from '@material-ui/core';
 import React from 'react';
-import { ComposedComponent } from 'react-schema-form';
+import {
+    ComposedComponent,
+    ReactSchemaFormInputProps,
+} from 'react-schema-form';
 import uuid from 'uuid';
 import { SpaceBar } from '../Icons';
-import { FormInputProps } from './reactSchemaForms';
 
-class UuidField extends React.PureComponent<FormInputProps> {
-    constructor(props: FormInputProps) {
+class UuidField extends React.PureComponent<ReactSchemaFormInputProps> {
+    constructor(props: ReactSchemaFormInputProps) {
         super(props);
 
         const { model, form, setDefault } = this.props;

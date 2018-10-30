@@ -1,12 +1,6 @@
 declare module 'react-inspector' {
     import { ComponentType } from 'react';
 
-    export interface ObjectProps {
-        name: string;
-        data?: any;
-        path?: string;
-    }
-
     export interface ObjectNameProps {
         name: string;
         dimmed?: boolean;

@@ -1,5 +1,6 @@
 import { PropTypes, TextField } from '@material-ui/core';
 import React, {
+    ComponentType,
     FormEventHandler,
     PureComponent,
     StatelessComponent,
@@ -22,9 +23,9 @@ interface TemplatedLinkButtonProps extends LinkButtonProps {
     readonly curies: HalLink[];
 }
 
-const TemplatedLinkButton: StatelessComponent<
+const TemplatedLinkButton: ComponentType<
     TemplatedLinkButtonProps
-> = withNavigation()(
+> = withNavigation<TemplatedLinkButtonProps>()(
     class extends PureComponent<
         TemplatedLinkButtonProps & NavigatableProps,
         { [variable: string]: string }
@@ -78,9 +79,9 @@ interface NonTemplatedLinkButtonProps extends LinkButtonProps {
     readonly title: string;
 }
 
-const NonTemplatedLinkButton: StatelessComponent<
+const NonTemplatedLinkButton: ComponentType<
     NonTemplatedLinkButtonProps
-> = withNavigation()(
+> = withNavigation<NonTemplatedLinkButtonProps>()(
     ({
         link,
         rel,

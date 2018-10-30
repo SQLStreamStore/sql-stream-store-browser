@@ -4,7 +4,7 @@ import React, { ComponentType, StatelessComponent } from 'react';
 import { Observable } from 'rxjs';
 import { connect, createState } from '../../reactive';
 import { navigation, rels, store } from '../../stream-store';
-import { HalLinks, HalResource } from '../../types';
+import { FormActions, HalLinks, HalResource } from '../../types';
 import FormButton from './FormButton';
 import LinkButton from './LinkButton';
 
@@ -21,12 +21,12 @@ const state$ = createState<HyperMediaControlsState>(
 );
 
 interface HyperMediaControlsProps {
-    actions: any;
+    actions: FormActions;
     _links: HalLinks;
     forms: { [rel: string]: HalResource & JSONSchema7 };
 }
 
-const HyperMediaControls: StatelessComponent<
+const HyperMediaControls: ComponentType<
     HyperMediaControlsProps & HyperMediaControlsState
 > = ({ actions, forms, href, _links }) => (
     <Card>
@@ -59,6 +59,4 @@ const HyperMediaControls: StatelessComponent<
     </Card>
 );
 
-export default connect(state$)(HyperMediaControls) as ComponentType<
-    HyperMediaControlsProps
->;
+export default connect(state$)(HyperMediaControls);

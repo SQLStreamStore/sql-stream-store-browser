@@ -1,7 +1,7 @@
 import { WithStyles, withStyles } from '@material-ui/core';
-import React, { ReactNode, StatelessComponent } from 'react';
+import React, { ComponentType } from 'react';
 import theme from '../theme';
-import { HalLink, HalLinks, HalResource, NavigatableProps } from '../types';
+import { HalLink, HalLinks, NavigatableProps } from '../types';
 import { preventDefault } from '../utils';
 import { withNavigation } from './NavigationProvider';
 
@@ -31,9 +31,9 @@ interface HyperlinkProps {
 const getLink = (links: HalLinks, rel: string): HalLink | null =>
     !links[rel] ? null : links[rel][0];
 
-const Hyperlink: StatelessComponent<
-    HyperlinkProps & { children?: ReactNode }
-> = withNavigation()(
+const Hyperlink: ComponentType<HyperlinkProps> = withNavigation<
+    HyperlinkProps
+>()(
     withStyles(styles)(
         ({
             classes,
@@ -41,8 +41,7 @@ const Hyperlink: StatelessComponent<
             authorization,
             onNavigate,
             rel,
-        }: HyperlinkProps & { children?: ReactNode } & NavigatableProps &
-            WithStyles<typeof styles>) => {
+        }: HyperlinkProps & NavigatableProps & WithStyles<typeof styles>) => {
             const link = getLink(_links, rel);
             if (!link) {
                 // tslint:disable-next-line:no-console
