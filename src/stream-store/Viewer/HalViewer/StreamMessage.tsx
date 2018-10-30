@@ -310,8 +310,8 @@ class StreamMessageTabs extends PureComponent<
                         onChange={this._handleChange}
                         indicatorColor={'primary'}
                     >
-                        <Tab label={'Data'} />
-                        <Tab label={'Metadata'} />
+                        <Tab label={'Data'} icon={<Notes />} />
+                        <Tab label={'Metadata'} icon={<Settings />} />
                     </Tabs>
                 </CardActions>
                 <CardContent>
