@@ -28,4 +28,4 @@ const MarkdownViewer: ComponentType<MarkdownViewerState> = ({ body }) => (
         </Remarkable>
     </Typography>
 );
-export default connect<{}, MarkdownViewerState>(state$)(MarkdownViewer);
+export default connect<MarkdownViewerState>(state$)(MarkdownViewer);

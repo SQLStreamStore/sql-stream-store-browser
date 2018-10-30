@@ -27,6 +27,6 @@ const StreamBrowserComponent: ComponentType<
     <StreamBrowser loading={loading} streams={streams} />
 );
 
-export default connect<HalViewerProps, StreamBrowserState>(state$)(
+export default connect<StreamBrowserState, HalViewerProps>(state$)(
     StreamBrowserComponent,
 );

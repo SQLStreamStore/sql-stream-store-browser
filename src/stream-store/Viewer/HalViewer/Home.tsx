@@ -82,4 +82,4 @@ const Index: ComponentType<IndexState & HalViewerProps> = ({
     </section>
 );
 
-export default connect<HalViewerProps, IndexState>(state$)(Index);
+export default connect<IndexState, HalViewerProps>(state$)(Index);

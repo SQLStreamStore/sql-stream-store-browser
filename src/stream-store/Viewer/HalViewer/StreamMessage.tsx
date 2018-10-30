@@ -346,6 +346,6 @@ const StreamMessage: ComponentType<StreamMessageState & HalViewerProps> = ({
     </section>
 );
 
-export default connect<HalViewerProps, StreamMessageState>(state$)(
+export default connect<StreamMessageState, HalViewerProps>(state$)(
     StreamMessage,
 );

@@ -140,6 +140,6 @@ const StreamMetadata: StatelessComponent<
     </section>
 );
 
-export default connect<HalViewerProps, StreamMetadataState>(state$)(
+export default connect<StreamMetadataState, HalViewerProps>(state$)(
     StreamMetadata,
 );

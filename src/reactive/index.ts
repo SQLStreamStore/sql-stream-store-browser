@@ -26,7 +26,7 @@ const createLogger = <TState>() => (state: TState) =>
     // tslint:disable-next-line:no-console
     console.debug(state, typeof state);
 
-export const connect = <TProps extends object, TState extends object>(
+export const connect = <TState extends object, TProps extends object = {}>(
     state$: Observable<TState>,
 ) => (
     WrappedComponent: ComponentType<TProps & TState>,

@@ -227,4 +227,4 @@ const Notifications: ComponentType<NotificationsProps> = ({
     </div>
 );
 
-export default connect<{}, NotificationsState>(state$)(Notifications);
+export default connect<NotificationsState>(state$)(Notifications);

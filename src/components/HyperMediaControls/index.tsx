@@ -59,6 +59,6 @@ const HyperMediaControls: ComponentType<
     </Card>
 );
 
-export default connect<HyperMediaControlsProps, HyperMediaControlsState>(
+export default connect<HyperMediaControlsState, HyperMediaControlsProps>(
     state$,
 )(HyperMediaControls);

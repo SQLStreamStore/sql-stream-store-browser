@@ -76,6 +76,6 @@ class UnrecognizedRelViewer extends React.PureComponent<
     }
 }
 
-export default connect<HalViewerProps, UnrecognizedRelViewerState>(state$)(
+export default connect<UnrecognizedRelViewerState, HalViewerProps>(state$)(
     UnrecognizedRelViewer,
 );

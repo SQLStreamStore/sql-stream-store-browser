@@ -100,4 +100,4 @@ const Stream: ComponentType<StreamState & HalViewerProps> = ({
     </section>
 );
 
-export default connect<HalViewerProps, StreamState>(state$)(Stream);
+export default connect<StreamState, HalViewerProps>(state$)(Stream);
