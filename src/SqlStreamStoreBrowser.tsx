@@ -1,5 +1,6 @@
 import { AppBar, CssBaseline, Toolbar, Typography } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { JSONSchema7 } from 'json-schema';
 import React, { ComponentType } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
@@ -14,13 +15,13 @@ import { SqlStreamStore } from './components/Icons';
 import { connect, createState } from './reactive';
 import { actions, store, Viewer } from './stream-store';
 import theme from './theme';
-import { HalLink, HalLinks } from './types';
+import { AuthorizationProps, HalLink, HalLinks } from './types';
 import { mediaTypes } from './utils';
 
-const getSelfAlias = links =>
+const getSelfAlias = (links: HalLinks) =>
     Object.keys(links)
         .flatMap(rel => links[rel])
-        .filter(({ rel }) => rel.indexOf('streamStore:') === 0)
+        .filter(({ rel }) => rel && rel.indexOf('streamStore:') === 0)
         .filter(
             ({ rel, href }) =>
                 !!links.self.filter(link => link.href === href).length,
@@ -36,20 +37,21 @@ const self$ = store.hal$.links$
 interface SqlStreamStoreBrowserState {
     loading: boolean;
     mediaType: string;
-    links: HalLinks;
+    _links: HalLinks;
     self: HalLink;
+    forms: { [rel: string]: JSONSchema7 };
 }
 const state$ = createState<SqlStreamStoreBrowserState>(
     obs.merge(
         self$.map(self => ['self', () => self]),
-        store.hal$.links$.map(links => ['links', () => links]),
+        store.hal$.links$.map(links => ['_links', () => links]),
         store.hal$.forms$.map(forms => ['forms', () => forms]),
         store.hal$.loading$.map(loading => ['loading', () => loading]),
         store.hal$.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
     ),
     obs.of({
+        _links: {},
         forms: {},
-        links: {},
         loading: false,
         mediaType: mediaTypes.hal,
         self: {
@@ -62,7 +64,7 @@ const onNavigate = (link: HalLink, authorization: string | undefined) =>
     link.href.indexOf('#') === -1 &&
     actions.get.request.next({ link, headers: { authorization } });
 
-const initialNavigation = ({ authorization }) =>
+const initialNavigation = ({ authorization }: AuthorizationProps) =>
     onNavigate(
         { href: window.location.href, type: mediaTypes.any },
         authorization,
@@ -82,29 +84,31 @@ const Hero = () => (
 const SqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState
 > = withAuthorization()(
-    mount<SqlStreamStoreBrowserState & { authorization: string | undefined }>(
-        initialNavigation,
-    )(({ loading, ...props }) => (
-        <MuiThemeProvider theme={theme}>
-            <div>
-                <CssBaseline />
-                <Hero />
-                <Loading open={loading} />
-                <NavigationProvider onNavigate={onNavigate}>
-                    <Viewer {...props} />
-                    <Notifications />
-                </NavigationProvider>
-            </div>
-        </MuiThemeProvider>
-    )),
+    mount<SqlStreamStoreBrowserState & AuthorizationProps>(initialNavigation)(
+        ({ loading, ...props }) => (
+            <MuiThemeProvider theme={theme}>
+                <div>
+                    <CssBaseline />
+                    <Hero />
+                    <Loading open={loading} />
+                    <NavigationProvider onNavigate={onNavigate}>
+                        <Viewer {...props} />
+                        <Notifications />
+                    </NavigationProvider>
+                </div>
+            </MuiThemeProvider>
+        ),
+    ),
 );
 
 const AuthorizedSqlStreamStoreBrowser: ComponentType<
-    SqlStreamStoreBrowserState & { authorization: string | undefined }
+    SqlStreamStoreBrowserState & AuthorizationProps
 > = ({ authorization, ...props }) => (
     <AuthorizationProvider authorization={authorization}>
         <SqlStreamStoreBrowser {...props} />
     </AuthorizationProvider>
 );
 
-export default connect(state$)(AuthorizedSqlStreamStoreBrowser);
+export default connect<SqlStreamStoreBrowserState, AuthorizationProps>(state$)(
+    AuthorizedSqlStreamStoreBrowser,
+);

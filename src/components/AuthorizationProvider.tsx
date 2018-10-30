@@ -1,21 +1,25 @@
-import React, { ReactNode, StatelessComponent } from 'react';
+import React, { ComponentType, ReactNode, StatelessComponent } from 'react';
+import { AuthorizationProps } from '../types';
 import getDisplayName from './getDisplayName';
 
 const { Consumer, Provider } = React.createContext<string | undefined>(
     undefined,
 );
 
-const AuthorizationProvider: StatelessComponent<{
-    authorization: string | undefined;
-    children: ReactNode;
-}> = ({ authorization, children }) => (
+const AuthorizationProvider: StatelessComponent<
+    AuthorizationProps & {
+        children: ReactNode;
+    }
+> = ({ authorization, children }) => (
     <Provider value={authorization}>{children}</Provider>
 );
 
 export default AuthorizationProvider;
 
-const withAuthorization = () => WrappedComponent => {
-    const Component = props => (
+const withAuthorization = () => <T extends object>(
+    WrappedComponent: ComponentType<T & AuthorizationProps>,
+) => {
+    const Component = (props: T) => (
         <Consumer>
             {authorization => (
                 <WrappedComponent {...props} authorization={authorization} />
@@ -26,7 +30,7 @@ const withAuthorization = () => WrappedComponent => {
         'WithAuthorization',
         WrappedComponent,
     );
-    return Component;
+    return Component as ComponentType<T>;
 };
 
 export { withAuthorization };

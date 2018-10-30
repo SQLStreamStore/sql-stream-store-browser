@@ -11,10 +11,13 @@ import {
 import React, {
     ComponentType,
     CSSProperties,
+    FormEvent,
     PureComponent,
+    ReactNode,
     StatelessComponent,
 } from 'react';
 import Inspector, {
+    NodeRendererProps,
     ObjectLabel,
     ObjectName,
     ObjectRootLabel,
@@ -32,7 +35,7 @@ import {
 } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
 import { HalResource, NavigatableProps } from '../../../types';
-import { http } from '../../../utils';
+import { hal, http } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';
@@ -51,7 +54,7 @@ const message$ = store.hal$.body$.map(({ payload, metadata, ...body }) => ({
     payload: tryParseJson(payload),
 }));
 
-interface StreamMessageState {
+interface StreamMessageState extends HalResource {
     message: {
         messageId: string;
         createdUtc: string;
@@ -67,6 +70,8 @@ interface StreamMessageState {
 const state$ = createState<StreamMessageState>(
     message$.map(message => ['message', () => message]),
     obs.of<StreamMessageState>({
+        _embedded: {},
+        _links: {},
         message: {
             createdUtc: '',
             messageId: '',
@@ -127,10 +132,10 @@ const StreamMessageDetails: StatelessComponent<
     </TableRow>
 );
 
-const isPotentialStreamId = data =>
+const isPotentialStreamId = (data: any) =>
     typeof data === 'number' || typeof data === 'string';
 
-const getStreamLinks = ({ _embedded }): HalResource[] =>
+const getStreamLinks = ({ _embedded }: HalResource): HalResource[] =>
     _embedded[rels.feed] || [];
 
 interface StreamMessageJsonState {
@@ -167,10 +172,10 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
         streams: [],
     };
 
-    _handlePotentialStreamIdClick = async (
-        { currentTarget: anchorElement },
-        pattern,
-    ) => {
+    _handlePotentialStreamIdClick: (
+        e: FormEvent,
+        pattern: string,
+    ) => Promise<void> = async ({ currentTarget: anchorElement }, pattern) => {
         const { authorization, _links } = this.props;
 
         this.setState({
@@ -200,15 +205,9 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
         this.setState({
             loading: false,
             streams: Object.values(
-                responses
-                    .flatMap(({ body }) => getStreamLinks(body as HalResource))
-                    .reduce(
-                        (akk, { href, title }) => ({
-                            ...akk,
-                            [href]: { href, title },
-                        }),
-                        {},
-                    ),
+                responses.flatMap(({ body }) =>
+                    getStreamLinks(hal.normalizeResource(body as HalResource)),
+                ),
             ),
         });
     };
@@ -218,7 +217,13 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
             open: false,
         });
 
-    _renderNode = ({ depth, name, data, path, isNonenumerable, ...props }) =>
+    _renderNode = ({
+        depth,
+        name,
+        data,
+        isNonenumerable,
+        ...props
+    }: NodeRendererProps & { children?: ReactNode }) =>
         depth === 0 ? (
             <ObjectRootLabel name={name} data={{}} {...props} />
         ) : isPotentialStreamId(data) ? (
@@ -244,6 +249,7 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
     render() {
         const { json, classes } = this.props;
         const { streams, loading, open } = this.state;
+
         return (
             <div>
                 <Inspector
@@ -287,7 +293,8 @@ class StreamMessageTabs extends PureComponent<
         value: 0,
     };
 
-    _handleChange = (e, value) => this.setState({ value });
+    _handleChange: (e: FormEvent, value: number) => void = (e, value) =>
+        this.setState({ value });
 
     render() {
         const {
@@ -303,8 +310,8 @@ class StreamMessageTabs extends PureComponent<
                         onChange={this._handleChange}
                         indicatorColor={'primary'}
                     >
-                        <Tab label={'Data'} />
-                        <Tab label={'Metadata'} />
+                        <Tab label={'Data'} icon={<Notes />} />
+                        <Tab label={'Metadata'} icon={<Settings />} />
                     </Tabs>
                 </CardActions>
                 <CardContent>
@@ -320,7 +327,7 @@ class StreamMessageTabs extends PureComponent<
     }
 }
 
-const StreamMessage: StatelessComponent<StreamMessageState & HalResource> = ({
+const StreamMessage: ComponentType<StreamMessageState & HalViewerProps> = ({
     message,
     ...props
 }) => (
@@ -337,4 +344,6 @@ const StreamMessage: StatelessComponent<StreamMessageState & HalResource> = ({
     </section>
 );
 
-export default connect(state$)(StreamMessage) as ComponentType<HalViewerProps>;
+export default connect<StreamMessageState, HalViewerProps>(state$)(
+    StreamMessage,
+);

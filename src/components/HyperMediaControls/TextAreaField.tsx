@@ -1,9 +1,11 @@
 import { TextField } from '@material-ui/core';
-import React, { ComponentType, StatelessComponent } from 'react';
-import { ComposedComponent } from 'react-schema-form';
-import { FormInputProps } from './reactSchemaForms';
+import React, { StatelessComponent } from 'react';
+import {
+    ComposedComponent,
+    ReactSchemaFormInputProps,
+} from 'react-schema-form';
 
-const TextAreaField: StatelessComponent<FormInputProps> = ({
+const TextAreaField: StatelessComponent<ReactSchemaFormInputProps> = ({
     form,
     error,
     onChangeValidate,
@@ -27,6 +29,4 @@ const TextAreaField: StatelessComponent<FormInputProps> = ({
     </div>
 );
 
-export default ComposedComponent.default(TextAreaField) as ComponentType<
-    FormInputProps
->;
+export default ComposedComponent.default(TextAreaField);

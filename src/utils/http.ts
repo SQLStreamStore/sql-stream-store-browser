@@ -104,11 +104,11 @@ const _delete = ({ link, headers = {} }: HttpRequest) =>
         method: 'delete',
     }).then(mapResponse);
 
-interface Http {
-    get: (request: HttpRequest) => Promise<HttpResponse>;
-    post: (request: HttpRequestWithBody) => Promise<HttpResponse>;
-    delete: (request: HttpRequest) => Promise<HttpResponse>;
-}
+type HttpVerb = 'get' | 'post' | 'delete';
+
+type Http = {
+    [V in HttpVerb]: (request: HttpRequest) => Promise<HttpResponse>
+};
 
 const http: Http = {
     delete: _delete,

@@ -4,12 +4,7 @@ import {
     ExpansionPanelSummary,
     Typography,
 } from '@material-ui/core';
-import React, {
-    ComponentType,
-    CSSProperties,
-    PureComponent,
-    StatelessComponent,
-} from 'react';
+import React, { CSSProperties, PureComponent, StatelessComponent } from 'react';
 import { Observable as obs } from 'rxjs';
 import { Hyperlink } from '../../../components';
 import { Code } from '../../../components/Icons';
@@ -124,9 +119,9 @@ class StreamMetadataJson extends PureComponent<
     }
 }
 
-const StreamMetadata: StatelessComponent<StreamMetadataState> = ({
-    metadata,
-}) => (
+const StreamMetadata: StatelessComponent<
+    StreamMetadataState & HalViewerProps
+> = ({ metadata }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
             <TableHead>
@@ -140,4 +135,6 @@ const StreamMetadata: StatelessComponent<StreamMetadataState> = ({
     </section>
 );
 
-export default connect(state$)(StreamMetadata) as ComponentType<HalViewerProps>;
+export default connect<StreamMetadataState, HalViewerProps>(state$)(
+    StreamMetadata,
+);

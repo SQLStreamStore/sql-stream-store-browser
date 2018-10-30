@@ -1,5 +1,5 @@
 import { PropTypes, TextField } from '@material-ui/core';
-import React, { PureComponent, StatelessComponent } from 'react';
+import React, { ComponentType, FormEventHandler, PureComponent } from 'react';
 import uriTemplate from 'uri-template';
 import { HalLink, NavigatableProps } from '../../types';
 import { preventDefault } from '../../utils';
@@ -18,19 +18,23 @@ interface TemplatedLinkButtonProps extends LinkButtonProps {
     readonly curies: HalLink[];
 }
 
-const TemplatedLinkButton: StatelessComponent<
+const TemplatedLinkButton: ComponentType<
     TemplatedLinkButtonProps
-> = withNavigation()(
+> = withNavigation<TemplatedLinkButtonProps>()(
     class extends PureComponent<
         TemplatedLinkButtonProps & NavigatableProps,
         { [variable: string]: string }
     > {
         state = {};
 
-        _onChange = variable => ({ target }) =>
+        _onChange = (
+            variable: string,
+        ): FormEventHandler<
+            HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+        > => ({ currentTarget }) =>
             this.setState({
                 ...this.state,
-                [variable]: target.value,
+                [variable]: currentTarget.value,
             });
 
         render() {
@@ -70,9 +74,9 @@ interface NonTemplatedLinkButtonProps extends LinkButtonProps {
     readonly title: string;
 }
 
-const NonTemplatedLinkButton: StatelessComponent<
+const NonTemplatedLinkButton: ComponentType<
     NonTemplatedLinkButtonProps
-> = withNavigation()(
+> = withNavigation<NonTemplatedLinkButtonProps>()(
     ({
         link,
         rel,

@@ -11,7 +11,9 @@ type Actions = {
     }
 };
 
-const verbs = Object.keys(http);
+type HttpVerb = keyof typeof http;
+
+const verbs: HttpVerb[] = Object.keys(http) as HttpVerb[];
 
 const actions: Actions = verbs.reduce(
     (akk, verb: keyof typeof http) => ({

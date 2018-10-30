@@ -1,6 +1,7 @@
-import React, { PureComponent } from 'react';
+import { JSONSchema7 } from 'json-schema';
+import React, { FormEvent, PureComponent } from 'react';
 import { SchemaForm } from 'react-schema-form';
-import { HalLink, NavigatableProps } from '../../types';
+import { AuthorizationProps, FormActions, HalLink } from '../../types';
 import { withAuthorization } from '../AuthorizationProvider';
 import Dialog from './Dialog';
 import TextAreaField from './TextAreaField';
@@ -11,12 +12,12 @@ const mapper = {
     uuid: UuidField,
 };
 
-const getValue = value => {
+const getValue = (value: FormEvent<HTMLInputElement>) => {
     if (typeof value === 'object') {
         try {
-            return JSON.parse(value.target.value);
+            return JSON.parse(value.currentTarget.value);
         } catch (e) {
-            return value.target.value;
+            return value.currentTarget.value;
         }
     }
 
@@ -26,10 +27,9 @@ const getValue = value => {
 interface FormButtonProps {
     rel: string;
     link: HalLink;
-    actions;
+    actions: FormActions;
     curies: HalLink[];
-    schema;
-    title: string;
+    schema: JSONSchema7;
 }
 
 interface FormButtonState {
@@ -39,7 +39,7 @@ interface FormButtonState {
 }
 
 class FormButton extends PureComponent<
-    FormButtonProps & NavigatableProps,
+    FormButtonProps & AuthorizationProps,
     FormButtonState
 > {
     state = {
@@ -60,7 +60,7 @@ class FormButton extends PureComponent<
         }
     };
 
-    _onModelChange = (key, value) => {
+    _onModelChange = (key: string, value: FormEvent<HTMLInputElement>) => {
         const { model, ...state } = this.state;
         this.setState({
             ...state,

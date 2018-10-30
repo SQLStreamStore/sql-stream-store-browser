@@ -5,17 +5,18 @@ import {
     DialogContent,
     DialogTitle,
     Slide,
+    Theme,
     withStyles,
     WithStyles,
 } from '@material-ui/core';
-import React, { PureComponent, StatelessComponent } from 'react';
-
 import { SlideProps } from '@material-ui/core/Slide';
+import React, { FormEvent, PureComponent, StatelessComponent } from 'react';
 import { HalLink } from '../../types';
 import RelIcon from '../RelIcon';
 import HelpButton from './HelpButton';
 import RelButton from './RelButton';
-const styles = theme => ({
+
+const styles = (theme: Theme) => ({
     button: {
         margin: theme.spacing.unit,
     },
@@ -53,7 +54,7 @@ export default withStyles(styles)(
                 open: false,
             });
 
-        _onSubmit = e => {
+        _onSubmit = (e: FormEvent) => {
             const { onSubmit } = this.props;
 
             e.preventDefault();

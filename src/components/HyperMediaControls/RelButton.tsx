@@ -1,7 +1,6 @@
 import { Button } from '@material-ui/core';
 import { ButtonProps } from '@material-ui/core/Button';
-import { SvgIconProps } from '@material-ui/core/SvgIcon';
-import React, { ReactNode, StatelessComponent } from 'react';
+import React, { StatelessComponent } from 'react';
 import RelIcon from '../RelIcon';
 
 interface RelButtonProps {

@@ -5,7 +5,7 @@ import { Observable, ReplaySubject, Subscription } from 'rxjs';
 export const createAction = <T>() => new ReplaySubject<T>(1);
 
 export const createState = <TState extends object>(
-    reducer$,
+    reducer$: Observable<any>,
     initialState$: Observable<TState>,
 ): Observable<TState> =>
     initialState$
@@ -26,7 +26,7 @@ const createLogger = <TState>() => (state: TState) =>
     // tslint:disable-next-line:no-console
     console.debug(state, typeof state);
 
-export const connect = <TProps extends object, TState extends object>(
+export const connect = <TState extends object, TProps extends object = {}>(
     state$: Observable<TState>,
 ) => (
     WrappedComponent: ComponentType<TProps & TState>,

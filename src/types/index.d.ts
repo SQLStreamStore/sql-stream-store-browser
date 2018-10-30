@@ -1,3 +1,5 @@
+import { ReplaySubject } from 'rxjs';
+
 export interface HalLink {
     readonly href: string;
     readonly title?: string;
@@ -6,6 +8,7 @@ export interface HalLink {
     readonly deprecation?: string;
     readonly hreflang?: string;
     readonly name?: string;
+    readonly rel?: string;
 }
 
 export interface HalLinks {
@@ -24,9 +27,12 @@ export interface HalResource {
 
 export type NavigationHandler = (link: HalLink, authorization?: string) => void;
 
-export interface NavigatableProps {
-    onNavigate: NavigationHandler;
+export interface AuthorizationProps {
     authorization?: string;
+}
+
+export interface NavigatableProps extends AuthorizationProps {
+    onNavigate: NavigationHandler;
 }
 
 export interface HttpResponse {
@@ -50,4 +56,13 @@ export interface HttpRequest {
     body?: object;
     link: HalLink;
     headers: { [key: string]: string | undefined };
+}
+
+export interface FormAction {
+    request: ReplaySubject<HttpRequest>;
+    response: ReplaySubject<HttpResponse>;
+}
+
+export interface FormActions {
+    [rel: string]: FormAction;
 }

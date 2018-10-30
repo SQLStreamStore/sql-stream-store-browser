@@ -10,7 +10,7 @@ import {
 } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
 import { HalResource } from '../../../types';
-import { resolveLinks } from '../../../utils';
+import { hal } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
 import { HalViewerProps } from './types';
@@ -30,7 +30,7 @@ const messages$ = store.hal$.body$
     .map(([{ _embedded }, url]) =>
         _embedded[rels.message].map(({ _links, ...message }) => ({
             ...message,
-            _links: resolveLinks(url, _links),
+            _links: hal.resolveLinks(url, _links),
         })),
     );
 
@@ -92,10 +92,12 @@ interface StreamState {
     messages: Array<Message & HalResource>;
 }
 
-const Stream: StatelessComponent<StreamState> = ({ messages = [] }) => (
+const Stream: ComponentType<StreamState & HalViewerProps> = ({
+    messages = [],
+}) => (
     <section>
         <Messages messages={messages} />
     </section>
 );
 
-export default connect(state$)(Stream) as ComponentType<HalViewerProps>;
+export default connect<StreamState, HalViewerProps>(state$)(Stream);

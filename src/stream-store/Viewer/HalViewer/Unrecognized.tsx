@@ -1,4 +1,4 @@
-import React, { ComponentType, StatelessComponent } from 'react';
+import React, { ComponentType } from 'react';
 import Inspector, {
     NodeRendererProps,
     ObjectLabel,
@@ -15,17 +15,19 @@ import { preventDefault } from '../../../utils';
 import store from '../../store';
 import { HalViewerProps } from './types';
 
-interface UnregcognizedRelViewerState {
+interface UnrecognizedRelViewerState {
     data: object;
 }
-const state$ = createState<UnregcognizedRelViewerState>(
+const state$ = createState<UnrecognizedRelViewerState>(
     store.hal$.body$.map(data => ['data', () => data]),
-    obs.of<UnregcognizedRelViewerState>({
+    obs.of<UnrecognizedRelViewerState>({
         data: {},
     }),
 );
 
-const MaybeLinkLabel: StatelessComponent<ObjectLabelProps> = withNavigation()(
+const MaybeLinkLabel: ComponentType<ObjectLabelProps> = withNavigation<
+    ObjectLabelProps
+>()(
     ({
         authorization,
         name,
@@ -54,7 +56,7 @@ const MaybeLinkLabel: StatelessComponent<ObjectLabelProps> = withNavigation()(
 );
 
 class UnrecognizedRelViewer extends React.PureComponent<
-    UnregcognizedRelViewerState
+    UnrecognizedRelViewerState & HalViewerProps
 > {
     _nodeRenderer = ({ depth, ...props }: NodeRendererProps) =>
         depth === 0 ? (
@@ -74,6 +76,6 @@ class UnrecognizedRelViewer extends React.PureComponent<
     }
 }
 
-export default connect(state$)(UnrecognizedRelViewer) as ComponentType<
-    HalViewerProps
->;
+export default connect<UnrecognizedRelViewerState, HalViewerProps>(state$)(
+    UnrecognizedRelViewer,
+);

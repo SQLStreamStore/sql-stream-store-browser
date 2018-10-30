@@ -2,23 +2,20 @@ import {
     IconButton,
     Snackbar,
     SnackbarContent,
+    Theme,
     WithStyles,
     withStyles,
 } from '@material-ui/core';
 import { amber, blue, green, red } from '@material-ui/core/colors';
 import classNames from 'classnames';
-import React, {
-    ComponentType,
-    createElement,
-    ReactNode,
-    StatelessComponent,
-} from 'react';
+import React, { ComponentType, createElement, ReactNode } from 'react';
 import { Observable as obs } from 'rxjs';
 import uuid from 'uuid';
 import { CheckCircle, Close, Error, Info, Warning } from '../components/Icons';
 import { connect, createAction, createState } from '../reactive';
 import { actions } from '../stream-store';
 import { HttpProblemDetailsResponse, HttpResponse } from '../types';
+import { http } from '../utils';
 
 const iconsByVariant = {
     error: Error,
@@ -36,7 +33,7 @@ const formatTitle = ({
 }) => `${status} ${statusText}`;
 
 const formatSubheader = ({ title, type }: { title: string; type: string }) =>
-    title ? `${title} (${type})` : null;
+    title ? `${title} (${type})` : undefined;
 
 const formatContent = ({ detail }: { detail?: string }): ReactNode[] =>
     !!detail
@@ -53,29 +50,40 @@ const formatContent = ({ detail }: { detail?: string }): ReactNode[] =>
               )
         : [];
 
-const responses$ = obs.merge(
-    ...Object.keys(actions).map(verb => actions[verb].response),
-);
+interface Notification {
+    content: ReactNode;
+    subheader?: string;
+    title: string;
+    variant: keyof typeof iconsByVariant;
+}
+
+const verbs: HttpVerb[] = Object.keys(actions) as HttpVerb[];
+
+const responses$ = obs.merge(...verbs.map(verb => actions[verb].response));
 
 const clientError$ = responses$
     .filter(({ status }) => status >= 400 && status < 500)
-    .map(({ body, ...response }: HttpProblemDetailsResponse) => ({
-        content: formatContent(body),
-        subheader: formatSubheader(body),
-        title: formatTitle(response),
-        variant: 'warning',
-    }));
+    .map(
+        ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
+            content: formatContent(body),
+            subheader: formatSubheader(body),
+            title: formatTitle(response),
+            variant: 'warning',
+        }),
+    );
 
-const serverError$ = responses$
-    .filter(({ status }) => status >= 500)
-    .map(({ body, ...response }: HttpProblemDetailsResponse) => ({
+const serverError$ = responses$.filter(({ status }) => status >= 500).map(
+    ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
         content: formatContent(body),
         subheader: formatSubheader(body),
         title: formatTitle(response),
         variant: 'error',
-    }));
+    }),
+);
 
-const unsafe = Object.keys(actions)
+type HttpVerb = keyof typeof http;
+
+const unsafe = verbs
     .filter(verb => verb !== 'get')
     .map(verb => actions[verb].response);
 
@@ -88,7 +96,7 @@ const success$ = obs
         variant: 'success',
     }));
 
-const dismiss = createAction();
+const dismiss = createAction<string>();
 
 const notification$ = obs
     .merge(clientError$, serverError$, success$)
@@ -97,24 +105,34 @@ const notification$ = obs
         messageId: uuid.v4(),
     }));
 
-const state$ = createState(
+interface NotificationState extends Notification {
+    messageId: string;
+}
+interface NotificationsState {
+    notifications: NotificationState[];
+}
+
+const state$ = createState<NotificationsState>(
     obs.merge(
-        notification$.map(notification => [
+        notification$.map((notification: NotificationState) => [
             'notifications',
-            notifications => [...notifications, notification],
+            (notifications: NotificationState[]): NotificationState[] => [
+                ...notifications,
+                notification,
+            ],
         ]),
         dismiss.map(messageId => [
             'notifications',
-            notifications =>
+            (notifications: NotificationState[]): NotificationState[] =>
                 notifications.filter(n => n.messageId !== messageId),
         ]),
     ),
-    obs.of({
+    obs.of<NotificationsState>({
         notifications: [],
     }),
 );
 
-const styles = theme => ({
+const styles = (theme: Theme) => ({
     error: {
         backgroundColor: red[500],
     },
@@ -140,18 +158,9 @@ const styles = theme => ({
     },
 });
 
-interface NotificationProps {
+interface NotificationProps extends NotificationState {
     autoHideDuration: number | undefined;
     className: string;
-    content: ReactNode;
-    messageId: string;
-    subheader: string;
-    title: string;
-    variant: string;
-}
-
-interface NotificationsState {
-    notifications: NotificationProps[];
 }
 
 const Notification: ComponentType<NotificationProps> = withStyles(styles)(
@@ -191,8 +200,8 @@ const Notification: ComponentType<NotificationProps> = withStyles(styles)(
                 }
                 action={[
                     <IconButton
-                        key="close"
-                        color="inherit"
+                        key={'close'}
+                        color={'inherit'}
                         onClick={() => dismiss.next(messageId)}
                     >
                         <Close className={classes.icon} />
@@ -204,7 +213,11 @@ const Notification: ComponentType<NotificationProps> = withStyles(styles)(
     ),
 );
 
-const Notifications: StatelessComponent<NotificationsState> = ({
+interface NotificationsProps {
+    notifications: NotificationProps[];
+}
+
+const Notifications: ComponentType<NotificationsProps> = ({
     notifications = [],
 }) => (
     <div>
@@ -214,4 +227,4 @@ const Notifications: StatelessComponent<NotificationsState> = ({
     </div>
 );
 
-export default connect<{}, NotificationsState>(state$)(Notifications);
+export default connect<NotificationsState>(state$)(Notifications);

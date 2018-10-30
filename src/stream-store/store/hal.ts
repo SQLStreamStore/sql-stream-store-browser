@@ -1,61 +1,21 @@
 import { JSONSchema7 } from 'json-schema';
 import { Observable as obs } from 'rxjs';
-import { HalLink, HalResource } from '../../types';
-import { resolveLinks } from '../../utils';
+import { HalResource } from '../../types';
+import { hal } from '../../utils';
 import mediaTypes from '../../utils/mediaTypes';
 import actions from '../actions';
 import mediaType$ from './mediaType';
 
-interface Links {
-    [rel: string]: HalLink | HalLink[];
-}
-
-interface Embedded {
-    [rel: string]: HalResource | HalResource[];
-}
-
-const normalizeEmbedded = (
-    maybeArray: HalResource | HalResource[],
-): HalResource[] => (Array.isArray(maybeArray) ? maybeArray : [maybeArray]);
-
-const normalizeLinks = (maybeArray: HalLink | HalLink[]): HalLink[] =>
-    Array.isArray(maybeArray) ? maybeArray : [maybeArray];
-
-const normalize = ({
-    _links,
-    _embedded,
-    ...resource
-}: {
-    _links: Links;
-    _embedded: Embedded;
-}): HalResource => ({
-    ...resource,
-    _embedded: Object.keys(_embedded || {}).reduce(
-        (akk, rel) => ({
-            ...akk,
-            [rel]: normalizeEmbedded(_embedded[rel]).map(normalize),
-        }),
-        {},
-    ),
-    _links: Object.keys(_links || {}).reduce(
-        (akk, rel) => ({
-            ...akk,
-            [rel]: normalizeLinks(_links[rel]),
-        }),
-        {},
-    ),
-});
-
 const body$ = actions.get.response
     .zip(mediaType$)
     .filter(([body, mediaType]) => mediaType === mediaTypes.hal)
-    .map(([{ body }]) => normalize(body as HalResource));
+    .map(([{ body }]) => hal.normalizeResource(body as HalResource));
 
 const url$ = actions.get.response.map(({ url }) => url);
 
 const links$ = body$
     .zip(url$)
-    .map(([{ _links }, url]) => resolveLinks(url, _links));
+    .map(([{ _links }, url]) => hal.resolveLinks(url, _links));
 
 const isJsonSchema = (schema: JSONSchema7 & HalResource) =>
     schema && schema.$schema && schema.$schema.endsWith('schema#');

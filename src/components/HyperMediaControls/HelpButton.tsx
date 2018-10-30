@@ -17,7 +17,7 @@ const getCurie = (rel: string, curies: HalLink[]): HalLink => {
     const [prefix, rest] = rel.split(':', 2);
 
     return !rest || rest.indexOf(':') !== -1
-        ? { href: rel }
+        ? { href: rel, rel }
         : curies
               .filter(({ name }) => name === prefix)
               .map(({ href, ...link }) => ({
@@ -25,7 +25,7 @@ const getCurie = (rel: string, curies: HalLink[]): HalLink => {
                   href: uriTemplate
                       .parse(decodeURI(href))
                       .expand({ rel: rest }),
-              }))[0] || { href: rel };
+              }))[0] || { href: rel, rel };
 };
 
 interface DocumentationProps {
@@ -88,8 +88,7 @@ class HelpButton extends PureComponent<HelpButtonProps, HelpButtonState> {
         disabled: false,
         ...getCurie(rel, curies),
     });
-    state = {
-        curies: [],
+    state: HelpButtonState = {
         disabled: true,
         documentation: '',
         href: '',
