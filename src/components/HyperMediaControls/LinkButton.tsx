@@ -1,9 +1,5 @@
 import { PropTypes, TextField } from '@material-ui/core';
-import React, {
-    ComponentType,
-    FormEventHandler,
-    PureComponent,
-} from 'react';
+import React, { ComponentType, FormEventHandler, PureComponent } from 'react';
 import uriTemplate from 'uri-template';
 import { HalLink, NavigatableProps } from '../../types';
 import { preventDefault } from '../../utils';

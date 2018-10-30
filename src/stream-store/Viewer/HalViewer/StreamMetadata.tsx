@@ -4,11 +4,7 @@ import {
     ExpansionPanelSummary,
     Typography,
 } from '@material-ui/core';
-import React, {
-    CSSProperties,
-    PureComponent,
-    StatelessComponent,
-} from 'react';
+import React, { CSSProperties, PureComponent, StatelessComponent } from 'react';
 import { Observable as obs } from 'rxjs';
 import { Hyperlink } from '../../../components';
 import { Code } from '../../../components/Icons';
