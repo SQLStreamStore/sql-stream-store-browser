@@ -200,8 +200,8 @@ const Notification: ComponentType<NotificationProps> = withStyles(styles)(
                 }
                 action={[
                     <IconButton
-                        key="close"
-                        color="inherit"
+                        key={'close'}
+                        color={'inherit'}
                         onClick={() => dismiss.next(messageId)}
                     >
                         <Close className={classes.icon} />
