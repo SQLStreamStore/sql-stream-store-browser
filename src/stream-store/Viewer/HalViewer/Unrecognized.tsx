@@ -1,4 +1,4 @@
-import React, { ComponentType, StatelessComponent } from 'react';
+import React, { ComponentType } from 'react';
 import Inspector, {
     NodeRendererProps,
     ObjectLabel,

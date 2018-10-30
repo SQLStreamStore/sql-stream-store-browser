@@ -5,7 +5,6 @@ import {
     Typography,
 } from '@material-ui/core';
 import React, {
-    ComponentType,
     CSSProperties,
     PureComponent,
     StatelessComponent,

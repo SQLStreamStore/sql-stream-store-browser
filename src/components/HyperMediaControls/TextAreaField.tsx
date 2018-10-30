@@ -1,5 +1,5 @@
 import { TextField } from '@material-ui/core';
-import React, { ComponentType, StatelessComponent } from 'react';
+import React, { StatelessComponent } from 'react';
 import {
     ComposedComponent,
     ReactSchemaFormInputProps,

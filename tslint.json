@@ -7,7 +7,8 @@
     "interface-name": [false, "always-prefix"],
     "member-access": false,
     "variable-name": [true, "check-format", "allow-leading-underscore", "allow-pascal-case"],
-    "no-submodule-imports": false
+    "no-submodule-imports": false,
+    "no-unused-variable": true
   },
   "defaultSeverity": "error",
   "linterOptions": {

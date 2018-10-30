@@ -3,7 +3,6 @@ import React, {
     ComponentType,
     FormEventHandler,
     PureComponent,
-    StatelessComponent,
 } from 'react';
 import uriTemplate from 'uri-template';
 import { HalLink, NavigatableProps } from '../../types';

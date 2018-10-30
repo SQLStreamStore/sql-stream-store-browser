@@ -12,9 +12,7 @@ import React, {
     ComponentType,
     CSSProperties,
     FormEvent,
-    FormEventHandler,
     PureComponent,
-    ReactEventHandler,
     ReactNode,
     StatelessComponent,
 } from 'react';
