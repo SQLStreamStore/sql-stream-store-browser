@@ -1,5 +1,6 @@
 import { AppBar, CssBaseline, Toolbar, Typography } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { JSONSchema7 } from 'json-schema';
 import React, { ComponentType } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
@@ -38,6 +39,7 @@ interface SqlStreamStoreBrowserState {
     mediaType: string;
     _links: HalLinks;
     self: HalLink;
+    forms: { [rel: string]: JSONSchema7 };
 }
 const state$ = createState<SqlStreamStoreBrowserState>(
     obs.merge(
@@ -107,4 +109,6 @@ const AuthorizedSqlStreamStoreBrowser: ComponentType<
     </AuthorizationProvider>
 );
 
-export default connect(state$)(AuthorizedSqlStreamStoreBrowser);
+export default connect<SqlStreamStoreBrowserState, AuthorizationProps>(state$)(
+    AuthorizedSqlStreamStoreBrowser,
+);
