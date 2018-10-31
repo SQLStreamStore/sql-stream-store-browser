@@ -1,7 +1,15 @@
-import { AppBar, CssBaseline, Toolbar, Typography } from '@material-ui/core';
+import {
+    AppBar,
+    CssBaseline,
+    IconButton,
+    Theme,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import { JSONSchema7 } from 'json-schema';
-import React, { ComponentType } from 'react';
+import React, { ComponentType, createElement } from 'react';
 import { Observable as obs } from 'rxjs';
 import {
     AuthorizationProvider,
@@ -11,10 +19,14 @@ import {
     Notifications,
     withAuthorization,
 } from './components';
-import { SqlStreamStore } from './components/Icons';
+import {
+    LightbulbFull,
+    LightbulbOutline,
+    SqlStreamStore,
+} from './components/Icons';
 import { connect, createState } from './reactive';
 import { actions, store, Viewer } from './stream-store';
-import theme from './theme';
+import themes from './themes';
 import { AuthorizationProps, HalLink, HalLinks } from './types';
 import { mediaTypes } from './utils';
 
@@ -39,6 +51,7 @@ interface SqlStreamStoreBrowserState {
     mediaType: string;
     _links: HalLinks;
     self: HalLink;
+    theme: Theme;
     forms: { [rel: string]: JSONSchema7 };
 }
 const state$ = createState<SqlStreamStoreBrowserState>(
@@ -48,6 +61,7 @@ const state$ = createState<SqlStreamStoreBrowserState>(
         store.hal$.forms$.map(forms => ['forms', () => forms]),
         store.hal$.loading$.map(loading => ['loading', () => loading]),
         store.hal$.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
+        themes.theme$.map(theme => ['theme', () => theme]),
     ),
     obs.of({
         _links: {},
@@ -57,6 +71,7 @@ const state$ = createState<SqlStreamStoreBrowserState>(
         self: {
             href: '',
         },
+        theme: themes.defaultTheme,
     }),
 );
 
@@ -70,13 +85,21 @@ const initialNavigation = ({ authorization }: AuthorizationProps) =>
         authorization,
     );
 
-const Hero = () => (
+const lightbulbs: { [key: string]: ComponentType<SvgIconProps> } = {
+    dark: LightbulbFull,
+    light: LightbulbOutline,
+};
+
+const Hero = ({ theme }: { theme: Theme }) => (
     <AppBar position={'static'}>
         <Toolbar>
             <SqlStreamStore color={'action'} />
             <Typography variant={'h6'} color={'inherit'}>
                 Sql Stream Store
             </Typography>
+            <IconButton onClick={() => themes.actions.type.next(void 0)}>
+                {createElement(lightbulbs[theme.palette.type])}
+            </IconButton>
         </Toolbar>
     </AppBar>
 );
@@ -85,19 +108,21 @@ const SqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState
 > = withAuthorization()(
     mount<SqlStreamStoreBrowserState & AuthorizationProps>(initialNavigation)(
-        ({ loading, ...props }) => (
-            <MuiThemeProvider theme={theme}>
-                <div>
-                    <CssBaseline />
-                    <Hero />
-                    <Loading open={loading} />
-                    <NavigationProvider onNavigate={onNavigate}>
-                        <Viewer {...props} />
-                        <Notifications />
-                    </NavigationProvider>
-                </div>
-            </MuiThemeProvider>
-        ),
+        ({ loading, theme, ...props }) => {
+            return (
+                <MuiThemeProvider theme={theme}>
+                    <div>
+                        <CssBaseline />
+                        <Hero theme={theme} />
+                        <Loading open={loading} />
+                        <NavigationProvider onNavigate={onNavigate}>
+                            <Viewer {...props} />
+                            <Notifications />
+                        </NavigationProvider>
+                    </div>
+                </MuiThemeProvider>
+            );
+        },
     ),
 );
 
