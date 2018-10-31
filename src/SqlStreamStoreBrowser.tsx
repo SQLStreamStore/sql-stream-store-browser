@@ -28,7 +28,7 @@ import { connect, createState } from './reactive';
 import { actions, store, Viewer } from './stream-store';
 import themes from './themes';
 import { AuthorizationProps, HalLink, HalLinks } from './types';
-import { mediaTypes } from './utils';
+import {mediaTypes, preventDefault} from './utils';
 
 const getSelfAlias = (links: HalLinks) =>
     Object.keys(links)
@@ -90,6 +90,8 @@ const lightbulbs: { [key: string]: ComponentType<SvgIconProps> } = {
     light: LightbulbOutline,
 };
 
+const onThemeToggle = preventDefault(() => themes.actions.type.next(void 0));
+
 const Hero = ({ theme }: { theme: Theme }) => (
     <AppBar position={'static'}>
         <Toolbar>
@@ -97,7 +99,7 @@ const Hero = ({ theme }: { theme: Theme }) => (
             <Typography variant={'h6'} color={'inherit'}>
                 Sql Stream Store
             </Typography>
-            <IconButton onClick={() => themes.actions.type.next(void 0)}>
+            <IconButton onClick={onThemeToggle}>
                 {createElement(lightbulbs[theme.palette.type])}
             </IconButton>
         </Toolbar>
