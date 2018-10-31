@@ -10,11 +10,9 @@ import {
 } from '@material-ui/core';
 import React, {
     ComponentType,
-    CSSProperties,
     FormEvent,
     PureComponent,
     ReactNode,
-    StatelessComponent,
 } from 'react';
 import Inspector, {
     NodeRendererProps,
@@ -24,20 +22,15 @@ import Inspector, {
 } from 'react-inspector';
 import { Observable as obs } from 'rxjs';
 import uriTemplate from 'uri-template';
-import { Hyperlink, StreamBrowser } from '../../../components';
+import { StreamBrowser } from '../../../components';
 import { Notes, Settings } from '../../../components/Icons';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-} from '../../../components/StripeyTable';
+import { Table, TableBody } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
 import { HalResource, NavigatableProps } from '../../../types';
 import { hal, http } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
+import { StreamHeader, StreamMessageDetails } from './components';
 import { HalViewerProps } from './types';
 
 const tryParseJson = (payload: string): object => {
@@ -83,53 +76,6 @@ const state$ = createState<StreamMessageState>(
             type: '',
         },
     }),
-);
-
-const StreamMessageHeader = () => (
-    <TableRow>
-        <TableCell>{'StreamId'}</TableCell>
-        <TableCell>{'Message Id'}</TableCell>
-        <TableCell>{'Created UTC'}</TableCell>
-        <TableCell>{'Type'}</TableCell>
-        <TableCell style={{ width: '100%' }}>{'Stream Id@Version'}</TableCell>
-        <TableCell>{'Position'}</TableCell>
-    </TableRow>
-);
-
-const nowrap: CSSProperties = { whiteSpace: 'nowrap' };
-
-interface StreamMessageDetailsProps {
-    messageId: string;
-    createdUtc: string;
-    position: number;
-    streamId: string;
-    streamVersion: number;
-    type: string;
-}
-
-const StreamMessageDetails: StatelessComponent<
-    StreamMessageDetailsProps & HalResource
-> = ({
-    messageId,
-    createdUtc,
-    position,
-    streamId,
-    streamVersion,
-    type,
-    _links,
-}) => (
-    <TableRow>
-        <TableCell style={nowrap}>
-            <Hyperlink _links={_links} rel={rels.feed} />
-        </TableCell>
-        <TableCell style={nowrap}>{messageId}</TableCell>
-        <TableCell style={nowrap}>{createdUtc}</TableCell>
-        <TableCell style={nowrap}>{type}</TableCell>
-        <TableCell style={{ width: '100%' }}>
-            <Hyperlink _links={_links} rel={rels.self} />
-        </TableCell>
-        <TableCell numeric>{position}</TableCell>
-    </TableRow>
 );
 
 const isPotentialStreamId = (data: any) =>
@@ -333,9 +279,7 @@ const StreamMessage: ComponentType<StreamMessageState & HalViewerProps> = ({
 }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
-            <TableHead>
-                <StreamMessageHeader />
-            </TableHead>
+            <StreamHeader />
             <TableBody>
                 <StreamMessageDetails {...message} {...props} />
             </TableBody>
