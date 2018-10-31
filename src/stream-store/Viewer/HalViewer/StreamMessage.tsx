@@ -5,6 +5,7 @@ import {
     Drawer,
     Tab,
     Tabs,
+    Typography,
     WithStyles,
     withStyles,
 } from '@material-ui/core';
@@ -251,7 +252,7 @@ const StreamMessageJson = withStyles(style)(class extends PureComponent<
         const { streams, loading, open } = this.state;
 
         return (
-            <div>
+            <div className={classes.drawerPaper}>
                 <Inspector
                     data={json}
                     expandLevel={32}
@@ -310,8 +311,30 @@ class StreamMessageTabs extends PureComponent<
                         onChange={this._handleChange}
                         indicatorColor={'primary'}
                     >
-                        <Tab label={'Data'} icon={<Notes />} />
-                        <Tab label={'Metadata'} icon={<Settings />} />
+                        <Tab
+                            label={
+                                <Typography variant={'body1'}>
+                                    {'Data'}
+                                </Typography>
+                            }
+                            icon={
+                                <Typography>
+                                    <Notes />
+                                </Typography>
+                            }
+                        />
+                        <Tab
+                            label={
+                                <Typography variant={'body1'}>
+                                    {'Metadata'}
+                                </Typography>
+                            }
+                            icon={
+                                <Typography>
+                                    <Settings />
+                                </Typography>
+                            }
+                        />
                     </Tabs>
                 </CardActions>
                 <CardContent>
