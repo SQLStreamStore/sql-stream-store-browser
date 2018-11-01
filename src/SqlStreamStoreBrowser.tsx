@@ -5,6 +5,8 @@ import {
     Theme,
     Toolbar,
     Typography,
+    WithStyles,
+    withStyles,
 } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
@@ -28,7 +30,7 @@ import { connect, createState } from './reactive';
 import { actions, store, Viewer } from './stream-store';
 import themes from './themes';
 import { AuthorizationProps, HalLink, HalLinks } from './types';
-import {mediaTypes, preventDefault} from './utils';
+import { mediaTypes, preventDefault } from './utils';
 
 const getSelfAlias = (links: HalLinks) =>
     Object.keys(links)
@@ -90,41 +92,53 @@ const lightbulbs: { [key: string]: ComponentType<SvgIconProps> } = {
     light: LightbulbOutline,
 };
 
+const heroStyle = {
+    themeToggle: {
+        marginLeft: 'auto',
+    },
+};
+interface HeroProps {
+    theme: Theme;
+}
+
 const onThemeToggle = preventDefault(() => themes.actions.type.next(void 0));
 
-const Hero = ({ theme }: { theme: Theme }) => (
-    <AppBar position={'static'}>
-        <Toolbar>
-            <SqlStreamStore color={'action'} />
-            <Typography variant={'h6'} color={'inherit'}>
-                Sql Stream Store
-            </Typography>
-            <IconButton onClick={onThemeToggle}>
-                {createElement(lightbulbs[theme.palette.type])}
-            </IconButton>
-        </Toolbar>
-    </AppBar>
+const Hero: ComponentType<HeroProps> = withStyles(heroStyle)(
+    ({ theme, classes }: HeroProps & WithStyles<typeof heroStyle>) => (
+        <AppBar position={'static'}>
+            <Toolbar>
+                <SqlStreamStore color={'action'} />
+                <Typography variant={'h6'} color={'inherit'}>
+                    Sql Stream Store
+                </Typography>
+                <IconButton
+                    onClick={onThemeToggle}
+                    className={classes.themeToggle}
+                >
+                    {createElement(lightbulbs[theme.palette.type])}
+                </IconButton>
+            </Toolbar>
+        </AppBar>
+    ),
 );
 
 const SqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState
 > = withAuthorization()(
     mount<SqlStreamStoreBrowserState & AuthorizationProps>(initialNavigation)(
-        ({ loading, theme, ...props }) => {
-            return (
-                <MuiThemeProvider theme={theme}>
-                    <div>
-                        <CssBaseline />
-                        <Hero theme={theme} />
-                        <Loading open={loading} />
-                        <NavigationProvider onNavigate={onNavigate}>
-                            <Viewer {...props} />
-                            <Notifications />
-                        </NavigationProvider>
-                    </div>
-                </MuiThemeProvider>
-            );
-        },
+        ({ loading, theme, ...props }) => (
+            <MuiThemeProvider theme={theme}>
+                <div>
+                    <CssBaseline />
+                    <Hero theme={theme} />
+                    <Loading open={loading} />
+                    <NavigationProvider onNavigate={onNavigate}>
+                        <Viewer {...props} />
+                        <Notifications />
+                    </NavigationProvider>
+                </div>
+            </MuiThemeProvider>
+        ),
     ),
 );
 
