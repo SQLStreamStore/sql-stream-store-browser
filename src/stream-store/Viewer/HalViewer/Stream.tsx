@@ -1,18 +1,12 @@
-import React, { ComponentType, CSSProperties, StatelessComponent } from 'react';
+import React, { ComponentType, StatelessComponent } from 'react';
 import { Observable as obs } from 'rxjs';
-import { Hyperlink } from '../../../components';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-} from '../../../components/StripeyTable';
+import { Table, TableBody } from '../../../components/StripeyTable';
 import { connect, createState } from '../../../reactive';
 import { HalResource } from '../../../types';
 import { hal } from '../../../utils';
 import rels from '../../rels';
 import store from '../../store';
+import { StreamHeader, StreamMessageDetails } from './components';
 import { HalViewerProps } from './types';
 
 interface Message {
@@ -39,50 +33,16 @@ const state$ = createState<StreamState>(
     obs.of({ messages: [] }),
 );
 
-const nowrap: CSSProperties = { whiteSpace: 'nowrap' };
-
-const Message = ({
-    messageId,
-    createdUtc,
-    position,
-    streamId,
-    streamVersion,
-    type,
-    _links,
-}: Message & HalResource) => (
-    <TableRow>
-        <TableCell style={nowrap}>{messageId}</TableCell>
-        <TableCell style={nowrap}>{createdUtc}</TableCell>
-        <TableCell style={nowrap}>{type}</TableCell>
-        <TableCell style={nowrap}>
-            <Hyperlink _links={_links} rel={rels.feed} />
-        </TableCell>
-        <TableCell>
-            <Hyperlink _links={_links} rel={rels.self} />
-        </TableCell>
-        <TableCell>{position}</TableCell>
-    </TableRow>
-);
-
 interface MessagesState {
     messages: Array<Message & HalResource>;
 }
 
 const Messages: StatelessComponent<MessagesState> = ({ messages }) => (
     <Table>
-        <TableHead>
-            <TableRow>
-                <TableCell>{'Message Id'}</TableCell>
-                <TableCell>{'Created UTC'}</TableCell>
-                <TableCell>{'Type'}</TableCell>
-                <TableCell>{'Stream'}</TableCell>
-                <TableCell>{'Stream Id@Version'}</TableCell>
-                <TableCell numeric>{'Position'}</TableCell>
-            </TableRow>
-        </TableHead>
+        <StreamHeader />
         <TableBody>
             {messages.map(message => (
-                <Message key={message.messageId} {...message} />
+                <StreamMessageDetails key={message.messageId} {...message} />
             ))}
         </TableBody>
     </Table>
