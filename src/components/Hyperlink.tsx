@@ -1,13 +1,14 @@
-import { WithStyles, withStyles } from '@material-ui/core';
+import { Theme, WithStyles, withStyles } from '@material-ui/core';
 import React, { ComponentType } from 'react';
-import theme from '../theme';
 import { HalLink, HalLinks, NavigatableProps } from '../types';
 import { preventDefault } from '../utils';
 import { withNavigation } from './NavigationProvider';
 
-const color = theme.palette.action.active;
-
-const styles = {
+const styles = ({
+    palette: {
+        action: { active: color },
+    },
+}: Theme) => ({
     hyperlink: {
         '&:active': {
             color,
@@ -20,7 +21,7 @@ const styles = {
         },
         color,
     },
-};
+});
 
 interface HyperlinkProps {
     rel: string;

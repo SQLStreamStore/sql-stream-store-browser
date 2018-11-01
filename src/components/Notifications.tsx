@@ -3,6 +3,7 @@ import {
     Snackbar,
     SnackbarContent,
     Theme,
+    Typography,
     WithStyles,
     withStyles,
 } from '@material-ui/core';
@@ -187,15 +188,17 @@ const Notification: ComponentType<NotificationProps> = withStyles(styles)(
                 className={classNames(classes[variant], className)}
                 message={
                     <span className={classes.message}>
-                        {createElement(iconsByVariant[variant], {
-                            className: classNames(
-                                classes.icon,
-                                classes.iconVariant,
-                            ),
-                        })}
-                        {title} {subheader}
-                        <br />
-                        {content}
+                        <Typography variant={'body2'}>
+                            {createElement(iconsByVariant[variant], {
+                                className: classNames(
+                                    classes.icon,
+                                    classes.iconVariant,
+                                ),
+                            })}
+                            {title} {subheader}
+                            <br />
+                            {content}
+                        </Typography>
                     </span>
                 }
                 action={[
@@ -204,7 +207,9 @@ const Notification: ComponentType<NotificationProps> = withStyles(styles)(
                         color={'inherit'}
                         onClick={() => dismiss.next(messageId)}
                     >
-                        <Close className={classes.icon} />
+                        <Typography variant={'body2'}>
+                            <Close className={classes.icon} />
+                        </Typography>
                     </IconButton>,
                 ]}
                 {...other}
