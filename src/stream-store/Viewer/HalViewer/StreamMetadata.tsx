@@ -1,13 +1,6 @@
-import {
-    ExpansionPanel,
-    ExpansionPanelDetails,
-    ExpansionPanelSummary,
-    Typography,
-} from '@material-ui/core';
-import React, { CSSProperties, PureComponent, StatelessComponent } from 'react';
+import React, { CSSProperties, StatelessComponent } from 'react';
 import { Observable as obs } from 'rxjs';
 import { Hyperlink } from '../../../components';
-import { Code } from '../../../components/Icons';
 import {
     Table,
     TableBody,
@@ -19,6 +12,7 @@ import { connect, createState } from '../../../reactive';
 import { HalLinks, HalResource } from '../../../types';
 import rels from '../../rels';
 import store from '../../store';
+import { JsonViewer } from './components';
 import { HalViewerProps } from './types';
 
 const metadata$ = store.hal$.body$.map(metadata => metadata);
@@ -81,44 +75,6 @@ const StreamMetadataDetails: StatelessComponent<StreamMetadataDetailsProps> = ({
     </TableRow>
 );
 
-interface StreamMetadataJsonProps {
-    metadataJson: any;
-}
-
-interface StreamMetadataJsonState {
-    expanded: boolean;
-}
-class StreamMetadataJson extends PureComponent<
-    StreamMetadataJsonProps,
-    StreamMetadataJsonState
-> {
-    state = {
-        expanded: true,
-    };
-
-    _handleClick = () => {
-        const { expanded } = this.state;
-        this.setState({
-            expanded: !expanded,
-        });
-    };
-
-    render() {
-        const { metadataJson } = this.props;
-        const { expanded } = this.state;
-        return (
-            <ExpansionPanel expanded={expanded} onClick={this._handleClick}>
-                <ExpansionPanelSummary expandIcon={<Code />}>
-                    <Typography variant={'h6'}>{'Metadata'}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <pre>{JSON.stringify(metadataJson, null, 4)}</pre>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-        );
-    }
-}
-
 const StreamMetadata: StatelessComponent<
     StreamMetadataState & HalViewerProps
 > = ({ metadata }) => (
@@ -131,7 +87,7 @@ const StreamMetadata: StatelessComponent<
                 <StreamMetadataDetails {...metadata} />
             </TableBody>
         </Table>
-        <StreamMetadataJson metadataJson={metadata.metadataJson} />
+        <JsonViewer json={metadata.metadataJson} />
     </section>
 );
 

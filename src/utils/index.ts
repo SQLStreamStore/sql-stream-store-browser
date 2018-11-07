@@ -7,3 +7,5 @@ export { default as preventDefault } from './preventDefault';
 export { default as mediaTypes } from './mediaTypes';
 
 export { default as hal } from './hal';
+
+export { default as reactJsonTheme } from './reactJsonTheme';
