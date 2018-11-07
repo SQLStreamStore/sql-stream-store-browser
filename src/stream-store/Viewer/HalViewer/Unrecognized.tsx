@@ -1,80 +1,73 @@
-import React, { ComponentType } from 'react';
-import Inspector, {
-    NodeRendererProps,
-    ObjectLabel,
-    ObjectLabelProps,
-    ObjectName,
-    ObjectRootLabel,
-} from 'react-inspector';
-
+import { ColorScheme } from 'base16';
+import React from 'react';
+import ReactJson, { OnSelectProps } from 'react-json-view';
 import { Observable as obs } from 'rxjs';
 import { withNavigation } from '../../../components';
 import { connect, createState } from '../../../reactive';
+import themes from '../../../themes';
 import { NavigatableProps } from '../../../types';
-import { preventDefault } from '../../../utils';
+import { reactJsonTheme } from '../../../utils';
 import store from '../../store';
 import { HalViewerProps } from './types';
 
+const isHyperlink = (
+    name: string | null,
+    namespace: Array<string | null>,
+): boolean =>
+    name === 'href' && namespace.filter(n => n === '_links').length > 0;
+
 interface UnrecognizedRelViewerState {
-    data: object;
+    src: object;
+    theme: ColorScheme;
 }
 const state$ = createState<UnrecognizedRelViewerState>(
-    store.hal$.body$.map(data => ['data', () => data]),
+    obs.merge(
+        store.hal$.body$.map(src => ['src', () => src]),
+        themes.theme$.map(({ palette: { type } }) => [
+            'theme',
+            () => reactJsonTheme(type),
+        ]),
+    ),
     obs.of<UnrecognizedRelViewerState>({
-        data: {},
+        src: {},
+        theme: reactJsonTheme(),
     }),
 );
 
-const MaybeLinkLabel: ComponentType<ObjectLabelProps> = withNavigation<
-    ObjectLabelProps
->()(
-    ({
-        authorization,
-        name,
-        data,
-        onNavigate,
-        ...props
-    }: ObjectLabelProps & NavigatableProps) =>
-        name === 'href' ? (
-            <span>
-                <ObjectName name={name} />
-                <span>: </span>
-                <a
-                    href={data}
-                    onClick={preventDefault(() =>
-                        onNavigate({ href: data }, authorization),
-                    )}
-                >
-                    {data}
-                </a>
-
-                {data}
-            </span>
-        ) : (
-            <ObjectLabel name={name} data={data} {...props} />
-        ),
-);
-
-class UnrecognizedRelViewer extends React.PureComponent<
+const UnrecognizedRelViewer = withNavigation<
     UnrecognizedRelViewerState & HalViewerProps
-> {
-    _nodeRenderer = ({ depth, ...props }: NodeRendererProps) =>
-        depth === 0 ? (
-            <ObjectRootLabel {...props} />
-        ) : (
-            <MaybeLinkLabel {...props} />
-        );
+>()(
+    class extends React.PureComponent<
+        UnrecognizedRelViewerState & HalViewerProps & NavigatableProps
+    > {
+        _handlePotentialNavigation = ({
+            name,
+            value,
+            namespace,
+        }: OnSelectProps) => {
+            const { authorization, onNavigate } = this.props;
+            if (!isHyperlink(name, namespace)) {
+                return;
+            }
 
-    render() {
-        return (
-            <Inspector
-                {...this.props}
-                nodeRenderer={this._nodeRenderer}
-                expandLevel={32}
-            />
-        );
-    }
-}
+            onNavigate(
+                {
+                    href: value as string,
+                },
+                authorization,
+            );
+        };
+
+        render() {
+            return (
+                <ReactJson
+                    {...this.props}
+                    onSelect={this._handlePotentialNavigation}
+                />
+            );
+        }
+    },
+);
 
 export default connect<UnrecognizedRelViewerState, HalViewerProps>(state$)(
     UnrecognizedRelViewer,
