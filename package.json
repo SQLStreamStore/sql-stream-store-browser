@@ -33,7 +33,7 @@
     "tslint-config-prettier": "1.15.0",
     "tslint-immutable": "4.8.0",
     "tslint-react": "3.6.0",
-    "typescript": "3.1.3",
+    "typescript": "3.1.6",
     "typesync": "0.4.0"
   },
   "dependencies": {
