@@ -1,15 +1,18 @@
 import { PaletteType } from '@material-ui/core';
 import { bright, ColorScheme, isotope } from 'base16';
 import invertColor from 'invert-color';
+
 const invert = (scheme: ColorScheme): ColorScheme =>
     Object.keys(scheme).reduce(
         (akk, key) => ({
             ...akk,
             [key]: key.startsWith('base')
-                // @ts-ignore
-                ? invertColor(scheme[key])
-                // @ts-ignore
-                : scheme[key],
+                ? // prettier-ignore
+                  // @ts-ignore
+                  invertColor(scheme[key])
+                : // prettier-ignore
+                  // @ts-ignore
+                  scheme[key],
         }),
         // tslint:disable-next-line:no-object-literal-type-assertion
         {} as ColorScheme,

@@ -73,14 +73,16 @@ const clientError$ = responses$
         }),
     );
 
-const serverError$ = responses$.filter(({ status }) => status >= 500).map(
-    ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
-        content: formatContent(body),
-        subheader: formatSubheader(body),
-        title: formatTitle(response),
-        variant: 'error',
-    }),
-);
+const serverError$ = responses$
+    .filter(({ status }) => status >= 500)
+    .map(
+        ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
+            content: formatContent(body),
+            subheader: formatSubheader(body),
+            title: formatTitle(response),
+            variant: 'error',
+        }),
+    );
 
 type HttpVerb = keyof typeof http;
 
