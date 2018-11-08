@@ -1,5 +1,5 @@
 import { Button, TextField } from '@material-ui/core';
-import { SpaceBar } from 'components/Icons';
+import { SpaceBar } from 'icons';
 import React from 'react';
 import {
     ComposedComponent,

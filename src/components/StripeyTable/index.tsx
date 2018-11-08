@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { TableProps } from '@material-ui/core/Table';
 import { TableRowProps } from '@material-ui/core/TableRow';
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 const TableCell = withStyles(theme => ({
     head: {
@@ -45,7 +45,7 @@ class StripeyTable extends PureComponent<TableProps> {
     static Footer = TableFooter;
 
     render() {
-        return (<Table {...this.props} />)
+        return <Table {...this.props} />;
     }
 }
 

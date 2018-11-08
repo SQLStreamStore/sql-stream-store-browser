@@ -6,7 +6,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 import { withAuthorization } from 'components/AuthorizationProvider';
-import { Help } from 'components/Icons';
+import { Help } from 'icons';
 import React, { ComponentType, PureComponent, ReactNode } from 'react';
 import Remarkable from 'react-remarkable';
 import { HalLink } from 'types';

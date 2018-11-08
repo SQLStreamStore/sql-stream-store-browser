@@ -1,6 +1,4 @@
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
-import { ComponentType, createElement } from 'react';
-import { rels } from 'stream-store';
 import {
     ChevronLeft,
     ChevronRight,
@@ -15,7 +13,9 @@ import {
     Search,
     Settings,
     SqlStreamStore,
-} from './Icons';
+} from 'icons';
+import { ComponentType, createElement } from 'react';
+import { rels } from 'stream-store';
 
 const fontIconByRel = {
     [rels.first]: FirstPage,

@@ -6,8 +6,8 @@ import {
     Tabs,
     Typography,
 } from '@material-ui/core';
-import { Table} from 'components';
-import { Notes, Settings } from 'components/Icons';
+import { Table } from 'components';
+import { Notes, Settings } from 'icons';
 import React, { ComponentType, FormEvent, PureComponent } from 'react';
 import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';

@@ -25,7 +25,7 @@ import {
     LightbulbFull,
     LightbulbOutline,
     SqlStreamStore,
-} from './components/Icons';
+} from './icons';
 import { connect, createState } from './reactive';
 import { actions, store, Viewer } from './stream-store';
 import themes from './themes';
