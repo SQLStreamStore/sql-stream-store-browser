@@ -1,19 +1,19 @@
-import { TableCell, TableHead, TableRow } from 'components/StripeyTable';
+import { Table } from 'components';
 import React from 'react';
 
 const StreamHeader = () => (
-    <TableHead>
-        <TableRow>
-            <TableCell>{'StreamId'}</TableCell>
-            <TableCell>{'Message Id'}</TableCell>
-            <TableCell>{'Created UTC'}</TableCell>
-            <TableCell>{'Type'}</TableCell>
-            <TableCell style={{ width: '100%' }}>
+    <Table.Head>
+        <Table.Row>
+            <Table.Cell>{'StreamId'}</Table.Cell>
+            <Table.Cell>{'Message Id'}</Table.Cell>
+            <Table.Cell>{'Created UTC'}</Table.Cell>
+            <Table.Cell>{'Type'}</Table.Cell>
+            <Table.Cell style={{ width: '100%' }}>
                 {'Stream Id@Version'}
-            </TableCell>
-            <TableCell>{'Position'}</TableCell>
-        </TableRow>
-    </TableHead>
+            </Table.Cell>
+            <Table.Cell>{'Position'}</Table.Cell>
+        </Table.Row>
+    </Table.Head>
 );
 
 export default StreamHeader;

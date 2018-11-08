@@ -1,4 +1,4 @@
-import { Table, TableBody } from 'components/StripeyTable';
+import { Table } from 'components';
 import React, { ComponentType, StatelessComponent } from 'react';
 import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
@@ -40,11 +40,11 @@ interface MessagesState {
 const Messages: StatelessComponent<MessagesState> = ({ messages }) => (
     <Table>
         <StreamHeader />
-        <TableBody>
+        <Table.Body>
             {messages.map(message => (
                 <StreamMessageDetails key={message.messageId} {...message} />
             ))}
-        </TableBody>
+        </Table.Body>
     </Table>
 );
 

@@ -1,5 +1,4 @@
-import { Hyperlink } from 'components';
-import { TableCell, TableRow } from 'components/StripeyTable';
+import { Hyperlink, Table } from 'components';
 import React, { CSSProperties, StatelessComponent } from 'react';
 import rels from 'stream-store/rels';
 import { HalResource } from 'types';
@@ -26,18 +25,18 @@ const StreamMessageDetails: StatelessComponent<
     type,
     _links,
 }) => (
-    <TableRow>
-        <TableCell style={nowrap}>
+    <Table.Row>
+        <Table.Cell style={nowrap}>
             <Hyperlink _links={_links} rel={rels.feed} />
-        </TableCell>
-        <TableCell style={nowrap}>{messageId}</TableCell>
-        <TableCell style={nowrap}>{createdUtc}</TableCell>
-        <TableCell style={nowrap}>{type}</TableCell>
-        <TableCell style={{ width: '100%' }}>
+        </Table.Cell>
+        <Table.Cell style={nowrap}>{messageId}</Table.Cell>
+        <Table.Cell style={nowrap}>{createdUtc}</Table.Cell>
+        <Table.Cell style={nowrap}>{type}</Table.Cell>
+        <Table.Cell style={{ width: '100%' }}>
             <Hyperlink _links={_links} rel={rels.self} />
-        </TableCell>
-        <TableCell numeric>{position}</TableCell>
-    </TableRow>
+        </Table.Cell>
+        <Table.Cell numeric>{position}</Table.Cell>
+    </Table.Row>
 );
 
 export default StreamMessageDetails;
