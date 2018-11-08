@@ -1,8 +1,8 @@
+import { Hyperlink } from 'components';
+import { TableCell, TableRow } from 'components/StripeyTable';
 import React, { CSSProperties, StatelessComponent } from 'react';
-import { Hyperlink } from '../../../../components';
-import { TableCell, TableRow } from '../../../../components/StripeyTable';
-import { HalResource } from '../../../../types';
-import rels from '../../../rels';
+import rels from 'stream-store/rels';
+import { HalResource } from 'types';
 
 const nowrap: CSSProperties = { whiteSpace: 'nowrap' };
 

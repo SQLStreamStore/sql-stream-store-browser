@@ -1,17 +1,17 @@
-import React, { CSSProperties, StatelessComponent } from 'react';
-import { Observable as obs } from 'rxjs';
-import { Hyperlink } from '../../../components';
+import { Hyperlink } from 'components';
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
-} from '../../../components/StripeyTable';
-import { connect, createState } from '../../../reactive';
-import { HalLinks, HalResource } from '../../../types';
-import rels from '../../rels';
-import store from '../../store';
+} from 'components/StripeyTable';
+import React, { CSSProperties, StatelessComponent } from 'react';
+import { connect, createState } from 'reactive';
+import { Observable as obs } from 'rxjs';
+import rels from 'stream-store/rels';
+import store from 'stream-store/store';
+import { HalLinks, HalResource } from 'types';
 import { JsonViewer } from './components';
 import { HalViewerProps } from './types';
 

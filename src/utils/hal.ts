@@ -1,5 +1,5 @@
+import { HalLink, HalLinks, HalResource } from 'types';
 import { resolve } from 'uri-js';
-import { HalLink, HalLinks, HalResource } from '../types';
 
 const resolveLinks = (url: string, links: HalLinks): HalLinks =>
     Object.keys(links).reduce(

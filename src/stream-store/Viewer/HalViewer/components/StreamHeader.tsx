@@ -1,9 +1,5 @@
+import { TableCell, TableHead, TableRow } from 'components/StripeyTable';
 import React from 'react';
-import {
-    TableCell,
-    TableHead,
-    TableRow,
-} from '../../../../components/StripeyTable';
 
 const StreamHeader = () => (
     <TableHead>

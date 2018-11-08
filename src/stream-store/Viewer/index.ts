@@ -1,5 +1,5 @@
 import { createElement } from 'react';
-import { mediaTypes } from '../../utils';
+import { mediaTypes } from 'utils';
 import HalViewer from './HalViewer';
 import MarkdownViewer from './MarkdownViewer';
 

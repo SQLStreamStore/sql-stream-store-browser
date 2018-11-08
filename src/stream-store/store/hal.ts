@@ -1,9 +1,8 @@
 import { JSONSchema7 } from 'json-schema';
 import { Observable as obs } from 'rxjs';
-import { HalResource } from '../../types';
-import { hal } from '../../utils';
-import mediaTypes from '../../utils/mediaTypes';
-import actions from '../actions';
+import actions from 'stream-store/actions';
+import { HalResource } from 'types';
+import { hal, mediaTypes } from 'utils';
 import mediaType$ from './mediaType';
 
 const body$ = actions.get.response

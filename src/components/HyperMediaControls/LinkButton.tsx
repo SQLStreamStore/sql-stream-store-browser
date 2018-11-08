@@ -1,9 +1,9 @@
 import { PropTypes, TextField } from '@material-ui/core';
+import { withNavigation } from 'components/NavigationProvider';
 import React, { ComponentType, FormEventHandler, PureComponent } from 'react';
+import { HalLink, NavigatableProps } from 'types';
 import uriTemplate from 'uri-template';
-import { HalLink, NavigatableProps } from '../../types';
-import { preventDefault } from '../../utils';
-import { withNavigation } from '../NavigationProvider';
+import { preventDefault } from 'utils';
 import Dialog from './Dialog';
 import RelButton from './RelButton';
 import Color = PropTypes.Color;

@@ -9,8 +9,8 @@ import {
     withStyles,
 } from '@material-ui/core';
 import React, { ComponentType } from 'react';
-import rels from '../stream-store/rels';
-import { HalResource } from '../types';
+import { rels } from 'stream-store';
+import { HalResource } from 'types';
 import Hyperlink from './Hyperlink';
 
 const styles = (theme: Theme) => ({

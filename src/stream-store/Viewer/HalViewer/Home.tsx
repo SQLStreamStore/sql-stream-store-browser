@@ -1,17 +1,17 @@
-import inflector from 'inflector-js';
-import React, { ComponentType, StatelessComponent } from 'react';
-import { Observable as obs } from 'rxjs';
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
-} from '../../../components/StripeyTable';
-import { connect, createState } from '../../../reactive';
-import { HalResource } from '../../../types';
-import rels from '../../rels';
-import store from '../../store';
+} from 'components/StripeyTable';
+import inflector from 'inflector-js';
+import React, { ComponentType, StatelessComponent } from 'react';
+import { connect, createState } from 'reactive';
+import { Observable as obs } from 'rxjs';
+import rels from 'stream-store/rels';
+import store from 'stream-store/store';
+import { HalResource } from 'types';
 import { HalViewerProps } from './types';
 
 const provider$ = store.hal$.body$.map(({ provider }) => provider);

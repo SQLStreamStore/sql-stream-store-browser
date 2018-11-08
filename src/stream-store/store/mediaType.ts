@@ -1,4 +1,4 @@
-import actions from '../actions';
+import actions from 'stream-store/actions';
 
 const getMediaType = (headers: { [key: string]: string }) =>
     headers['content-type'].split(';')[0];

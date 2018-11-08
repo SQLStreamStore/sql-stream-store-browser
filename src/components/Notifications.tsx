@@ -9,14 +9,14 @@ import {
 } from '@material-ui/core';
 import { amber, blue, green, red } from '@material-ui/core/colors';
 import classNames from 'classnames';
+import { CheckCircle, Close, Error, Info, Warning } from 'components/Icons';
 import React, { ComponentType, createElement, ReactNode } from 'react';
+import { connect, createAction, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
+import { actions } from 'stream-store';
+import { HttpProblemDetailsResponse, HttpResponse } from 'types';
+import { http } from 'utils';
 import uuid from 'uuid';
-import { CheckCircle, Close, Error, Info, Warning } from '../components/Icons';
-import { connect, createAction, createState } from '../reactive';
-import { actions } from '../stream-store';
-import { HttpProblemDetailsResponse, HttpResponse } from '../types';
-import { http } from '../utils';
 
 const iconsByVariant = {
     error: Error,
