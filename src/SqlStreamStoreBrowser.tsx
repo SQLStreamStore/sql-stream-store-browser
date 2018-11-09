@@ -18,11 +18,7 @@ import {
     Notifications,
     withAuthorization,
 } from 'components';
-import {
-    LightbulbFull,
-    LightbulbOutline,
-    SqlStreamStore,
-} from 'icons';
+import { LightbulbFull, LightbulbOutline, SqlStreamStore } from 'icons';
 import { JSONSchema7 } from 'json-schema';
 import React, { ComponentType, createElement } from 'react';
 import { connect, createState } from 'reactive';
