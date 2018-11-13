@@ -6,13 +6,13 @@ import {
     Tabs,
     Typography,
 } from '@material-ui/core';
+import { Table } from 'components';
+import { Notes, Settings } from 'icons';
 import React, { ComponentType, FormEvent, PureComponent } from 'react';
+import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
-import { Notes, Settings } from '../../../components/Icons';
-import { Table, TableBody } from '../../../components/StripeyTable';
-import { connect, createState } from '../../../reactive';
-import { HalResource } from '../../../types';
-import store from '../../store';
+import store from 'stream-store/store';
+import { HalResource } from 'types';
 import { JsonViewer, StreamHeader, StreamMessageDetails } from './components';
 import { HalViewerProps } from './types';
 
@@ -139,9 +139,9 @@ const StreamMessage: ComponentType<StreamMessageState & HalViewerProps> = ({
     <section>
         <Table style={{ tableLayout: 'auto' }}>
             <StreamHeader />
-            <TableBody>
+            <Table.Body>
                 <StreamMessageDetails {...message} {...props} />
-            </TableBody>
+            </Table.Body>
         </Table>
         <StreamMessageTabs message={message} {...props} />
     </section>

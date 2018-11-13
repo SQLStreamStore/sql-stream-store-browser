@@ -1,17 +1,10 @@
+import { Hyperlink, Table } from 'components';
 import React, { CSSProperties, StatelessComponent } from 'react';
+import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
-import { Hyperlink } from '../../../components';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-} from '../../../components/StripeyTable';
-import { connect, createState } from '../../../reactive';
-import { HalLinks, HalResource } from '../../../types';
-import rels from '../../rels';
-import store from '../../store';
+import rels from 'stream-store/rels';
+import store from 'stream-store/store';
+import { HalLinks, HalResource } from 'types';
 import { JsonViewer } from './components';
 import { HalViewerProps } from './types';
 
@@ -42,11 +35,11 @@ const state$ = createState<StreamMetadataState>(
 const nowrap: CSSProperties = { whiteSpace: 'nowrap' };
 
 const StreamMetadataHeader = () => (
-    <TableRow>
-        <TableCell>{'Stream'}</TableCell>
-        <TableCell>{'Max Age'}</TableCell>
-        <TableCell>{'Max Count'}</TableCell>
-    </TableRow>
+    <Table.Row>
+        <Table.Cell>{'Stream'}</Table.Cell>
+        <Table.Cell>{'Max Age'}</Table.Cell>
+        <Table.Cell>{'Max Count'}</Table.Cell>
+    </Table.Row>
 );
 
 interface StreamMetadataDetailsProps {
@@ -62,17 +55,17 @@ const StreamMetadataDetails: StatelessComponent<StreamMetadataDetailsProps> = ({
     maxCount,
     _links,
 }) => (
-    <TableRow>
-        <TableCell style={nowrap}>
+    <Table.Row>
+        <Table.Cell style={nowrap}>
             <Hyperlink _links={_links} rel={rels.feed} />
-        </TableCell>
-        <TableCell style={nowrap} numeric>
+        </Table.Cell>
+        <Table.Cell style={nowrap} numeric>
             {maxAge}
-        </TableCell>
-        <TableCell style={nowrap} numeric>
+        </Table.Cell>
+        <Table.Cell style={nowrap} numeric>
             {maxCount}
-        </TableCell>
-    </TableRow>
+        </Table.Cell>
+    </Table.Row>
 );
 
 const StreamMetadata: StatelessComponent<
@@ -80,12 +73,12 @@ const StreamMetadata: StatelessComponent<
 > = ({ metadata }) => (
     <section>
         <Table style={{ tableLayout: 'auto' }}>
-            <TableHead>
+            <Table.Head>
                 <StreamMetadataHeader />
-            </TableHead>
-            <TableBody>
+            </Table.Head>
+            <Table.Body>
                 <StreamMetadataDetails {...metadata} />
-            </TableBody>
+            </Table.Body>
         </Table>
         <JsonViewer json={metadata.metadataJson} />
     </section>

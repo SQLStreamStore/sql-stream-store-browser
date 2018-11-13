@@ -1,15 +1,15 @@
 import { Drawer, WithStyles, withStyles } from '@material-ui/core';
 import { ColorScheme } from 'base16';
+import { StreamBrowser, withNavigation } from 'components';
 import React, { ComponentType, PureComponent } from 'react';
 import ReactJson from 'react-json-view';
+import { connect, createState } from 'reactive';
 import { Observable } from 'rxjs';
+import rels from 'stream-store/rels';
+import themes from 'themes';
+import { HalResource, NavigatableProps } from 'types';
 import uriTemplate from 'uri-template';
-import { StreamBrowser, withNavigation } from '../../../../components';
-import { connect, createState } from '../../../../reactive';
-import themes from '../../../../themes';
-import { HalResource, NavigatableProps } from '../../../../types';
-import { hal, http, reactJsonTheme } from '../../../../utils';
-import rels from '../../../rels';
+import { hal, http, reactJsonTheme } from 'utils';
 
 const isPotentialStreamId = (data: any) =>
     typeof data === 'number' || typeof data === 'string';

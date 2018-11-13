@@ -1,13 +1,13 @@
 import { ColorScheme } from 'base16';
+import { withNavigation } from 'components';
 import React from 'react';
 import ReactJson, { OnSelectProps } from 'react-json-view';
+import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
-import { withNavigation } from '../../../components';
-import { connect, createState } from '../../../reactive';
-import themes from '../../../themes';
-import { NavigatableProps } from '../../../types';
-import { reactJsonTheme } from '../../../utils';
-import store from '../../store';
+import store from 'stream-store/store';
+import themes from 'themes';
+import { NavigatableProps } from 'types';
+import { reactJsonTheme } from 'utils';
 import { HalViewerProps } from './types';
 
 const isHyperlink = (

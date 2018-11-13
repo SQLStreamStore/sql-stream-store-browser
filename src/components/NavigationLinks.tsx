@@ -5,8 +5,8 @@ import React, {
     PureComponent,
     StatelessComponent,
 } from 'react';
-import { navigation } from '../stream-store';
-import { HalLink, HalLinks, NavigatableProps } from '../types';
+import { navigation } from 'stream-store';
+import { HalLink, HalLinks, NavigatableProps } from 'types';
 import { withNavigation } from './NavigationProvider';
 import RelIcon from './RelIcon';
 

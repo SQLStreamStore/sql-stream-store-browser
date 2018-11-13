@@ -1,9 +1,8 @@
 import { JSONSchema7 } from 'json-schema';
 import { Observable as obs } from 'rxjs';
-import { HalResource } from '../../types';
-import { hal } from '../../utils';
-import mediaTypes from '../../utils/mediaTypes';
-import actions from '../actions';
+import actions from 'stream-store/actions';
+import { HalResource } from 'types';
+import { hal, mediaTypes } from 'utils';
 import mediaType$ from './mediaType';
 
 const body$ = actions.get.response
@@ -20,18 +19,20 @@ const links$ = body$
 const isJsonSchema = (schema: JSONSchema7 & HalResource) =>
     schema && schema.$schema && schema.$schema.endsWith('schema#');
 
-const forms$ = body$.map(({ _embedded }) => _embedded).map(embedded =>
-    Object.keys(embedded)
-        .filter(rel => isJsonSchema(embedded[rel][0]))
-        .reduce(
-            (akk, rel) => ({
-                ...akk,
-                [rel]: embedded[rel][0],
-            }),
-            // tslint:disable-next-line:no-object-literal-type-assertion
-            {} as JSONSchema7,
-        ),
-);
+const forms$ = body$
+    .map(({ _embedded }) => _embedded)
+    .map(embedded =>
+        Object.keys(embedded)
+            .filter(rel => isJsonSchema(embedded[rel][0]))
+            .reduce(
+                (akk, rel) => ({
+                    ...akk,
+                    [rel]: embedded[rel][0],
+                }),
+                // tslint:disable-next-line:no-object-literal-type-assertion
+                {} as JSONSchema7,
+            ),
+    );
 
 const verbs = Object.keys(actions);
 

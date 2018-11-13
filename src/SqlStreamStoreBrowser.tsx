@@ -10,9 +10,6 @@ import {
 } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
-import { JSONSchema7 } from 'json-schema';
-import React, { ComponentType, createElement } from 'react';
-import { Observable as obs } from 'rxjs';
 import {
     AuthorizationProvider,
     Loading,
@@ -20,17 +17,16 @@ import {
     NavigationProvider,
     Notifications,
     withAuthorization,
-} from './components';
-import {
-    LightbulbFull,
-    LightbulbOutline,
-    SqlStreamStore,
-} from './components/Icons';
-import { connect, createState } from './reactive';
-import { actions, store, Viewer } from './stream-store';
-import themes from './themes';
-import { AuthorizationProps, HalLink, HalLinks } from './types';
-import { mediaTypes, preventDefault } from './utils';
+} from 'components';
+import { LightbulbFull, LightbulbOutline, SqlStreamStore } from 'icons';
+import { JSONSchema7 } from 'json-schema';
+import React, { ComponentType, createElement } from 'react';
+import { connect, createState } from 'reactive';
+import { Observable as obs } from 'rxjs';
+import { actions, store, Viewer } from 'stream-store';
+import themes from 'themes';
+import { AuthorizationProps, HalLink, HalLinks } from 'types';
+import { mediaTypes, preventDefault } from 'utils';
 
 const getSelfAlias = (links: HalLinks) =>
     Object.keys(links)

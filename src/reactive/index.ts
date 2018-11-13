@@ -1,5 +1,4 @@
 import React, { Component, ComponentType } from 'react';
-
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 
 export const createAction = <T>() => new ReplaySubject<T>(1);

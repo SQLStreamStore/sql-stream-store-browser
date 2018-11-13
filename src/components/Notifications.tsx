@@ -9,14 +9,14 @@ import {
 } from '@material-ui/core';
 import { amber, blue, green, red } from '@material-ui/core/colors';
 import classNames from 'classnames';
+import { CheckCircle, Close, Error, Info, Warning } from 'icons';
 import React, { ComponentType, createElement, ReactNode } from 'react';
+import { connect, createAction, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
+import { actions } from 'stream-store';
+import { HttpProblemDetailsResponse, HttpResponse } from 'types';
+import { http } from 'utils';
 import uuid from 'uuid';
-import { CheckCircle, Close, Error, Info, Warning } from '../components/Icons';
-import { connect, createAction, createState } from '../reactive';
-import { actions } from '../stream-store';
-import { HttpProblemDetailsResponse, HttpResponse } from '../types';
-import { http } from '../utils';
 
 const iconsByVariant = {
     error: Error,
@@ -73,14 +73,16 @@ const clientError$ = responses$
         }),
     );
 
-const serverError$ = responses$.filter(({ status }) => status >= 500).map(
-    ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
-        content: formatContent(body),
-        subheader: formatSubheader(body),
-        title: formatTitle(response),
-        variant: 'error',
-    }),
-);
+const serverError$ = responses$
+    .filter(({ status }) => status >= 500)
+    .map(
+        ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
+            content: formatContent(body),
+            subheader: formatSubheader(body),
+            title: formatTitle(response),
+            variant: 'error',
+        }),
+    );
 
 type HttpVerb = keyof typeof http;
 

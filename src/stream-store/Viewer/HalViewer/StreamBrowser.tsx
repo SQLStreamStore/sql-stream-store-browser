@@ -1,10 +1,10 @@
+import { StreamBrowser } from 'components';
 import React, { ComponentType } from 'react';
+import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
-import { StreamBrowser } from '../../../components';
-import { connect, createState } from '../../../reactive';
-import { HalResource } from '../../../types';
-import rels from '../../rels';
-import store from '../../store';
+import rels from 'stream-store/rels';
+import store from 'stream-store/store';
+import { HalResource } from 'types';
 import { HalViewerProps } from './types';
 
 const streams$ = store.hal$.body$.map(

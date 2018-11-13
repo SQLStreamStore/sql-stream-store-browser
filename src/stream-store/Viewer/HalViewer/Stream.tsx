@@ -1,11 +1,11 @@
+import { Table } from 'components';
 import React, { ComponentType, StatelessComponent } from 'react';
+import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
-import { Table, TableBody } from '../../../components/StripeyTable';
-import { connect, createState } from '../../../reactive';
-import { HalResource } from '../../../types';
-import { hal } from '../../../utils';
-import rels from '../../rels';
-import store from '../../store';
+import rels from 'stream-store/rels';
+import store from 'stream-store/store';
+import { HalResource } from 'types';
+import { hal } from 'utils';
 import { StreamHeader, StreamMessageDetails } from './components';
 import { HalViewerProps } from './types';
 
@@ -40,11 +40,11 @@ interface MessagesState {
 const Messages: StatelessComponent<MessagesState> = ({ messages }) => (
     <Table>
         <StreamHeader />
-        <TableBody>
+        <Table.Body>
             {messages.map(message => (
                 <StreamMessageDetails key={message.messageId} {...message} />
             ))}
-        </TableBody>
+        </Table.Body>
     </Table>
 );
 

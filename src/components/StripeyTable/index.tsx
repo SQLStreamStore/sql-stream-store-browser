@@ -9,8 +9,9 @@ import {
     WithStyles,
     withStyles,
 } from '@material-ui/core';
+import { TableProps } from '@material-ui/core/Table';
 import { TableRowProps } from '@material-ui/core/TableRow';
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 const TableCell = withStyles(theme => ({
     head: {
@@ -36,4 +37,16 @@ const TableRow = withStyles(tableRowStyles)(
     ),
 );
 
-export { Table, TableBody, TableHead, TableCell, TableRow, TableFooter };
+class StripeyTable extends PureComponent<TableProps> {
+    static Body = TableBody;
+    static Row = TableRow;
+    static Cell = TableCell;
+    static Head = TableHead;
+    static Footer = TableFooter;
+
+    render() {
+        return <Table {...this.props} />;
+    }
+}
+
+export default StripeyTable;

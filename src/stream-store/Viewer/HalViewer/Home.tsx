@@ -1,17 +1,11 @@
+import { Table } from 'components';
 import inflector from 'inflector-js';
 import React, { ComponentType, StatelessComponent } from 'react';
+import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-} from '../../../components/StripeyTable';
-import { connect, createState } from '../../../reactive';
-import { HalResource } from '../../../types';
-import rels from '../../rels';
-import store from '../../store';
+import rels from 'stream-store/rels';
+import store from 'stream-store/store';
+import { HalResource } from 'types';
 import { HalViewerProps } from './types';
 
 const provider$ = store.hal$.body$.map(({ provider }) => provider);
@@ -44,32 +38,32 @@ const state$ = createState<IndexState>(
 
 const Info: StatelessComponent<InfoState> = ({ provider, versions }) => (
     <Table>
-        <TableHead>
-            <TableRow>
-                <TableCell colSpan={2}>{'Server Information'}</TableCell>
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            <TableRow>
-                <TableCell>
+        <Table.Head>
+            <Table.Row>
+                <Table.Cell colSpan={2}>{'Server Information'}</Table.Cell>
+            </Table.Row>
+        </Table.Head>
+        <Table.Body>
+            <Table.Row>
+                <Table.Cell>
                     <strong>{'Provider'}</strong>
-                </TableCell>
-                <TableCell>
+                </Table.Cell>
+                <Table.Cell>
                     {inflector.camel2words(inflector.underscore(provider))}
-                </TableCell>
-            </TableRow>
+                </Table.Cell>
+            </Table.Row>
             {Object.keys(versions).map(key => (
-                <TableRow key={key}>
-                    <TableCell>
+                <Table.Row key={key}>
+                    <Table.Cell>
                         <strong>
                             {inflector.camel2words(inflector.underscore(key))}{' '}
                             {'Version'}
                         </strong>
-                    </TableCell>
-                    <TableCell>{versions[key]}</TableCell>
-                </TableRow>
+                    </Table.Cell>
+                    <Table.Cell>{versions[key]}</Table.Cell>
+                </Table.Row>
             ))}
-        </TableBody>
+        </Table.Body>
     </Table>
 );
 

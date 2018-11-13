@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse } from '../types';
+import { HttpRequest, HttpResponse } from 'types';
 import mediaTypes from './mediaTypes';
 
 declare global {
