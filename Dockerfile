@@ -2,8 +2,6 @@ FROM node:10.12.0-alpine AS build
 ARG MYGET_API_KEY
 ARG VERSION
 
-RUN apk add --no-cache git
-
 WORKDIR /app
 
 COPY package.json yarn.lock ./
