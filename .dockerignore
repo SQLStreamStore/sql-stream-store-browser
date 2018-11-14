@@ -1,12 +1,10 @@
 node_modules/**
 npm-debug.log
+yarn-error.log
 Dockerfile*
 docker-compose*
 .dockerignore
-.git/**
-.gitignore
-README.md
-LICENSE
 .vscode/**
 .idea/**
 build/**
+dist/**

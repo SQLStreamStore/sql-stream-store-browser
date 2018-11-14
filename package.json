@@ -6,12 +6,17 @@
     "analyze": "source-map-explorer build/static/js/main.*",
     "start": "react-scripts-ts start",
     "build": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ && react-scripts-ts build",
-    "build:dist": "rm -rf dist && tsc --project tsconfig.publish.json",
+    "build:dist": "rm -rf dist && tsc --project tsconfig.publish.json && cp src/index.d.ts ./dist",
     "eject": "react-scripts-ts eject",
     "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ --fix"
   },
   "main": "dist/index.js",
-  "files": [ "dist", "README.md", "src" ],
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "src"
+  ],
   "private": false,
   "devDependencies": {
     "@types/array.prototype.flatmap": "^1.2.0",
