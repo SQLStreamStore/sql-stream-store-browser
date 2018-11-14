@@ -1,4 +1,6 @@
 FROM node:10.12.0-alpine AS build
+ARG MYGET_API_KEY
+ARG VERSION
 
 RUN apk add --no-cache git
 
@@ -11,7 +13,15 @@ RUN yarn --frozen-lockfile
 COPY . .
 
 RUN yarn build && \
+    yarn build:dist && \
     yarn cache clean
+
+RUN echo "https://www.myget.org/F/sqlstreamstore/npm/:_authToken=${MYGET_API_KEY}" > .npmrc && \
+    echo "@sql-stream-store:registry=https://www.myget.org/F/sqlstreamstore/npm/" >> .npmrc
+
+RUN test -z "$MYGET_API_KEY" || \
+    yarn publish --new-version $VERSION && \
+    echo "No API key found, skipping publishing..."
 
 FROM nginx:1.15.5-alpine AS runtime
 
