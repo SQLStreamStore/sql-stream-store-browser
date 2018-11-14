@@ -15,9 +15,9 @@ RUN yarn build && \
 
 FROM nginx:1.15.5-alpine AS runtime
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 
-COPY ./mime.types /etc/nginx/mime.types
+COPY ./nginx/mime.types /etc/nginx/mime.types
 
 COPY --from=build /app/build/ /var/www/
 
