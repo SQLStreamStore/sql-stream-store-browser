@@ -8,3 +8,4 @@ docker-compose*
 .idea/**
 build/**
 dist/**
+build.sh

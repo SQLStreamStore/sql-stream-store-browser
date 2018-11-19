@@ -1,6 +1,15 @@
+FROM microsoft/dotnet:2.1.500-sdk-alpine3.7 as version
+
+WORKDIR /src
+
+COPY .git ./
+
+RUN apk add libcurl && \
+    dotnet tool install -g minver-cli --version 1.0.0-alpha.15 && \
+    /root/.dotnet/tools/minver > .version
+
 FROM node:10.12.0-alpine AS build
 ARG MYGET_API_KEY
-ARG VERSION
 
 WORKDIR /app
 
@@ -18,8 +27,10 @@ RUN echo "https://www.myget.org/F/sqlstreamstore/npm/:_authToken=${MYGET_API_KEY
     echo "@sql-stream-store:registry=https://www.myget.org/F/sqlstreamstore/npm/" >> .npmrc
 
 RUN test -z "$MYGET_API_KEY" || \
-    yarn publish --new-version $VERSION && \
+    yarn publish --new-version $(cat .version) && \
     echo "No API key found, skipping publishing..."
+
+COPY --from=version /src/.version /app/build
 
 FROM nginx:1.15.5-alpine AS runtime
 
