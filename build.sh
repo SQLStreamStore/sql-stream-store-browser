@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 LOCAL_IMAGE="sql-stream-store-browser"
 LOCAL="${LOCAL_IMAGE}:latest"
 

@@ -4,7 +4,7 @@ WORKDIR /src
 
 COPY .git ./
 
-RUN apk add libcurl && \
+RUN apk add libcurl --no-cache && \
     dotnet tool install -g minver-cli --version 1.0.0-alpha.15 && \
     /root/.dotnet/tools/minver > .version
 
