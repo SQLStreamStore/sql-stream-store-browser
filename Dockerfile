@@ -19,7 +19,9 @@ RUN yarn --frozen-lockfile
 
 COPY . .
 
-RUN yarn build && \
+COPY --from=version /src/.version ./
+
+RUN REACT_APP_CLIENT_VERSION=$(cat .version) yarn build && \
     yarn build:dist && \
     yarn cache clean
 
@@ -30,8 +32,6 @@ RUN test -z "$MYGET_API_KEY" || \
     yarn publish --new-version $(cat .version) && \
     echo "No API key found, skipping publishing..."
 
-COPY --from=version /src/.version /app/build
-
 FROM nginx:1.15.5-alpine AS runtime
 
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
@@ -39,6 +39,7 @@ COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx/mime.types /etc/nginx/mime.types
 
 COPY --from=build /app/build/ /var/www/
+COPY --from=version /src/.version /var/www
 
 EXPOSE 80
 
