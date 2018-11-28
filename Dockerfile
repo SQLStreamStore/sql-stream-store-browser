@@ -5,7 +5,7 @@ WORKDIR /src
 COPY .git ./
 
 RUN apk add libcurl --no-cache && \
-    dotnet tool install -g minver-cli --version 1.0.0-alpha.15 && \
+    dotnet tool install -g minver-cli --version 1.0.0-beta.1 && \
     /root/.dotnet/tools/minver > .version
 
 FROM node:10.12.0-alpine AS build
