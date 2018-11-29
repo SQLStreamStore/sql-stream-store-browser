@@ -5,7 +5,7 @@ set -e
 LOCAL_IMAGE="sql-stream-store-browser"
 LOCAL="${LOCAL_IMAGE}:latest"
 
-REMOTE_IMAGE="sql-stream-store/browser"
+REMOTE_IMAGE="sqlstreamstore/browser"
 
 docker build \
     --build-arg MYGET_API_KEY=$MYGET_API_KEY \
