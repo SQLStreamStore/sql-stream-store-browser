@@ -29,4 +29,4 @@ const TextAreaField: StatelessComponent<ReactSchemaFormInputProps> = ({
     </div>
 );
 
-export default ComposedComponent.default(TextAreaField);
+export default ComposedComponent(TextAreaField);
