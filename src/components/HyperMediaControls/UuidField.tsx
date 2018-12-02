@@ -48,4 +48,4 @@ class UuidField extends React.PureComponent<ReactSchemaFormInputProps> {
     }
 }
 
-export default ComposedComponent.default(UuidField);
+export default ComposedComponent(UuidField);

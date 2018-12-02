@@ -42,9 +42,7 @@ declare module 'react-schema-form' {
 
     export const SchemaForm: ComponentType<ReactSchemaFormProps>;
 
-    export const ComposedComponent: {
-        default: <T>(
-            component: ComponentType<T>,
-        ) => ComponentType<ReactSchemaFormInputProps>;
-    };
+    export const ComposedComponent: <T>(
+        component: ComponentType<T>,
+    ) => ComponentType<ReactSchemaFormInputProps>;
 }

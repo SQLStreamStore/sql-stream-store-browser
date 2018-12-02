@@ -6,19 +6,47 @@ import { Observable as obs } from 'rxjs';
 import rels from 'stream-store/rels';
 import store from 'stream-store/store';
 import { HalResource } from 'types';
+import { clientVersion } from 'utils';
 import { HalViewerProps } from './types';
 
 const provider$ = store.hal$.body$.map(({ provider }) => provider);
 
 const versions$ = store.hal$.body$.map(({ versions }) => versions);
 
+const info$ = provider$.zip(versions$).map(([provider, versions]) =>
+    [
+        {
+            id: 'Provider',
+            value: inflector.camel2words(
+                inflector.underscore(provider),
+            ) as string,
+        },
+    ]
+        .concat(
+            Object.keys(versions).map(key => ({
+                id: `${inflector.camel2words(
+                    inflector.underscore(key),
+                )} Version`,
+                value: versions[key] as string,
+            })),
+        )
+        .concat({
+            id: 'Client Version',
+            value: clientVersion as string,
+        }),
+);
+
 interface RecentState {
     recent: HalResource[];
 }
 
+interface InfoLineProps {
+    id: string;
+    value: string;
+}
+
 interface InfoState {
-    provider: string;
-    versions: { [key: string]: string };
+    info: InfoLineProps[];
 }
 
 interface IndexState extends RecentState, InfoState {}
@@ -29,14 +57,22 @@ const recent$ = store.hal$.body$.map(
 
 const state$ = createState<IndexState>(
     obs.merge(
-        provider$.map(provider => ['provider', () => provider]),
-        versions$.map(versions => ['versions', () => versions]),
+        info$.map(info => ['info', () => info]),
         recent$.map(recent => ['recent', () => recent]),
     ),
-    obs.of<IndexState>({ recent: [], provider: '', versions: {} }),
+    obs.of<IndexState>({ recent: [], info: [] }),
 );
 
-const Info: StatelessComponent<InfoState> = ({ provider, versions }) => (
+const InfoLine: StatelessComponent<InfoLineProps> = ({ id, value }) => (
+    <Table.Row>
+        <Table.Cell>
+            <strong>{id}</strong>
+        </Table.Cell>
+        <Table.Cell>{value}</Table.Cell>
+    </Table.Row>
+);
+
+const Info: StatelessComponent<InfoState> = ({ info }) => (
     <Table>
         <Table.Head>
             <Table.Row>
@@ -44,35 +80,16 @@ const Info: StatelessComponent<InfoState> = ({ provider, versions }) => (
             </Table.Row>
         </Table.Head>
         <Table.Body>
-            <Table.Row>
-                <Table.Cell>
-                    <strong>{'Provider'}</strong>
-                </Table.Cell>
-                <Table.Cell>
-                    {inflector.camel2words(inflector.underscore(provider))}
-                </Table.Cell>
-            </Table.Row>
-            {Object.keys(versions).map(key => (
-                <Table.Row key={key}>
-                    <Table.Cell>
-                        <strong>
-                            {inflector.camel2words(inflector.underscore(key))}{' '}
-                            {'Version'}
-                        </strong>
-                    </Table.Cell>
-                    <Table.Cell>{versions[key]}</Table.Cell>
-                </Table.Row>
+            {info.map(({ id, value }) => (
+                <InfoLine key={id} id={id} value={value} />
             ))}
         </Table.Body>
     </Table>
 );
 
-const Index: ComponentType<IndexState & HalViewerProps> = ({
-    provider,
-    versions,
-}) => (
+const Index: ComponentType<IndexState & HalViewerProps> = ({ info }) => (
     <section>
-        <Info provider={provider} versions={versions} />
+        <Info info={info} />
     </section>
 );
 

@@ -9,3 +9,5 @@ export { default as mediaTypes } from './mediaTypes';
 export { default as hal } from './hal';
 
 export { default as reactJsonTheme } from './reactJsonTheme';
+
+export { default as clientVersion } from './clientVersion';
