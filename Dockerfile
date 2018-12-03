@@ -20,7 +20,7 @@ COPY . .
 
 COPY --from=version /src/.version ./
 
-RUN REACT_APP_CLIENT_VERSION=$(cat .version) yarn build && \
+RUN REACT_APP_CLIENT_VERSION=$(cat .version) \
     yarn build:dist && \
     yarn cache clean
 
