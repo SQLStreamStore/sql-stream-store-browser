@@ -26,7 +26,7 @@ RUN REACT_APP_CLIENT_VERSION=$(cat .version) yarn build && \
     yarn cache clean
 
 RUN echo "https://www.myget.org/F/sqlstreamstore/npm/:_authToken=${MYGET_API_KEY}" > .npmrc && \
-    echo "@sql-stream-store:registry=https://www.myget.org/F/sqlstreamstore/npm/" >> .npmrc
+    echo "@sqlstreamstore:registry=https://www.myget.org/F/sqlstreamstore/npm/" >> .npmrc
 
 RUN test -z "$MYGET_API_KEY" || \
     yarn publish --new-version $(cat .version) && \
