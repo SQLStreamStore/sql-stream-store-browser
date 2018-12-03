@@ -25,12 +25,13 @@ RUN REACT_APP_CLIENT_VERSION=$(cat .version) yarn build && \
     yarn build:dist && \
     yarn cache clean
 
-RUN echo "https://www.myget.org/F/sqlstreamstore/npm/:_authToken=${MYGET_API_KEY}" > .npmrc && \
-    echo "@sqlstreamstore:registry=https://www.myget.org/F/sqlstreamstore/npm/" >> .npmrc
-
-RUN test -z "$MYGET_API_KEY" || \
-    yarn publish --new-version $(cat .version) --no-git-tag-version && \
-    echo "No API key found, skipping publishing..."
+RUN \
+    if [ -n "$MYGET_API_KEY" ] ;\
+        then echo "https://www.myget.org/F/sqlstreamstore/npm/:_authToken=${MYGET_API_KEY}" > .npmrc && \
+            echo "@sqlstreamstore:registry=https://www.myget.org/F/sqlstreamstore/npm/" >> .npmrc && \
+            yarn publish --new-version $(cat .version) --no-git-tag-version ;\
+        else echo "No API key found, skipping publishing..." ;\
+    fi
 
 FROM nginx:1.15.5-alpine AS runtime
 
