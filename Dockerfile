@@ -9,7 +9,6 @@ RUN apk add libcurl --no-cache && \
     /root/.dotnet/tools/minver > .version
 
 FROM node:10.12.0-alpine AS build
-ARG MYGET_API_KEY
 
 WORKDIR /app
 
@@ -24,6 +23,9 @@ COPY --from=version /src/.version ./
 RUN REACT_APP_CLIENT_VERSION=$(cat .version) yarn build && \
     yarn build:dist && \
     yarn cache clean
+
+FROM build AS publish
+ARG MYGET_API_KEY
 
 RUN \
     if [ -n "$MYGET_API_KEY" ] ;\
