@@ -29,7 +29,7 @@ RUN echo "https://www.myget.org/F/sqlstreamstore/npm/:_authToken=${MYGET_API_KEY
     echo "@sqlstreamstore:registry=https://www.myget.org/F/sqlstreamstore/npm/" >> .npmrc
 
 RUN test -z "$MYGET_API_KEY" || \
-    yarn publish --new-version $(cat .version) && \
+    yarn publish --new-version $(cat .version) --no-git-tag-version && \
     echo "No API key found, skipping publishing..."
 
 FROM nginx:1.15.5-alpine AS runtime
