@@ -5,10 +5,11 @@
   "scripts": {
     "analyze": "source-map-explorer build/static/js/main.*",
     "start": "react-scripts-ts start",
-    "build": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ && react-scripts-ts build",
-    "build:dist": "rm -rf dist && tsc --project tsconfig.publish.json && cp src/index.d.ts ./dist",
+    "build": "yarn lint && react-scripts-ts build",
+    "build:dist": "rm -rf dist && yarn lint && tsc --project tsconfig.publish.json && cp src/index.d.ts ./dist",
     "eject": "react-scripts-ts eject",
-    "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ --fix"
+    "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ --fix",
+    "lint": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -63,7 +64,7 @@
     "uri-template": "1.0.1",
     "uuid": "3.3.2"
   },
-  "author": "thefringeninja <joao.paul@braganca.name>",
+  "author": "thefringeninja",
   "license": "MIT",
   "browserslist": [
     ">0.2%",
