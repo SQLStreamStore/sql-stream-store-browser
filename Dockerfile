@@ -23,7 +23,7 @@ COPY --from=version /src/.version ./
 RUN REACT_APP_CLIENT_VERSION=$(cat .version) \
     yarn build:dist && \
     yarn cache clean && \
-    cp .version ./build
+    cp .version ./dist
 
 FROM build AS publish
 ARG MYGET_API_KEY
@@ -42,7 +42,7 @@ WORKDIR /etc/nginx
 
 COPY ./nginx/ ./
 
-COPY --from=publish /app/build/ /var/www/
+COPY --from=publish /app/dist/ /var/www/
 
 EXPOSE 80
 
