@@ -22,7 +22,8 @@ COPY --from=version /src/.version ./
 
 RUN REACT_APP_CLIENT_VERSION=$(cat .version) \
     yarn build:dist && \
-    yarn cache clean
+    yarn cache clean && \
+    cp .version ./build
 
 FROM build AS publish
 ARG MYGET_API_KEY
@@ -37,12 +38,11 @@ RUN \
 
 FROM nginx:1.15.5-alpine AS runtime
 
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+WORKDIR /etc/nginx
 
-COPY ./nginx/mime.types /etc/nginx/mime.types
+COPY ./nginx/ ./
 
-COPY --from=build /app/build/ /var/www/
-COPY --from=version /src/.version /var/www
+COPY --from=publish /app/build/ /var/www/
 
 EXPOSE 80
 
