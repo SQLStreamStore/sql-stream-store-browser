@@ -16,7 +16,10 @@
   "files": [
     "dist",
     "README.md",
-    "src"
+    "src",
+    "*.json",
+    "yarn.lock",
+    "public/*"
   ],
   "private": false,
   "devDependencies": {
