@@ -1,4 +1,0 @@
-types {
-  application/javascript                js;
-  text/html                             html htm shtml;
-}

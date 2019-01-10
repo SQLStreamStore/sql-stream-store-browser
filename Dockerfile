@@ -1,11 +1,10 @@
-FROM microsoft/dotnet:2.1.500-sdk-alpine3.7 as version
+FROM microsoft/dotnet:2.2.102-sdk-stretch as version
 
 WORKDIR /src
 
 COPY .git ./
 
-RUN apk add libcurl --no-cache && \
-    dotnet tool install -g minver-cli --version 1.0.0-beta.1 && \
+RUN dotnet tool install -g minver-cli --version 1.0.0-beta.2 && \
     /root/.dotnet/tools/minver > .version
 
 FROM node:10.12.0-alpine AS build
@@ -35,15 +34,3 @@ RUN \
             yarn publish --new-version $(cat .version) --no-git-tag-version ;\
         else echo "No API key found, skipping publishing..." ;\
     fi
-
-FROM nginx:1.15.5-alpine AS runtime
-
-WORKDIR /etc/nginx
-
-COPY ./nginx/ ./
-
-COPY --from=publish /app/dist/ /var/www/
-
-EXPOSE 80
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
