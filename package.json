@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/array.prototype.flatmap": "^1.2.0",
     "@types/base16": "^1.0.1",
-    "@types/classnames": "^2.2.6",
+    "@types/classnames": "^2.2.7",
     "@types/history": "^4.7.2",
     "@types/json-schema": "^7.0.1",
     "@types/jss": "^9.5.7",
