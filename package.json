@@ -44,7 +44,7 @@
     "tslint-immutable": "5.0.0",
     "tslint-react": "3.6.0",
     "typescript": "3.1.6",
-    "typesync": "0.4.0"
+    "typesync": "0.4.1"
   },
   "dependencies": {
     "@material-ui/core": "3.9.0",

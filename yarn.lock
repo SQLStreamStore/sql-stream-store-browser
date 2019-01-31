@@ -7602,9 +7602,10 @@ typescript@3.1.6:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
 
-typesync@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/typesync/-/typesync-0.4.0.tgz#9cb0cf6068904b208b4d37e4c10c7ea34398d0e6"
+typesync@0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/typesync/-/typesync-0.4.1.tgz#34f87e6315dbb1b46f637f6b37411374827fc2b5"
+  integrity sha512-dlWez9dZYK5bFPJLW5k0le3M72dCFTofb9u7fSapwxarxexXxwnyK0WBnl0nnGB/SawcVca//CV55sMpnc9O2w==
   dependencies:
     awilix "^3.0.9"
     axios "^0.18.0"
