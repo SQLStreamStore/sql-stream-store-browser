@@ -146,9 +146,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/remarkable@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@types/remarkable/-/remarkable-1.7.1.tgz#9029dc75c6ba80d33c3f6da16e9418eb81ed2767"
+"@types/remarkable@^1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@types/remarkable/-/remarkable-1.7.2.tgz#872648d4f7d292325e32d389e02e5be0b48a459b"
+  integrity sha512-41pF2v5UP9wOTBuU1NXfIFKSGUE7ETby4wjfJhhzS7cU2kDr72ur9D0TX/2nUGpfX1Mbz9GvetEz/But9yAoRg==
 
 "@types/uuid@^3.4.4":
   version "3.4.4"
