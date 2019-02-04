@@ -47,7 +47,7 @@
     "typesync": "0.4.1"
   },
   "dependencies": {
-    "@material-ui/core": "3.9.0",
+    "@material-ui/core": "3.9.2",
     "@material-ui/icons": "3.0.1",
     "array.prototype.flatmap": "1.2.1",
     "base16": "1.0.0",
