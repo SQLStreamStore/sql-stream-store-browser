@@ -16,18 +16,10 @@ import { HalResource } from 'types';
 import { JsonViewer, StreamHeader, StreamMessageDetails } from './components';
 import { HalViewerProps } from './types';
 
-const tryParseJson = (payload: string): object => {
-    try {
-        return JSON.parse(payload);
-    } catch (e) {
-        return {};
-    }
-};
-
 const message$ = store.hal$.body$.map(({ payload, metadata, ...body }) => ({
     ...body,
-    metadata: tryParseJson(metadata),
-    payload: tryParseJson(payload),
+    metadata,
+    payload,
 }));
 
 interface StreamMessageState extends HalResource {

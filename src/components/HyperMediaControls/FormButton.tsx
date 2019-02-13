@@ -12,18 +12,6 @@ const mapper = {
     uuid: UuidField,
 };
 
-const getValue = (value: FormEvent<HTMLInputElement>) => {
-    if (typeof value === 'object') {
-        try {
-            return JSON.parse(value.currentTarget.value);
-        } catch (e) {
-            return value.currentTarget.value;
-        }
-    }
-
-    return value;
-};
-
 interface FormButtonProps {
     rel: string;
     link: HalLink;
@@ -66,7 +54,7 @@ class FormButton extends PureComponent<
             ...state,
             model: {
                 ...model,
-                [key]: getValue(value),
+                [key]: value,
             },
         });
     };

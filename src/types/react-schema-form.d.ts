@@ -1,6 +1,11 @@
 declare module 'react-schema-form' {
     import { JSONSchema7 } from 'json-schema';
-    import { ComponentType, FormEventHandler } from 'react';
+    import {
+        ChangeEvent,
+        ComponentType,
+        FormEvent,
+        FormEventHandler,
+    } from 'react';
 
     interface Form {
         description: string;
@@ -8,14 +13,17 @@ declare module 'react-schema-form' {
         key: string;
         placeholder: string;
         readonly: boolean;
+        schema: JSONSchema7;
         title: string;
         type: string;
     }
 
-    export interface ReactSchemaFormInputProps {
+    export interface ReactSchemaFormInputProps<
+        T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    > {
         error: string;
         form: Form;
-        onChangeValidate: FormEventHandler;
+        onChangeValidate: (e: ChangeEvent<T>, v?: any) => void;
         model: { [key: string]: any };
         onChange: (key: string, value: string) => void;
         setDefault: (
@@ -42,7 +50,13 @@ declare module 'react-schema-form' {
 
     export const SchemaForm: ComponentType<ReactSchemaFormProps>;
 
-    export const ComposedComponent: <T>(
+    export const ComposedComponent: <
+        T,
+        TElement extends
+            | HTMLInputElement
+            | HTMLTextAreaElement
+            | HTMLSelectElement
+    >(
         component: ComponentType<T>,
-    ) => ComponentType<ReactSchemaFormInputProps>;
+    ) => ComponentType<ReactSchemaFormInputProps<TElement>>;
 }
