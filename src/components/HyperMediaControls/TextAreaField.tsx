@@ -21,7 +21,10 @@ class TextAreaField extends React.PureComponent<
     ): void => {
         const { form, onChangeValidate } = this.props;
 
-        const tryParseJson = (value: string): string | object => {
+        const tryParseJson = (value: string): string | object | undefined => {
+            if (!value) {
+                return undefined;
+            }
             try {
                 return JSON.parse(value);
             } catch (e) {
