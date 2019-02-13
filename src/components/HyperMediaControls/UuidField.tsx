@@ -7,8 +7,10 @@ import {
 } from 'react-schema-form';
 import uuid from 'uuid';
 
-class UuidField extends React.PureComponent<ReactSchemaFormInputProps> {
-    constructor(props: ReactSchemaFormInputProps) {
+class UuidField extends React.PureComponent<
+    ReactSchemaFormInputProps<HTMLInputElement>
+> {
+    constructor(props: ReactSchemaFormInputProps<HTMLInputElement>) {
         super(props);
 
         const { model, form, setDefault } = this.props;
