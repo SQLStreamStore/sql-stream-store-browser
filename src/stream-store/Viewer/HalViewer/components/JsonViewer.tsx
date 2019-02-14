@@ -7,7 +7,7 @@ import { connect, createState } from 'reactive';
 import { Observable } from 'rxjs';
 import rels from 'stream-store/rels';
 import themes from 'themes';
-import { HalResource, NavigatableProps } from 'types';
+import { HalResource, HttpResponse, NavigatableProps } from 'types';
 import uriTemplate from 'uri-template';
 import { hal, http, reactJsonTheme } from 'utils';
 
@@ -91,15 +91,25 @@ class JsonViewer extends PureComponent<
             ),
         );
 
+        const streams = this._getStreams(responses);
+
         this.setState({
             loading: false,
-            streams: Object.values(
-                responses.flatMap(({ body }) =>
-                    getStreamLinks(hal.normalizeResource(body as HalResource)),
-                ),
-            ),
+            streams,
         });
     };
+
+    _getStreams = (responses: HttpResponse[]) =>
+        Object.values(
+            responses
+                .flatMap(({ body }) =>
+                    getStreamLinks(hal.normalizeResource(body as HalResource)),
+                )
+                .map(({ _links, ...resource }) => ({
+                    ...resource,
+                    _links: hal.resolveLinks('../../', _links),
+                })),
+        );
 
     _handlePotentialStreamIdClose = () =>
         this.setState({
