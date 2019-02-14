@@ -81,7 +81,7 @@ class JsonViewer extends PureComponent<
         );
 
         const responses = await Promise.all(
-            [...new Set([pattern, String(pattern).replace('-', '')])].map(p =>
+            [...new Set([pattern, String(pattern).replace(/-/g, '')])].map(p =>
                 http.get({
                     headers: { authorization },
                     link: {
