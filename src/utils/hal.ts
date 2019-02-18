@@ -1,5 +1,5 @@
 import { HalLink, HalLinks, HalResource } from 'types';
-import { resolve } from 'uri-js';
+import URL from 'url';
 
 const resolveLinks = (url: string, links: HalLinks): HalLinks =>
     Object.keys(links).reduce(
@@ -7,7 +7,7 @@ const resolveLinks = (url: string, links: HalLinks): HalLinks =>
             ...akk,
             [rel]: links[rel].map(({ href, ...link }) => ({
                 ...link,
-                href: resolve(url, href || './', { tolerant: true }),
+                href: URL.resolve(url, href || './'),
                 rel,
             })),
         }),
