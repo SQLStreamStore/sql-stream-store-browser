@@ -24,7 +24,17 @@ const actions = {
     type: createAction<void>(),
 };
 
-const defaultTheme = createTheme('light');
+const paletteTypeKey = 'paletteType';
+
+const loadPaletteType = (): PaletteType => {
+    const type = window.localStorage.getItem(paletteTypeKey);
+    return type === 'dark' ? 'dark' : 'light';
+};
+
+const savePaletteType = (type: PaletteType) =>
+    window.localStorage.setItem(paletteTypeKey, type);
+
+const defaultTheme = createTheme(loadPaletteType());
 
 interface ThemeState {
     theme: Theme;
@@ -40,6 +50,8 @@ const theme$ = createState<ThemeState>(
         theme: defaultTheme,
     }),
 ).map(({ theme }) => theme);
+
+theme$.subscribe(({ palette: { type } }) => savePaletteType(type));
 
 export default {
     actions,
