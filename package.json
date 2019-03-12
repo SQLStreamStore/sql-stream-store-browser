@@ -41,7 +41,7 @@
     "react-scripts-ts": "3.1.0",
     "source-map-explorer": "1.6.0",
     "tslint-config-prettier": "1.17.0",
-    "tslint-immutable": "5.0.0",
+    "tslint-immutable": "5.3.3",
     "tslint-react": "3.6.0",
     "typescript": "3.2.4",
     "typesync": "0.4.1"
