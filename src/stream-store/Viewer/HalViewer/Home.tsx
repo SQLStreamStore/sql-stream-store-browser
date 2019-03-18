@@ -1,6 +1,6 @@
 import { Table } from 'components';
 import inflector from 'inflector-js';
-import React, { ComponentType, StatelessComponent } from 'react';
+import React, { ComponentType, FunctionComponent } from 'react';
 import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
 import rels from 'stream-store/rels';
@@ -63,7 +63,7 @@ const state$ = createState<IndexState>(
     obs.of<IndexState>({ recent: [], info: [] }),
 );
 
-const InfoLine: StatelessComponent<InfoLineProps> = ({ id, value }) => (
+const InfoLine: FunctionComponent<InfoLineProps> = ({ id, value }) => (
     <Table.Row>
         <Table.Cell>
             <strong>{id}</strong>
@@ -72,7 +72,7 @@ const InfoLine: StatelessComponent<InfoLineProps> = ({ id, value }) => (
     </Table.Row>
 );
 
-const Info: StatelessComponent<InfoState> = ({ info }) => (
+const Info: FunctionComponent<InfoState> = ({ info }) => (
     <Table>
         <Table.Head>
             <Table.Row>

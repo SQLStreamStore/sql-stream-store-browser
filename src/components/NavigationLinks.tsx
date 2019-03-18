@@ -2,8 +2,8 @@ import { IconButton } from '@material-ui/core';
 import React, {
     ComponentType,
     FormEventHandler,
+    FunctionComponent,
     PureComponent,
-    StatelessComponent,
 } from 'react';
 import { navigation } from 'stream-store';
 import { HalLink, HalLinks, NavigatableProps } from 'types';
@@ -45,7 +45,7 @@ interface NavigationLinksProps {
     _links: HalLinks;
 }
 
-const NavigationLinks: StatelessComponent<NavigationLinksProps> = ({
+const NavigationLinks: FunctionComponent<NavigationLinksProps> = ({
     _links,
 }) => (
     <nav>

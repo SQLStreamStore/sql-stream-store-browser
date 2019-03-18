@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactNode, StatelessComponent } from 'react';
+import React, { ComponentType, FunctionComponent, ReactNode } from 'react';
 import { NavigatableProps, NavigationHandler } from 'types';
 import getDisplayName from './getDisplayName';
 
@@ -10,7 +10,7 @@ const { Consumer, Provider } = React.createContext<NavigationHandler>(
     defaultNavigationHandler,
 );
 
-const NavigationProvider: StatelessComponent<{
+const NavigationProvider: FunctionComponent<{
     onNavigate: NavigationHandler;
     children: ReactNode;
 }> = ({ onNavigate, children }) => (

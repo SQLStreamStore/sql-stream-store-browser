@@ -1,5 +1,5 @@
 import { HyperMediaControls, NavigationLinks } from 'components';
-import React, { ComponentType, createElement, StatelessComponent } from 'react';
+import React, { ComponentType, createElement, FunctionComponent } from 'react';
 import actions from 'stream-store/actions';
 import rels from 'stream-store/rels';
 import Home from './Home';
@@ -26,7 +26,7 @@ const views: { [rel: string]: ComponentType<HalViewerProps> } = {
     _unrecognized: Unrecognized,
 };
 
-const HalViewer: StatelessComponent<HalViewerProps> = ({
+const HalViewer: FunctionComponent<HalViewerProps> = ({
     forms,
     _links,
     self,

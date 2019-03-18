@@ -1,5 +1,5 @@
 import { Table } from 'components';
-import React, { ComponentType, StatelessComponent } from 'react';
+import React, { ComponentType, FunctionComponent } from 'react';
 import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
 import rels from 'stream-store/rels';
@@ -37,7 +37,7 @@ interface MessagesState {
     messages: Array<Message & HalResource>;
 }
 
-const Messages: StatelessComponent<MessagesState> = ({ messages }) => (
+const Messages: FunctionComponent<MessagesState> = ({ messages }) => (
     <Table>
         <StreamHeader />
         <Table.Body>
