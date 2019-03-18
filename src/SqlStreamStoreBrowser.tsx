@@ -33,7 +33,7 @@ const getSelfAlias = (links: HalLinks) =>
         .flatMap(rel => links[rel])
         .filter(({ rel }) => rel && rel.indexOf('streamStore:') === 0)
         .filter(
-            ({ rel, href }) =>
+            ({ href }) =>
                 !!links.self.filter(link => link.href === href).length,
         )
         .map(({ rel }) => rel);
@@ -58,7 +58,7 @@ const state$ = createState<SqlStreamStoreBrowserState>(
         store.hal$.links$.map(links => ['_links', () => links]),
         store.hal$.forms$.map(forms => ['forms', () => forms]),
         store.hal$.loading$.map(loading => ['loading', () => loading]),
-        store.hal$.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
+        store.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
         themes.theme$.map(theme => ['theme', () => theme]),
     ),
     obs.of({
