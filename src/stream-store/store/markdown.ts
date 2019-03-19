@@ -4,7 +4,7 @@ import mediaType$ from './mediaType';
 
 const body$ = actions.get.response
     .zip(mediaType$)
-    .filter(([body, mediaType]) => mediaType === mediaTypes.markdown)
+    .filter(([, mediaType]) => mediaType === mediaTypes.markdown)
     .map(([{ body }]) => body);
 
 export default {

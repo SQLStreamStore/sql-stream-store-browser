@@ -1,5 +1,5 @@
 import { Hyperlink, Table } from 'components';
-import React, { CSSProperties, StatelessComponent } from 'react';
+import React, { CSSProperties, FunctionComponent } from 'react';
 import { connect, createState } from 'reactive';
 import { Observable as obs } from 'rxjs';
 import rels from 'stream-store/rels';
@@ -49,7 +49,7 @@ interface StreamMetadataDetailsProps {
     _links: HalLinks;
 }
 
-const StreamMetadataDetails: StatelessComponent<StreamMetadataDetailsProps> = ({
+const StreamMetadataDetails: FunctionComponent<StreamMetadataDetailsProps> = ({
     streamId,
     maxAge,
     maxCount,
@@ -68,7 +68,7 @@ const StreamMetadataDetails: StatelessComponent<StreamMetadataDetailsProps> = ({
     </Table.Row>
 );
 
-const StreamMetadata: StatelessComponent<
+const StreamMetadata: FunctionComponent<
     StreamMetadataState & HalViewerProps
 > = ({ metadata }) => (
     <section>

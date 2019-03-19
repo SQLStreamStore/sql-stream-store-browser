@@ -1,5 +1,5 @@
 import { Hyperlink, Table } from 'components';
-import React, { CSSProperties, StatelessComponent } from 'react';
+import React, { CSSProperties, FunctionComponent } from 'react';
 import rels from 'stream-store/rels';
 import { HalResource } from 'types';
 
@@ -14,7 +14,7 @@ interface StreamMessageDetailsProps {
     type: string;
 }
 
-const StreamMessageDetails: StatelessComponent<
+const StreamMessageDetails: FunctionComponent<
     StreamMessageDetailsProps & HalResource
 > = ({
     messageId,

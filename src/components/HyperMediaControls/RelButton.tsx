@@ -1,14 +1,14 @@
 import { Button } from '@material-ui/core';
 import { ButtonProps } from '@material-ui/core/Button';
 import RelIcon from 'components/RelIcon';
-import React, { StatelessComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 
 interface RelButtonProps {
     rel: string;
     title?: string;
 }
 
-const RelButton: StatelessComponent<RelButtonProps & ButtonProps> = ({
+const RelButton: FunctionComponent<RelButtonProps & ButtonProps> = ({
     rel,
     onClick,
     title,
