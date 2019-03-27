@@ -6242,17 +6242,17 @@ react-remarkable@1.1.3:
   dependencies:
     remarkable "^1.x"
 
-react-schema-form@0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/react-schema-form/-/react-schema-form-0.6.2.tgz#1a733d40f1ea89cc5caac4865610ac8e6e2a5959"
-  integrity sha512-fsuTsTNnq2eEYR5kPEDVDJF0FJB4GNqeBsmvZrvuBGx23z0/6t3VCYuxsNQQtzb+nWfkCREQTV3yKHuG7nFHlA==
+react-schema-form@0.6.12:
+  version "0.6.12"
+  resolved "https://registry.yarnpkg.com/react-schema-form/-/react-schema-form-0.6.12.tgz#a3460bc87585fb249fe88a1c35f6f92785b931c7"
+  integrity sha512-Tbebb1fJuIbZpfjoGsKISjMPtEfPQ8DXnZ/yXGGFuZTbwNGibDUO2NVgpyhFmNryBpWczjexD0MluQZhJodFiQ==
   dependencies:
     classnames "^2.2.6"
     lodash "^4.17.11"
     notevil "^1.1.0"
     objectpath "1.2.2"
     react-autosuggest "^9.3.4"
-    supports-color "^5.4.0"
+    supports-color "^6.0.0"
     tv4 "^1.2.7"
     webpack-config "^7.5.0"
 
@@ -7249,6 +7249,13 @@ supports-color@^4.2.1:
 supports-color@^5.1.0, supports-color@^5.3.0, supports-color@^5.4.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.5.0.tgz#e2e69a44ac8772f78a1ec0b35b689df6530efc8f"
+  dependencies:
+    has-flag "^3.0.0"
+
+supports-color@^6.0.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-6.1.0.tgz#0764abc69c63d5ac842dd4867e8d025e880df8f3"
+  integrity sha512-qe1jfm1Mg7Nq/NSh6XE24gPXROEVsWHxC1LIx//XNlD9iw7YZQGjZNjYN7xGaEG6iKdA8EtNFW6R0gjnVXp+wQ==
   dependencies:
     has-flag "^3.0.0"
 
