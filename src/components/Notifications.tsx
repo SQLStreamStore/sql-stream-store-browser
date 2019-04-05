@@ -1,3 +1,5 @@
+import { merge as observableMerge, of as observableOf } from 'rxjs';
+
 import {
     IconButton,
     Snackbar,
@@ -12,7 +14,7 @@ import classNames from 'classnames';
 import { CheckCircle, Close, Error, Info, Warning } from 'icons';
 import React, { ComponentType, createElement, ReactNode } from 'react';
 import { connect, createAction, createState } from 'reactive';
-import { Observable as obs } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { actions } from 'stream-store';
 import { HttpProblemDetailsResponse, HttpResponse } from 'types';
 import { http } from 'utils';
@@ -60,29 +62,33 @@ interface Notification {
 
 const verbs: HttpVerb[] = Object.keys(actions) as HttpVerb[];
 
-const responses$ = obs.merge(...verbs.map(verb => actions[verb].response));
+const responses$ = observableMerge(
+    ...verbs.map(verb => actions[verb].response),
+);
 
-const clientError$ = responses$
-    .filter(({ status }) => status >= 400 && status < 500)
-    .map(
+const clientError$ = responses$.pipe(
+    filter(({ status }) => status >= 400 && status < 500),
+    map(
         ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
             content: formatContent(body),
             subheader: formatSubheader(body),
             title: formatTitle(response),
             variant: 'warning',
         }),
-    );
+    ),
+);
 
-const serverError$ = responses$
-    .filter(({ status }) => status >= 500)
-    .map(
+const serverError$ = responses$.pipe(
+    filter(({ status }) => status >= 500),
+    map(
         ({ body, ...response }: HttpProblemDetailsResponse): Notification => ({
             content: formatContent(body),
             subheader: formatSubheader(body),
             title: formatTitle(response),
             variant: 'error',
         }),
-    );
+    ),
+);
 
 type HttpVerb = keyof typeof http;
 
@@ -90,23 +96,27 @@ const unsafe = verbs
     .filter(verb => verb !== 'get')
     .map(verb => actions[verb].response);
 
-const success$ = obs
-    .merge(...unsafe)
-    .filter(({ status }) => status < 400)
-    .map((response: HttpResponse) => ({
+const success$ = observableMerge(...unsafe).pipe(
+    filter(({ status }) => status < 400),
+    map((response: HttpResponse) => ({
         autoHideDuration: 2000,
         title: formatTitle(response),
         variant: 'success',
-    }));
+    })),
+);
 
 const dismiss = createAction<string>();
 
-const notification$ = obs
-    .merge(clientError$, serverError$, success$)
-    .map(notification => ({
+const notification$ = observableMerge(
+    clientError$,
+    serverError$,
+    success$,
+).pipe(
+    map(notification => ({
         ...notification,
         messageId: uuid.v4(),
-    }));
+    })),
+);
 
 interface NotificationState extends Notification {
     messageId: string;
@@ -116,21 +126,25 @@ interface NotificationsState {
 }
 
 const state$ = createState<NotificationsState>(
-    obs.merge(
-        notification$.map((notification: NotificationState) => [
-            'notifications',
-            (notifications: NotificationState[]): NotificationState[] => [
-                ...notifications,
-                notification,
-            ],
-        ]),
-        dismiss.map(messageId => [
-            'notifications',
-            (notifications: NotificationState[]): NotificationState[] =>
-                notifications.filter(n => n.messageId !== messageId),
-        ]),
+    observableMerge(
+        notification$.pipe(
+            map((notification: NotificationState) => [
+                'notifications',
+                (notifications: NotificationState[]): NotificationState[] => [
+                    ...notifications,
+                    notification,
+                ],
+            ]),
+        ),
+        dismiss.pipe(
+            map(messageId => [
+                'notifications',
+                (notifications: NotificationState[]): NotificationState[] =>
+                    notifications.filter(n => n.messageId !== messageId),
+            ]),
+        ),
     ),
-    obs.of<NotificationsState>({
+    observableOf<NotificationsState>({
         notifications: [],
     }),
 );

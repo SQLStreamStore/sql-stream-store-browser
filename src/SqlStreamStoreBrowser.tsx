@@ -22,7 +22,8 @@ import { LightbulbFull, LightbulbOutline, SqlStreamStore } from 'icons';
 import { JSONSchema7 } from 'json-schema';
 import React, { ComponentType, createElement } from 'react';
 import { connect, createState } from 'reactive';
-import { Observable as obs } from 'rxjs';
+import { merge as observableMerge, of as observableOf } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { actions, store, Viewer } from 'stream-store';
 import themes from 'themes';
 import { AuthorizationProps, HalLink, HalLinks } from 'types';
@@ -38,11 +39,12 @@ const getSelfAlias = (links: HalLinks) =>
         )
         .map(({ rel }) => rel);
 
-const self$ = store.hal$.links$
-    .filter(links => !!links.self)
-    .map(getSelfAlias)
-    .filter(rel => !!rel)
-    .map(([link]) => link);
+const self$ = store.hal$.links$.pipe(
+    filter(links => !!links.self),
+    map(getSelfAlias),
+    filter(rel => !!rel),
+    map(([link]) => link),
+);
 
 interface SqlStreamStoreBrowserState {
     loading: boolean;
@@ -53,15 +55,15 @@ interface SqlStreamStoreBrowserState {
     forms: { [rel: string]: JSONSchema7 };
 }
 const state$ = createState<SqlStreamStoreBrowserState>(
-    obs.merge(
-        self$.map(self => ['self', () => self]),
-        store.hal$.links$.map(links => ['_links', () => links]),
-        store.hal$.forms$.map(forms => ['forms', () => forms]),
-        store.hal$.loading$.map(loading => ['loading', () => loading]),
-        store.mediaType$.map(mediaType => ['mediaType', () => mediaType]),
-        themes.theme$.map(theme => ['theme', () => theme]),
+    observableMerge(
+        self$.pipe(map(self => ['self', () => self])),
+        store.hal$.links$.pipe(map(links => ['_links', () => links])),
+        store.hal$.forms$.pipe(map(forms => ['forms', () => forms])),
+        store.hal$.loading$.pipe(map(loading => ['loading', () => loading])),
+        store.mediaType$.pipe(map(mediaType => ['mediaType', () => mediaType])),
+        themes.theme$.pipe(map(theme => ['theme', () => theme])),
     ),
-    obs.of({
+    observableOf({
         _links: {},
         forms: {},
         loading: false,

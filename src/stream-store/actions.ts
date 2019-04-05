@@ -1,6 +1,7 @@
 import { Action, Location } from 'history';
 import { createAction } from 'reactive';
 import { ReplaySubject } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { HttpRequest, HttpResponse } from 'types';
 import { history, http } from 'utils';
 
@@ -29,7 +30,7 @@ const actions: Actions = verbs.reduce(
 
 verbs.forEach(verb =>
     actions[verb].request
-        .flatMap(request => http[verb](request))
+        .pipe(mergeMap(request => http[verb](request)))
         .subscribe(response => actions[verb].response.next(response)),
 );
 

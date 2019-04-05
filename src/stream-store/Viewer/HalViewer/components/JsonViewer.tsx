@@ -4,7 +4,8 @@ import { StreamBrowser, withNavigation } from 'components';
 import React, { ComponentType, PureComponent } from 'react';
 import ReactJson from 'react-json-view';
 import { connect, createState } from 'reactive';
-import { Observable } from 'rxjs';
+import { of as observableOf } from 'rxjs';
+import { map } from 'rxjs/operators';
 import rels from 'stream-store/rels';
 import themes from 'themes';
 import { HalResource, HttpResponse, NavigatableProps } from 'types';
@@ -150,11 +151,10 @@ class JsonViewer extends PureComponent<
 }
 
 const state$ = createState<ThemedJsonViewerState>(
-    themes.theme$.map(({ palette: { type } }) => [
-        'theme',
-        () => reactJsonTheme(type),
-    ]),
-    Observable.of<ThemedJsonViewerState>({
+    themes.theme$.pipe(
+        map(({ palette: { type } }) => ['theme', () => reactJsonTheme(type)]),
+    ),
+    observableOf<ThemedJsonViewerState>({
         theme: reactJsonTheme(),
     }),
 );

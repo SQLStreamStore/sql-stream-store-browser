@@ -2,7 +2,8 @@ import { Card, CardActions } from '@material-ui/core';
 import { JSONSchema7 } from 'json-schema';
 import React, { ComponentType } from 'react';
 import { connect, createState } from 'reactive';
-import { Observable } from 'rxjs';
+import { of as observableOf } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { navigation, rels, store } from 'stream-store';
 import { FormActions, HalLinks, HalResource } from 'types';
 import FormButton from './FormButton';
@@ -16,8 +17,8 @@ interface HyperMediaControlsState {
 }
 
 const state$ = createState<HyperMediaControlsState>(
-    store.hal$.url$.map(href => ['href', () => href]),
-    Observable.of<HyperMediaControlsState>({ href: '' }),
+    store.hal$.url$.pipe(map(href => ['href', () => href])),
+    observableOf<HyperMediaControlsState>({ href: '' }),
 );
 
 interface HyperMediaControlsProps {

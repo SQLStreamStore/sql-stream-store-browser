@@ -10,17 +10,20 @@ import { Table } from 'components';
 import { Notes, Settings } from 'icons';
 import React, { ComponentType, FormEvent, PureComponent } from 'react';
 import { connect, createState } from 'reactive';
-import { Observable as obs } from 'rxjs';
+import { of as observableOf } from 'rxjs';
+import { map } from 'rxjs/operators';
 import store from 'stream-store/store';
 import { HalResource } from 'types';
 import { JsonViewer, StreamHeader, StreamMessageDetails } from './components';
 import { HalViewerProps } from './types';
 
-const message$ = store.hal$.body$.map(({ payload, metadata, ...body }) => ({
-    ...body,
-    metadata,
-    payload,
-}));
+const message$ = store.hal$.body$.pipe(
+    map(({ payload, metadata, ...body }) => ({
+        ...body,
+        metadata,
+        payload,
+    })),
+);
 
 interface StreamMessageState extends HalResource {
     message: {
@@ -36,8 +39,8 @@ interface StreamMessageState extends HalResource {
 }
 
 const state$ = createState<StreamMessageState>(
-    message$.map(message => ['message', () => message]),
-    obs.of<StreamMessageState>({
+    message$.pipe(map(message => ['message', () => message])),
+    observableOf<StreamMessageState>({
         _embedded: {},
         _links: {},
         message: {
