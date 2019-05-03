@@ -11,6 +11,7 @@
     "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ --fix",
     "lint": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./"
   },
+  "homepage": ".",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
