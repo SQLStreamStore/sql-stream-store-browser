@@ -1,0 +1,19 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+    name: continuous-integration/github
+    steps:
+      - name: checkout
+        uses: actions/checkout@a14471d83
+      - name: build
+        run: "./build.sh"
+        env:
+          MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
