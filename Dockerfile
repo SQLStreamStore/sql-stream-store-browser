@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.2.102-sdk-stretch as version
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2.401-stretch as version
 
 WORKDIR /src
 
