@@ -1,10 +1,12 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2.401-stretch as version
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2.402-alpine3.9 as version
+
+RUN apk add git
 
 WORKDIR /src
 
-COPY .git ./
+COPY .git ./.git
 
-RUN dotnet tool install -g minver-cli --version 1.0.0 && \
+RUN dotnet tool install --global minver-cli --version 2.0.0-alpha.1 && \
     /root/.dotnet/tools/minver > .version
 
 FROM node:10.12.0-alpine AS build
