@@ -4,7 +4,7 @@ WORKDIR /src
 
 COPY .git ./
 
-RUN dotnet tool install -g minver-cli --version 1.0.0 && \
+RUN dotnet tool install -g minver-cli --version 2.0.0-rc.1 && \
     /root/.dotnet/tools/minver > .version
 
 FROM node:10.12.0-alpine AS build
