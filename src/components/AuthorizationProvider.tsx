@@ -1,5 +1,5 @@
 import React, { ComponentType, FunctionComponent, ReactNode } from 'react';
-import { AuthorizationProps } from 'types';
+import { AuthorizationProps } from './../types';
 import getDisplayName from './getDisplayName';
 
 const { Consumer, Provider } = React.createContext<string | undefined>(

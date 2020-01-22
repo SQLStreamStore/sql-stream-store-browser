@@ -13,20 +13,19 @@ import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import {
     AuthorizationProvider,
     Loading,
-    mount,
     NavigationProvider,
     Notifications,
     withAuthorization,
-} from 'components';
-import { LightbulbFull, LightbulbOutline, SqlStreamStore } from 'icons';
+} from './components/index';
+import { LightbulbFull, LightbulbOutline, SqlStreamStore } from './icons';
 import { JSONSchema7 } from 'json-schema';
-import React, { ComponentType, createElement } from 'react';
-import { connect, createState } from 'reactive';
+import React, { ComponentType, createElement, PureComponent, useEffect } from 'react';
+import { connect, createState } from './reactive';
 import { Observable as obs } from 'rxjs';
-import { actions, store, Viewer } from 'stream-store';
-import themes from 'themes';
-import { AuthorizationProps, HalLink, HalLinks } from 'types';
-import { mediaTypes, preventDefault } from 'utils';
+import { actions, store, Viewer } from './stream-store';
+import themes from './themes';
+import { AuthorizationProps, HalLink, HalLinks } from './types';
+import { mediaTypes, preventDefault } from './utils';
 
 const getSelfAlias = (links: HalLinks) =>
     Object.keys(links)
@@ -121,22 +120,24 @@ const Hero: ComponentType<HeroProps> = withStyles(heroStyle)(
 const SqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState
 > = withAuthorization()(
-    mount<SqlStreamStoreBrowserState & AuthorizationProps>(initialNavigation)(
-        ({ loading, theme, ...props }) => (
-            <MuiThemeProvider theme={theme}>
-                <div>
-                    <CssBaseline />
-                    <Hero theme={theme} />
-                    <Loading open={loading} />
-                    <NavigationProvider onNavigate={onNavigate}>
-                        <Viewer {...props} />
-                        <Notifications />
-                    </NavigationProvider>
-                </div>
-            </MuiThemeProvider>
-        ),
-    ),
-);
+    ({ loading, theme, ...props }) => {
+        useEffect(() => {
+            initialNavigation(props);
+        }, []);
+        
+        return (<MuiThemeProvider theme={theme}>
+            <div>
+                <CssBaseline />
+                <Hero theme={theme} />
+                <Loading open={loading} />
+                <NavigationProvider onNavigate={onNavigate}>
+                    <Viewer {...props} />
+                    <Notifications />
+                </NavigationProvider>
+            </div>
+        </MuiThemeProvider>
+        )
+    });
 
 const AuthorizedSqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState & AuthorizationProps

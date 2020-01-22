@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse } from 'types';
+import { HttpRequest, HttpResponse } from './../types';
 import mediaTypes from './mediaTypes';
 
 declare global {
@@ -43,9 +43,9 @@ const getResponseHeaders = (headers: Headers) =>
         (acc, [key, value]) =>
             value
                 ? {
-                      ...acc,
-                      [key]: value,
-                  }
+                    ...acc,
+                    [key]: value,
+                }
                 : acc,
         {},
     );

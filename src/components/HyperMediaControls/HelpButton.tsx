@@ -5,13 +5,13 @@ import {
     WithStyles,
     withStyles,
 } from '@material-ui/core';
-import { withAuthorization } from 'components/AuthorizationProvider';
-import { Help } from 'icons';
+import { withAuthorization } from './../../components/AuthorizationProvider';
+import { Help } from './../../icons';
 import React, { ComponentType, PureComponent, ReactNode } from 'react';
 import Remarkable from 'react-remarkable';
-import { HalLink } from 'types';
+import { HalLink } from './../../types';
 import uriTemplate from 'uri-template';
-import { http } from 'utils';
+import { http } from './../../utils';
 
 const getCurie = (rel: string, curies: HalLink[]): HalLink => {
     const [prefix, rest] = rel.split(':', 2);

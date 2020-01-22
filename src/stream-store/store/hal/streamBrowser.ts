@@ -1,6 +1,6 @@
-import { createAction } from 'reactive';
+import { createAction } from './../../../reactive';
 import { Observable } from 'rxjs';
-import rels from 'stream-store/rels';
+import rels from './../../../stream-store/rels';
 import uriTemplate from 'uri-template';
 import links$ from './links';
 

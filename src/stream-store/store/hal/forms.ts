@@ -1,5 +1,5 @@
 import { JSONSchema7 } from 'json-schema';
-import { HalResource } from 'types';
+import { HalResource } from './../../../types';
 import body$ from './body';
 
 const isJsonSchema = (schema: JSONSchema7 & HalResource) =>

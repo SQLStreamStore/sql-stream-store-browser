@@ -10,5 +10,4 @@ export { default as NavigationLinks } from './NavigationLinks';
 export { NavigationProvider, withNavigation };
 export { default as Notifications } from './Notifications';
 export { default as StreamBrowser } from './StreamBrowser';
-export { default as mount } from './mount';
 export { default as Table } from './StripeyTable';

@@ -1,4 +1,4 @@
-import { HalLink, HalLinks, HalResource } from 'types';
+import { HalLink, HalLinks, HalResource } from './../types';
 import URL from 'url';
 
 const resolveLinks = (url: string, links: HalLinks): HalLinks =>

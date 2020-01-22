@@ -1,5 +1,6 @@
 {
   "name": "@sqlstreamstore/browser",
+  "version": "0.1.0",
   "description": "Sql Stream Store User Interface",
   "repository": "https://github.com/SQLStreamStore/sql-stream-store-browser.git",
   "scripts": {
@@ -9,7 +10,13 @@
     "build:dist": "rm -rf dist && yarn lint && tsc --project tsconfig.publish.json && cp src/index.d.ts ./dist",
     "eject": "react-scripts-ts eject",
     "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./ --fix",
-    "lint": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./"
+    "lint": "prettier --list-different \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.tsx\" && tslint --project ./",
+    "publish-npm": "tsc --project tsconfig.npm.json"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^4.8.3",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "homepage": ".",
   "main": "dist/index.js",
@@ -58,8 +65,8 @@
     "invert-color": "2.0.0",
     "json-schema": "0.2.3",
     "jss": "9.8.7",
-    "react": "16.7.0",
-    "react-dom": "16.7.0",
+    "react": "16.8.0",
+    "react-dom": "16.8.0",
     "react-json-view": "1.19.1",
     "react-remarkable": "1.1.3",
     "react-schema-form": "0.6.2",

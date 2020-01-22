@@ -1,9 +1,9 @@
 import { Typography } from '@material-ui/core';
 import React, { ComponentType } from 'react';
 import Remarkable from 'react-remarkable';
-import { connect, createState } from 'reactive';
+import { connect, createState } from './../../../reactive';
 import { Observable } from 'rxjs';
-import store from 'stream-store/store';
+import store from './../../../stream-store/store';
 
 const body$ = store.markdown$.body$.map(body => () => body);
 

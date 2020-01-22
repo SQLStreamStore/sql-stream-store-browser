@@ -1,7 +1,7 @@
-import { Hyperlink, Table } from 'components';
+import { Hyperlink, Table } from './../../../../components';
 import React, { CSSProperties, FunctionComponent } from 'react';
-import rels from 'stream-store/rels';
-import { HalResource } from 'types';
+import rels from './../../../../stream-store/rels';
+import { HalResource } from './../../../../types';
 
 const nowrap: CSSProperties = { whiteSpace: 'nowrap' };
 

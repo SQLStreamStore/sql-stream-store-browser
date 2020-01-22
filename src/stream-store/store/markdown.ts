@@ -1,5 +1,5 @@
-import actions from 'stream-store/actions';
-import { mediaTypes } from 'utils';
+import actions from './../../stream-store/actions';
+import { mediaTypes } from './../../utils';
 import mediaType$ from './mediaType';
 
 const body$ = actions.get.response

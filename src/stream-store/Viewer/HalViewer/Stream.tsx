@@ -1,11 +1,11 @@
-import { Table } from 'components';
+import { Table } from './../../../components';
 import React, { ComponentType, FunctionComponent } from 'react';
-import { connect, createState } from 'reactive';
+import { connect, createState } from './../../../reactive';
 import { Observable as obs } from 'rxjs';
-import rels from 'stream-store/rels';
-import store from 'stream-store/store';
-import { HalResource } from 'types';
-import { hal } from 'utils';
+import rels from './../../../stream-store/rels';
+import store from './../../../stream-store/store';
+import { HalResource } from './../../../types';
+import { hal } from './../../../utils';
 import { StreamHeader, StreamMessageDetails } from './components';
 import { HalViewerProps } from './types';
 

@@ -1,0 +1,6 @@
+node_modules/
+src/
+public/
+package-lock.json
+tsconfig.json
+/**/*.tsx

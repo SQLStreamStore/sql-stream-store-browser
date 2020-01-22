@@ -1,4 +1,4 @@
-import { hal } from 'utils';
+import { hal } from './../../../utils';
 import body$ from './body';
 import url$ from './url';
 

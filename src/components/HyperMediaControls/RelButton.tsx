@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import { ButtonProps } from '@material-ui/core/Button';
-import RelIcon from 'components/RelIcon';
+import RelIcon from './../../components/RelIcon';
 import React, { FunctionComponent } from 'react';
 
 interface RelButtonProps {

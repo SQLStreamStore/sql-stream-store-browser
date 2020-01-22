@@ -1,5 +1,5 @@
 import React, { ComponentType, FunctionComponent, ReactNode } from 'react';
-import { NavigatableProps, NavigationHandler } from 'types';
+import { NavigatableProps, NavigationHandler } from './../types';
 import getDisplayName from './getDisplayName';
 
 const defaultNavigationHandler: NavigationHandler = (link, authorization) => {

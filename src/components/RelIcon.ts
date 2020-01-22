@@ -13,9 +13,9 @@ import {
     Search,
     Settings,
     SqlStreamStore,
-} from 'icons';
+} from './../icons';
 import { ComponentType, createElement } from 'react';
-import { rels } from 'stream-store';
+import { rels } from './../stream-store';
 
 const fontIconByRel = {
     [rels.first]: FirstPage,

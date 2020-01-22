@@ -1,7 +1,7 @@
 import { Theme, WithStyles, withStyles } from '@material-ui/core';
 import React, { ComponentType } from 'react';
-import { HalLink, HalLinks, NavigatableProps } from 'types';
-import { preventDefault } from 'utils';
+import { HalLink, HalLinks, NavigatableProps } from './../types';
+import { preventDefault } from './../utils';
 import { withNavigation } from './NavigationProvider';
 
 const styles = ({
