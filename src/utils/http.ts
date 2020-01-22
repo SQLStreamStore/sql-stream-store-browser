@@ -43,9 +43,9 @@ const getResponseHeaders = (headers: Headers) =>
         (acc, [key, value]) =>
             value
                 ? {
-                    ...acc,
-                    [key]: value,
-                }
+                      ...acc,
+                      [key]: value,
+                  }
                 : acc,
         {},
     );
