@@ -10,8 +10,8 @@ import {
     WithStyles,
 } from '@material-ui/core';
 import { SlideProps } from '@material-ui/core/Slide';
-import RelIcon from './../../components/RelIcon';
 import React, { FormEvent, FunctionComponent, PureComponent } from 'react';
+import RelIcon from './../../components/RelIcon';
 import { HalLink } from './../../types';
 import HelpButton from './HelpButton';
 import RelButton from './RelButton';

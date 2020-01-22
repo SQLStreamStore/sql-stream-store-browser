@@ -1,17 +1,16 @@
+import { JSONSchema7 } from 'json-schema';
+import React, { ComponentType, useEffect } from 'react';
+import { Observable as obs } from 'rxjs';
 import {
     AuthorizationProvider,
-    Loading,
     NavigationProvider,
     Notifications,
     withAuthorization,
 } from './components/index';
-import { JSONSchema7 } from 'json-schema';
-import React, { ComponentType, PureComponent, useEffect } from 'react';
 import { connect, createState } from './reactive';
-import { Observable as obs } from 'rxjs';
 import { actions, store, Viewer } from './stream-store';
 import { AuthorizationProps, HalLink, HalLinks } from './types';
-import { mediaTypes, preventDefault } from './utils';
+import { mediaTypes } from './utils';
 
 const getSelfAlias = (links: HalLinks) =>
     Object.keys(links)
@@ -56,7 +55,9 @@ const state$ = createState<SqlStreamStoreBrowserState>(
 );
 
 const onNavigate = (link: HalLink, authorization: string | undefined) => {
-    link.href.indexOf('#') === -1 && actions.get.request.next({ link, headers: { authorization } });
+    if (link.href.indexOf('#') === -1) {
+        actions.get.request.next({ link, headers: { authorization } });
+    }
 }
 
 interface EmbeddedBrowserProps {

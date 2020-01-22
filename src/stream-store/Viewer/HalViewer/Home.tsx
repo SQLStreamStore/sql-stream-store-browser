@@ -1,8 +1,8 @@
-import { Table } from './../../../components';
 import inflector from 'inflector-js';
 import React, { ComponentType, FunctionComponent } from 'react';
-import { connect, createState } from './../../../reactive';
 import { Observable as obs } from 'rxjs';
+import { Table } from './../../../components';
+import { connect, createState } from './../../../reactive';
 import rels from './../../../stream-store/rels';
 import store from './../../../stream-store/store';
 import { HalResource } from './../../../types';

@@ -1,11 +1,11 @@
 import { Button, TextField } from '@material-ui/core';
-import { SpaceBar } from './../../icons';
 import React from 'react';
 import {
     ComposedComponent,
     ReactSchemaFormInputProps,
 } from 'react-schema-form';
 import uuid from 'uuid';
+import { SpaceBar } from './../../icons';
 
 class UuidField extends React.PureComponent<
     ReactSchemaFormInputProps<HTMLInputElement>

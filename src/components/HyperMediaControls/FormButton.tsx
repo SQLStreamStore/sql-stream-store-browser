@@ -1,7 +1,7 @@
-import { withAuthorization } from './../../components/AuthorizationProvider';
 import { JSONSchema7 } from 'json-schema';
 import React, { FormEvent, PureComponent } from 'react';
 import { SchemaForm } from 'react-schema-form';
+import { withAuthorization } from './../../components/AuthorizationProvider';
 import { AuthorizationProps, FormActions, HalLink } from './../../types';
 import Dialog from './Dialog';
 import TextAreaField from './TextAreaField';

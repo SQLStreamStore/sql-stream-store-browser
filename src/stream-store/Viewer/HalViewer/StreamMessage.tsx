@@ -6,11 +6,11 @@ import {
     Tabs,
     Typography,
 } from '@material-ui/core';
+import React, { ComponentType, FormEvent, PureComponent } from 'react';
+import { Observable as obs } from 'rxjs';
 import { Table } from './../../../components';
 import { Notes, Settings } from './../../../icons';
-import React, { ComponentType, FormEvent, PureComponent } from 'react';
 import { connect, createState } from './../../../reactive';
-import { Observable as obs } from 'rxjs';
 import store from './../../../stream-store/store';
 import { HalResource } from './../../../types';
 import { JsonViewer, StreamHeader, StreamMessageDetails } from './components';

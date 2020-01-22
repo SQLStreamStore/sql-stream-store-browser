@@ -1,5 +1,5 @@
-import { Table } from './../../../../components';
 import React, { CSSProperties } from 'react';
+import { Table } from './../../../../components';
 
 const nowrap: CSSProperties = { whiteSpace: 'nowrap' };
 

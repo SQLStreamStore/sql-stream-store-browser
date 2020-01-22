@@ -1,7 +1,7 @@
-import { Hyperlink, Table } from './../../../components';
 import React, { CSSProperties, FunctionComponent } from 'react';
-import { connect, createState } from './../../../reactive';
 import { Observable as obs } from 'rxjs';
+import { Hyperlink, Table } from './../../../components';
+import { connect, createState } from './../../../reactive';
 import rels from './../../../stream-store/rels';
 import store from './../../../stream-store/store';
 import { HalLinks, HalResource } from './../../../types';

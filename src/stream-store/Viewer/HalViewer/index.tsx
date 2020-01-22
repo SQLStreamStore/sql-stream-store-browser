@@ -1,5 +1,5 @@
-import { HyperMediaControls, NavigationLinks } from './../../../components';
 import React, { ComponentType, createElement, FunctionComponent } from 'react';
+import { HyperMediaControls, NavigationLinks } from './../../../components';
 import actions from './../../../stream-store/actions';
 import rels from './../../../stream-store/rels';
 import Home from './Home';
@@ -7,8 +7,8 @@ import Stream from './Stream';
 import StreamBrowser from './StreamBrowser';
 import StreamMessage from './StreamMessage';
 import StreamMetadata from './StreamMetadata';
-import Unrecognized from './Unrecognized';
 import { HalViewerProps } from './types';
+import Unrecognized from './Unrecognized';
 
 const formActions = {
     [rels.append]: actions.post,

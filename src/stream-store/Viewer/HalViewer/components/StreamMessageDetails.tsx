@@ -1,5 +1,5 @@
-import { Hyperlink, Table } from './../../../../components';
 import React, { CSSProperties, FunctionComponent } from 'react';
+import { Hyperlink, Table } from './../../../../components';
 import rels from './../../../../stream-store/rels';
 import { HalResource } from './../../../../types';
 

@@ -1,8 +1,8 @@
 import { Card, CardActions } from '@material-ui/core';
 import { JSONSchema7 } from 'json-schema';
 import React, { ComponentType } from 'react';
-import { connect, createState } from './../../reactive';
 import { Observable } from 'rxjs';
+import { connect, createState } from './../../reactive';
 import { navigation, rels, store } from './../../stream-store';
 import { FormActions, HalLinks, HalResource } from './../../types';
 import FormButton from './FormButton';

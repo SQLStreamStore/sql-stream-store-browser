@@ -1,4 +1,5 @@
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
+import { ComponentType, createElement } from 'react';
 import {
     ChevronLeft,
     ChevronRight,
@@ -14,7 +15,6 @@ import {
     Settings,
     SqlStreamStore,
 } from './../icons';
-import { ComponentType, createElement } from 'react';
 import { rels } from './../stream-store';
 
 const fontIconByRel = {

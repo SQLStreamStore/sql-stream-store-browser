@@ -1,6 +1,6 @@
 import { Action, Location } from 'history';
-import { createAction } from './../reactive';
 import { ReplaySubject } from 'rxjs';
+import { createAction } from './../reactive';
 import { HttpRequest, HttpResponse } from './../types';
 import { history, http } from './../utils';
 

@@ -1,7 +1,7 @@
-import { createAction } from './../../../reactive';
 import { Observable } from 'rxjs';
-import rels from './../../../stream-store/rels';
 import uriTemplate from 'uri-template';
+import { createAction } from './../../../reactive';
+import rels from './../../../stream-store/rels';
 import links$ from './links';
 
 const isPotentialStreamId = (data: any) =>
