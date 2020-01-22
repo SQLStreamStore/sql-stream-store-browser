@@ -119,13 +119,13 @@ const Hero: ComponentType<HeroProps> = withStyles(heroStyle)(
 
 const SqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState
-> = withAuthorization()(
-    ({ loading, theme, ...props }) => {
-        useEffect(() => {
-            initialNavigation(props);
-        }, []);
-        
-        return (<MuiThemeProvider theme={theme}>
+> = withAuthorization()(({ loading, theme, ...props }) => {
+    useEffect(() => {
+        initialNavigation(props);
+    }, []);
+
+    return (
+        <MuiThemeProvider theme={theme}>
             <div>
                 <CssBaseline />
                 <Hero theme={theme} />
@@ -136,8 +136,8 @@ const SqlStreamStoreBrowser: ComponentType<
                 </NavigationProvider>
             </div>
         </MuiThemeProvider>
-        )
-    });
+    );
+});
 
 const AuthorizedSqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState & AuthorizationProps

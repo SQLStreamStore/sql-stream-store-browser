@@ -8,7 +8,11 @@ import { StreamBrowser, withNavigation } from './../../../../components';
 import { connect, createState } from './../../../../reactive';
 import rels from './../../../../stream-store/rels';
 import themes from './../../../../themes';
-import { HalResource, HttpResponse, NavigatableProps } from './../../../../types';
+import {
+    HalResource,
+    HttpResponse,
+    NavigatableProps,
+} from './../../../../types';
 import { hal, http, reactJsonTheme } from './../../../../utils';
 
 const isPotentialStreamId = (data: any) =>

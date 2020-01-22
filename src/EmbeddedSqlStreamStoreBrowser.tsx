@@ -58,27 +58,34 @@ const onNavigate = (link: HalLink, authorization: string | undefined) => {
     if (link.href.indexOf('#') === -1) {
         actions.get.request.next({ link, headers: { authorization } });
     }
-}
+};
 
 interface EmbeddedBrowserProps {
     currentUrl: string;
-    mediaType: '*/*' | 'application/hal+json' | 'application/json' | 'text/markdown';
+    mediaType:
+        | '*/*'
+        | 'application/hal+json'
+        | 'application/json'
+        | 'text/markdown';
 }
 
-const EmbeddedSqlStreamStoreBrowser: ComponentType<SqlStreamStoreBrowserState & AuthorizationProps & EmbeddedBrowserProps> = withAuthorization()(
-    ({ ...props }) => {
+const EmbeddedSqlStreamStoreBrowser: ComponentType<
+    SqlStreamStoreBrowserState & AuthorizationProps & EmbeddedBrowserProps
+> = withAuthorization()(({ ...props }) => {
+    useEffect(() => {
+        onNavigate(
+            { href: props.currentUrl, type: props.mediaType },
+            props.authorization,
+        );
+    }, []);
 
-        useEffect(() => {
-            onNavigate({ href: props.currentUrl, type: props.mediaType }, props.authorization);
-        }, []);
-
-        return (
-            <NavigationProvider onNavigate={onNavigate}>
-                <Viewer {...props} />
-                <Notifications />
-            </NavigationProvider>
-        )
-    });
+    return (
+        <NavigationProvider onNavigate={onNavigate}>
+            <Viewer {...props} />
+            <Notifications />
+        </NavigationProvider>
+    );
+});
 
 const AuthorizedSqlStreamStoreBrowser: ComponentType<
     SqlStreamStoreBrowserState & AuthorizationProps & EmbeddedBrowserProps
@@ -88,6 +95,7 @@ const AuthorizedSqlStreamStoreBrowser: ComponentType<
     </AuthorizationProvider>
 );
 
-export default connect<SqlStreamStoreBrowserState, AuthorizationProps & EmbeddedBrowserProps>(state$)(
-    AuthorizedSqlStreamStoreBrowser,
-);
+export default connect<
+    SqlStreamStoreBrowserState,
+    AuthorizationProps & EmbeddedBrowserProps
+>(state$)(AuthorizedSqlStreamStoreBrowser);
