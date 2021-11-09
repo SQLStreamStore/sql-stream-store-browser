@@ -1,6 +1,8 @@
+import { of as observableOf } from 'rxjs';
+
 import { createMuiTheme, PaletteType, Theme } from '@material-ui/core';
 import { PaletteOptions } from '@material-ui/core/styles/createPalette';
-import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { createAction, createState } from './reactive';
 
 const palette = (type: PaletteType): PaletteOptions => ({
@@ -41,15 +43,17 @@ interface ThemeState {
 }
 
 const theme$ = createState<ThemeState>(
-    actions.type.map(() => [
-        'theme',
-        ({ palette: { type } }: Theme) =>
-            createTheme(type === 'light' ? 'dark' : 'light'),
-    ]),
-    Observable.of({
+    actions.type.pipe(
+        map(() => [
+            'theme',
+            ({ palette: { type } }: Theme) =>
+                createTheme(type === 'light' ? 'dark' : 'light'),
+        ]),
+    ),
+    observableOf({
         theme: defaultTheme,
     }),
-).map(({ theme }) => theme);
+).pipe(map(({ theme }) => theme));
 
 theme$.subscribe(({ palette: { type } }) => savePaletteType(type));
 

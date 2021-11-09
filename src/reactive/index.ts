@@ -1,5 +1,6 @@
 import React, { Component, ComponentType } from 'react';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { merge, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { publishReplay, refCount, scan, tap } from 'rxjs/operators';
 
 export const createAction = <T>() => new ReplaySubject<T>(1);
 
@@ -7,9 +8,8 @@ export const createState = <TState extends object>(
     reducer$: Observable<any>,
     initialState$: Observable<TState>,
 ): Observable<TState> =>
-    initialState$
-        .merge(reducer$)
-        .scan(
+    merge(initialState$, reducer$).pipe(
+        scan(
             // @ts-ignore
             (state, [scope, reducer]) =>
                 // tslint:disable-next-line:no-object-literal-type-assertion
@@ -17,9 +17,10 @@ export const createState = <TState extends object>(
                     ...(state as object),
                     [scope]: reducer(state[scope]),
                 } as TState),
-        )
-        .publishReplay(1)
-        .refCount();
+        ),
+        publishReplay(1),
+        refCount(),
+    );
 
 const createLogger = <TState>() => (state: TState) =>
     // tslint:disable-next-line:no-console
@@ -35,7 +36,7 @@ export const connect = <TState extends object, TProps extends object = {}>(
 
         componentWillMount() {
             const log = createLogger<TState>();
-            this.subscription = state$.do(log).subscribe(s => {
+            this.subscription = state$.pipe(tap(log)).subscribe(s => {
                 this.setState(s);
             });
         }

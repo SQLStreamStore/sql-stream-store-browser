@@ -3,7 +3,8 @@ import { withNavigation } from 'components';
 import React from 'react';
 import ReactJson, { OnSelectProps } from 'react-json-view';
 import { connect, createState } from 'reactive';
-import { Observable as obs } from 'rxjs';
+import { merge as observableMerge, of as observableOf } from 'rxjs';
+import { map } from 'rxjs/operators';
 import store from 'stream-store/store';
 import themes from 'themes';
 import { NavigatableProps } from 'types';
@@ -21,14 +22,16 @@ interface UnrecognizedRelViewerState {
     theme: ColorScheme;
 }
 const state$ = createState<UnrecognizedRelViewerState>(
-    obs.merge(
-        store.hal$.body$.map(src => ['src', () => src]),
-        themes.theme$.map(({ palette: { type } }) => [
-            'theme',
-            () => reactJsonTheme(type),
-        ]),
+    observableMerge(
+        store.hal$.body$.pipe(map(src => ['src', () => src])),
+        themes.theme$.pipe(
+            map(({ palette: { type } }) => [
+                'theme',
+                () => reactJsonTheme(type),
+            ]),
+        ),
     ),
-    obs.of<UnrecognizedRelViewerState>({
+    observableOf<UnrecognizedRelViewerState>({
         src: {},
         theme: reactJsonTheme(),
     }),

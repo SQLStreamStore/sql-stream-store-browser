@@ -1,7 +1,8 @@
 import { Table } from 'components';
 import React, { ComponentType, FunctionComponent } from 'react';
 import { connect, createState } from 'reactive';
-import { Observable as obs } from 'rxjs';
+import { of as observableOf, zip } from 'rxjs';
+import { map } from 'rxjs/operators';
 import rels from 'stream-store/rels';
 import store from 'stream-store/store';
 import { HalResource } from 'types';
@@ -19,18 +20,18 @@ interface Message {
     type: string;
 }
 
-const messages$ = store.hal$.body$
-    .zip(store.hal$.url$)
-    .map(([{ _embedded }, url]) =>
+const messages$ = zip(store.hal$.body$, store.hal$.url$).pipe(
+    map(([{ _embedded }, url]) =>
         _embedded[rels.message].map(({ _links, ...message }) => ({
             ...message,
             _links: hal.resolveLinks(url, _links),
         })),
-    );
+    ),
+);
 
 const state$ = createState<StreamState>(
-    messages$.map(messages => ['messages', () => messages]),
-    obs.of({ messages: [] }),
+    messages$.pipe(map(messages => ['messages', () => messages])),
+    observableOf({ messages: [] }),
 );
 
 interface MessagesState {
